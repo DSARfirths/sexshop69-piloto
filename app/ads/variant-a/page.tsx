@@ -1,3 +1,4 @@
+// ========== app/ads/variant-a/page.tsx (CTA a categoría bienestar) ==========
 export default function AdsA() {
   return (
     <main className="max-w-3xl mx-auto py-10">
@@ -8,7 +9,7 @@ export default function AdsA() {
         <li>Pagos seguros y discretos</li>
         <li>Asesoría personalizada</li>
       </ul>
-      <a href="/categoria/bienestar" className="inline-block mt-6 px-5 py-3 rounded-xl bg-brand-primary text-white">Explorar catálogo</a>
+      <a href="/categoria/bienestar" className="inline-block mt-6 px-5 py-3 rounded-xl bg-brand-primary text-white">Explorar Bienestar</a>
     </main>
   )
 }

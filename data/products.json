@@ -1,0 +1,18 @@
+[
+{"slug":"gel-agua-125","name":"Gel base agua 125ml","price":39.9,"sku":"GA125","category":"bienestar"},
+{"slug":"gel-silicona-50","name":"Gel silicona 50ml","price":59.9,"sku":"GS050","category":"bienestar"},
+{"slug":"preservativo-12","name":"Preservativos x12","price":24.9,"sku":"PRES12","category":"bienestar"},
+{"slug":"spray-higiene-100","name":"Spray higiene íntima 100ml","price":34.9,"sku":"SH100","category":"bienestar"},
+{"slug":"lubricante-aloevera","name":"Gel aloe vera 100ml","price":29.9,"sku":"ALOE100","category":"bienestar"},
+
+
+{"slug":"lenceria-negra-satin","name":"Lencería satín negra","price":99.9,"sku":"LENNS","category":"lenceria"},
+{"slug":"lenceria-roja-encaje","name":"Lencería encaje roja","price":119.9,"sku":"LERE","category":"lenceria"},
+{"slug":"babydoll-blanco","name":"Babydoll blanco clásico","price":109.9,"sku":"BBLANC","category":"lenceria"},
+{"slug":"body-microfibra","name":"Body microfibra elastic","price":89.9,"sku":"BMICRO","category":"lenceria"},
+
+
+{"slug":"kit-relax","name":"Kit relax pareja","price":129.9,"sku":"KRELAX","category":"kits"},
+{"slug":"kit-aniversario","name":"Kit aniversario","price":179.9,"sku":"KANIV","category":"kits"},
+{"slug":"kit-regalo-discreto","name":"Kit regalo discreto","price":149.9,"sku":"KREGD","category":"kits"}
+]
