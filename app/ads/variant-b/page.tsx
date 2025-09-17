@@ -1,5 +1,4 @@
-// ========== app/ads/variant-b/page.tsx (CTA a kits) ==========
-export default function AdsB() {
+﻿export default function AdsB(){
   return (
     <main className="max-w-3xl mx-auto py-10">
       <h1 className="text-3xl font-semibold">Atención discreta y profesional</h1>
@@ -7,4 +6,4 @@ export default function AdsB() {
       <a href="/categoria/kits" className="inline-block mt-6 px-5 py-3 rounded-xl bg-brand-primary text-white">Ver Kits</a>
     </main>
   )
-} 
+}

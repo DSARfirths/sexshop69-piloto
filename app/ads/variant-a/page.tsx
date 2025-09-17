@@ -1,5 +1,4 @@
-// ========== app/ads/variant-a/page.tsx (CTA a categoría bienestar) ==========
-export default function AdsA() {
+﻿export default function AdsA(){
   return (
     <main className="max-w-3xl mx-auto py-10">
       <h1 className="text-3xl font-semibold">Bienestar íntimo con asesoría segura</h1>

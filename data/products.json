@@ -1,18 +1,173 @@
 [
-{"slug":"gel-agua-125","name":"Gel base agua 125ml","price":39.9,"sku":"GA125","category":"bienestar"},
-{"slug":"gel-silicona-50","name":"Gel silicona 50ml","price":59.9,"sku":"GS050","category":"bienestar"},
-{"slug":"preservativo-12","name":"Preservativos x12","price":24.9,"sku":"PRES12","category":"bienestar"},
-{"slug":"spray-higiene-100","name":"Spray higiene íntima 100ml","price":34.9,"sku":"SH100","category":"bienestar"},
-{"slug":"lubricante-aloevera","name":"Gel aloe vera 100ml","price":29.9,"sku":"ALOE100","category":"bienestar"},
-
-
-{"slug":"lenceria-negra-satin","name":"Lencería satín negra","price":99.9,"sku":"LENNS","category":"lenceria"},
-{"slug":"lenceria-roja-encaje","name":"Lencería encaje roja","price":119.9,"sku":"LERE","category":"lenceria"},
-{"slug":"babydoll-blanco","name":"Babydoll blanco clásico","price":109.9,"sku":"BBLANC","category":"lenceria"},
-{"slug":"body-microfibra","name":"Body microfibra elastic","price":89.9,"sku":"BMICRO","category":"lenceria"},
-
-
-{"slug":"kit-relax","name":"Kit relax pareja","price":129.9,"sku":"KRELAX","category":"kits"},
-{"slug":"kit-aniversario","name":"Kit aniversario","price":179.9,"sku":"KANIV","category":"kits"},
-{"slug":"kit-regalo-discreto","name":"Kit regalo discreto","price":149.9,"sku":"KREGD","category":"kits"}
+  {
+    "slug": "gel-agua-125",
+    "name": "Gel base agua 125ml",
+    "price": 39.9,
+    "sku": "GA125",
+    "category": "bienestar"
+  },
+  {
+    "slug": "gel-silicona-50",
+    "name": "Gel silicona 50ml",
+    "price": 59.9,
+    "sku": "GS050",
+    "category": "bienestar"
+  },
+  {
+    "slug": "preservativo-12",
+    "name": "Preservativos x12",
+    "price": 24.9,
+    "sku": "PRES12",
+    "category": "bienestar"
+  },
+  {
+    "slug": "spray-higiene-100",
+    "name": "Spray higiene íntima 100ml",
+    "price": 34.9,
+    "sku": "SH100",
+    "category": "bienestar"
+  },
+  {
+    "slug": "lubricante-aloevera",
+    "name": "Gel aloe vera 100ml",
+    "price": 29.9,
+    "sku": "ALOE100",
+    "category": "bienestar"
+  },
+  {
+    "slug": "lenceria-negra-satin",
+    "name": "Lencería satín negra",
+    "price": 99.9,
+    "sku": "LENNS",
+    "category": "lenceria"
+  },
+  {
+    "slug": "lenceria-roja-encaje",
+    "name": "Lencería encaje roja",
+    "price": 119.9,
+    "sku": "LERE",
+    "category": "lenceria"
+  },
+  {
+    "slug": "babydoll-blanco",
+    "name": "Babydoll blanco clásico",
+    "price": 109.9,
+    "sku": "BBLANC",
+    "category": "lenceria"
+  },
+  {
+    "slug": "body-microfibra",
+    "name": "Body microfibra elastic",
+    "price": 89.9,
+    "sku": "BMICRO",
+    "category": "lenceria"
+  },
+  {
+    "slug": "kit-relax",
+    "name": "Kit relax pareja",
+    "price": 129.9,
+    "sku": "KRELAX",
+    "category": "kits"
+  },
+  {
+    "slug": "kit-aniversario",
+    "name": "Kit aniversario",
+    "price": 179.9,
+    "sku": "KANIV",
+    "category": "kits"
+  },
+  {
+    "slug": "kit-regalo-discreto",
+    "name": "Kit regalo discreto",
+    "price": 149.9,
+    "sku": "KREGD",
+    "category": "kits"
+  },
+  {
+    "slug": "arnes-dillio-6",
+    "name": "Arnés con tirantes Dillio 6\"",
+    "price": 189.9,
+    "sku": "ARDIL6",
+    "category": "arneses",
+    "nsfw": true,
+    "images": 3
+  },
+  {
+    "slug": "dillio-twister-6",
+    "name": "Dillio Twister 6\"",
+    "price": 169.9,
+    "sku": "DITW6",
+    "category": "consoladores",
+    "nsfw": true,
+    "images": 4
+  },
+  {
+    "slug": "fetish-tronco-amor-inflable",
+    "name": "Serie Fetish Fantasy – Tronco de amor inflable",
+    "price": 299.9,
+    "sku": "FFTRONCO",
+    "category": "fetish",
+    "nsfw": true,
+    "images": 8
+  },
+  {
+    "slug": "muneca-fantasia-mia",
+    "name": "Muñeca de fantasía definitiva – Mia",
+    "price": 399.9,
+    "sku": "MIAFX",
+    "category": "munecas",
+    "nsfw": true,
+    "images": 16
+  },
+  {
+    "slug": "super-bangin-butthole",
+    "name": "Bussies mojados – Super Bangin' Butthole",
+    "price": 149.9,
+    "sku": "SBBUT",
+    "category": "anales",
+    "nsfw": true,
+    "images": 6,
+    "brand": "PDX Extreme",
+    "badge": "top",
+    "features": [
+      "Manga realista con textura interna para estimulación envolvente",
+      "Estuche ergonómico con agarre cómodo y almacenamiento discreto",
+      "Funciona con lubricante a base de agua; compatible con calentadores de manga",
+      "Diseño para uso individual; fácil de limpiar"
+    ],
+    "using": [
+      "Abrir la tapa y aplicar agua o lubricante a base de agua en el canal interno",
+      "Introducir lentamente y ajustar la presión con la mano",
+      "Tras el uso, retirar y lavar con agua tibia y limpiador de juguetes",
+      "Secar completamente antes de guardar en su estuche"
+    ],
+    "care": [
+      "Lavar antes y después de cada uso",
+      "Usar únicamente lubricantes a base de agua",
+      "Dejar secar al aire en lugar fresco; espolvorear con renovador si aplica"
+    ],
+    "specs": {
+      "tipo": "Masturbador anal",
+      "longitud_total": "~18–20 cm (aprox.)",
+      "canal": "Texturizado",
+      "material": "TPE / TPR grado íntimo",
+      "color": "Piel",
+      "libre_de_ftalatos": true,
+      "resistente_al_agua": true,
+      "origen": "Importado"
+    },
+    "related": [
+      "gel-agua-125",
+      "spray-higiene-100"
+    ]
+  },
+  {
+    "slug": "dillio-9",
+    "name": "Consolador Dillio 9\"",
+    "price": 199.9,
+    "sku": "DIL9",
+    "category": "consoladores",
+    "nsfw": true,
+    "images": 3
+  }
 ]
