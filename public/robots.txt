@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+# Las imágenes sensibles irán bajo /nsfw-assets/ y llevan X-Robots-Tag: noimageindex
