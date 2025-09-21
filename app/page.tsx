@@ -9,7 +9,7 @@ const categoryLabels: Record<string, string> = {
   arneses: 'Arneses con arnes',
   consoladores: 'Consoladores',
   fetish: 'Fetish y BDSM',
-  munecas: 'Munecas realistas',
+  munecas: 'Muñecas realistas',
   anales: 'Juegos anales'
 }
 const featuredCategories = ['bienestar', 'lenceria', 'kits'] as const
