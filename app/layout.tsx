@@ -1,4 +1,4 @@
-﻿import './globals.css'
+import './globals.css'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Script from 'next/script'
@@ -6,7 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ChatBubble } from '@/components/ChatBubble'
 import { AgeGate } from '@/components/AgeGate'
-import GAProvider from "./ga-provider";
+import Tracker from './Tracker';
 
 export const metadata: Metadata = {
   title: 'SexShop del Perú 69 — Piloto',
@@ -14,34 +14,34 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const gadsId = process.env.NEXT_PUBLIC_GADS_ID;
 
   return (
     <html lang="es">
       <head>
-        {GA_ID && (
+        {gaId && (
           <>
             <Script
-              id="gtag-src"
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
               strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
             />
             <Script id="gtag-init" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                // Evitamos page_view doble; lo enviamos manual en GAProvider:
-                gtag('config', '${GA_ID}', { send_page_view: false });
-                // Si algún día usa tag directo de Ads (no necesario si importa desde GA4):
-                ${process.env.NEXT_PUBLIC_GADS_ID ? `gtag('config', '${process.env.NEXT_PUBLIC_GADS_ID}');` : ""}
+                gtag('config', '${gaId}');
+                ${gadsId ? `gtag('config', '${gadsId}');` : ''}
               `}
             </Script>
           </>
         )}
       </head>
       <body className="min-h-screen bg-white text-neutral-900 antialiased">
-        <GAProvider />
+        <Suspense fallback={null}>
+          <Tracker />
+        </Suspense>
         <Header />
         <main className="max-w-6xl mx-auto px-4 pb-24 pt-2">
           {children}
