@@ -1,0 +1,51 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+            node-version: 20
+            cache: 'npm'
+
+      - name: Install deps (CI) y compilar
+        run: |
+          npm ci
+          npm run build
+
+      # Despliegue por SSH ejecutando comandos en el servidor
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            set -e
+            cd /home/deploy/apps/sexshop69-piloto
+
+            # Asegura que la copia local está sincronizada
+            git fetch --all --prune
+            git checkout main
+            git reset --hard origin/main
+
+            # Instala solo deps de producción y compila
+            npm ci --omit=dev
+            npm run build
+
+            # Reinicia PM2 con las variables del server (.env.local)
+            pm2 restart sexshop69 --update-env || pm2 start npm --name sexshop69 -- start
+
+            pm2 save
