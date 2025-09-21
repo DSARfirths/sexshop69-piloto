@@ -27,5 +27,22 @@ export default function Tracker() {
     }
   }, [pathname, searchParams]);
 
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement)?.closest?.(
+        'a[href*="wa.me"], a[href*="api.whatsapp.com"]'
+      ) as HTMLAnchorElement | null;
+
+      if (el && (window as any).gtag) {
+        (window as any).gtag('event', 'whatsapp_click', {
+          link_url: el.href,
+        });
+      }
+    };
+
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
+
   return null;
 }
