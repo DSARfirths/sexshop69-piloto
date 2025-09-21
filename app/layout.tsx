@@ -6,7 +6,6 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ChatBubble } from '@/components/ChatBubble'
 import { AgeGate } from '@/components/AgeGate'
-import Script from "next/script";
 import GAProvider from "./ga-provider";
 
 export const metadata: Metadata = {
