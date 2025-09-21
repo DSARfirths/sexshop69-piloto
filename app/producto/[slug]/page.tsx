@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { bySlug } from '@/lib/products'
 import StickyCTA from '@/components/StickyCTA'
 import NSFWGallery from '@/components/NSFWGallery'
@@ -8,7 +9,7 @@ import TrustBadges from '@/components/ui/TrustBadges'
 import SpecsTable from '@/components/ui/SpecsTable'
 import Sections from '@/components/ui/Sections'
 
-export async function generateMetadata({ params }: any): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const p = bySlug(params.slug)
   if (!p) return {}
   return {
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   }
 }
 
-export default function ProductPage({ params }: any){
+export default function ProductPage({ params }: { params: { slug: string } }){
   const product = bySlug(params.slug)
   if (!product) return notFound()
   const isNSFW = !!product.nsfw
@@ -40,10 +41,10 @@ export default function ProductPage({ params }: any){
           <div className="text-sm text-neutral-500 mt-1">SKU: {product.sku} {isNSFW && (<span className="ml-2 inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-700">Contenido sensible</span>)}</div>
 
           <div className="mt-4 flex gap-3">
-            <form action="/api/checkout" method="POST">
-              <input type="hidden" name="sku" value={product.sku} />
-              <button className="px-5 py-3 rounded-xl bg-brand-primary text-white hover:opacity-90">Comprar ahora</button>
-            </form>
+            {/* Este enlace simula la compra y envía los datos a la página de éxito para la conversión */}
+            <Link href={`/checkout/success?sku=${product.sku}&value=${product.price}`} className="px-5 py-3 rounded-xl bg-brand-primary text-white hover:opacity-90">
+              Comprar ahora (Simulación)
+            </Link>
             <a href={`https://wa.me/51924281623?text=Consulta%20${product.sku}`} className="px-5 py-3 rounded-xl border">WhatsApp</a>
           </div>
 
@@ -66,7 +67,10 @@ export default function ProductPage({ params }: any){
         </aside>
       </div>
 
-      <StickyCTA label={`Comprar S/ ${product.price.toFixed(2)}`} href={`/api/checkout?s=${product.sku}`} />
+      <StickyCTA
+        label={`Comprar S/ ${product.price.toFixed(2)}`}
+        href={`/checkout/success?sku=${product.sku}&value=${product.price}`}
+      />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
         '@context': 'https://schema.org', '@type': 'Product', name: product.name, sku: product.sku,
