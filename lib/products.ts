@@ -76,20 +76,54 @@ export function resolveExistingImageExtensions(
   imageIndex = 1
 ): ImageExtension[] {
   if ((product.images ?? 0) <= 0) return []
-  if (typeof window !== 'undefined') {
-    throw new Error('resolveExistingImageExtensions solo se puede usar en el servidor')
+  const serverOnlyError = new Error('resolveExistingImageExtensions solo se puede usar en el servidor')
+
+  try {
+    if (typeof window !== 'undefined') {
+      throw serverOnlyError
+    }
+
+    const dynamicRequire = (() => {
+      try {
+        return eval('require') as unknown as (module: string) => unknown
+      } catch (error) {
+        return undefined
+      }
+    })()
+
+    if (typeof dynamicRequire !== 'function') return []
+
+    const fsModule = (() => {
+      try {
+        return dynamicRequire('fs') as typeof import('fs')
+      } catch (error) {
+        return undefined
+      }
+    })()
+
+    const pathModule = (() => {
+      try {
+        return dynamicRequire('path') as typeof import('path')
+      } catch (error) {
+        return undefined
+      }
+    })()
+
+    if (!fsModule?.existsSync || !pathModule?.join) return []
+
+    const assetFolder = resolveAssetFolder(product)
+    const directory = pathModule.join(process.cwd(), 'public', assetFolder, product.slug)
+
+    return SUPPORTED_IMAGE_EXTENSIONS.filter((extension): extension is ImageExtension => {
+      const filePath = pathModule.join(directory, `${imageIndex}.${extension}`)
+      return fsModule.existsSync(filePath)
+    })
+  } catch (error) {
+    if (error === serverOnlyError) {
+      throw error
+    }
+    return []
   }
-
-  const dynamicRequire = eval('require') as unknown as (module: string) => unknown
-  const { existsSync } = dynamicRequire('fs') as typeof import('fs')
-  const path = dynamicRequire('path') as typeof import('path')
-  const assetFolder = resolveAssetFolder(product)
-  const directory = path.join(process.cwd(), 'public', assetFolder, product.slug)
-
-  return SUPPORTED_IMAGE_EXTENSIONS.filter((extension): extension is ImageExtension => {
-    const filePath = path.join(directory, `${imageIndex}.${extension}`)
-    return existsSync(filePath)
-  })
 }
 
 export function resolveAssetFolder(product: Pick<Product, 'assetFolder' | 'nsfw'>): 'nsfw-assets' | 'sfw-assets' {
