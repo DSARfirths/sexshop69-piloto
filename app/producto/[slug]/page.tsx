@@ -7,7 +7,7 @@ import {
   formatAttributeValue,
   getProductProperties,
   resolveAssetFolder,
-  SUPPORTED_IMAGE_EXTENSIONS
+  resolveExistingImageExtensions
 } from '@/lib/products'
 import StickyCTA from '@/components/StickyCTA'
 import ProductGallery from '@/components/product/ProductGallery'
@@ -24,8 +24,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const canonical = `/producto/${p.slug}`
   const hasImages = (p.images ?? 0) > 0
   const assetFolder = resolveAssetFolder(p)
-  const openGraphImages = hasImages
-    ? SUPPORTED_IMAGE_EXTENSIONS.map(extension => ({
+  const imageExtensions = hasImages ? resolveExistingImageExtensions(p) : []
+  const hasValidImages = imageExtensions.length > 0
+  const openGraphImages = hasValidImages
+    ? imageExtensions.map(extension => ({
         url: `/${assetFolder}/${p.slug}/1.${extension}`,
         alt: `${p.name} — vista 1`
       }))
@@ -46,7 +48,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       images: openGraphImages
     } as Metadata['openGraph'],
     twitter: {
-      card: hasImages ? 'summary_large_image' : 'summary',
+      card: hasValidImages ? 'summary_large_image' : 'summary',
       title,
       description,
       images: openGraphImages?.map(image => image.url)
@@ -58,6 +60,8 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
   const product = bySlug(params.slug)
   if (!product) return notFound()
   const assetFolder = resolveAssetFolder(product)
+  const availableImageExtensions = (product.images ?? 0) > 0 ? resolveExistingImageExtensions(product) : []
+  const imageUrls = availableImageExtensions.map(extension => `/${assetFolder}/${product.slug}/1.${extension}`)
   const isNSFW = !!product.nsfw
   const structuredProperties = getProductProperties(product.attributes, product.specs).map(([name, value]) => ({
     '@type': 'PropertyValue',
@@ -170,6 +174,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         '@context': 'https://schema.org', '@type': 'Product', name: product.name, sku: product.sku,
         brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
+        image: imageUrls.length > 0 ? imageUrls : undefined,
         offers: { '@type': 'Offer', price: product.price, priceCurrency: 'PEN', availability: 'https://schema.org/InStock' },
         additionalProperty: structuredProperties
       }) }} />

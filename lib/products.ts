@@ -69,6 +69,29 @@ const rawProducts = products as RawProduct[]
 
 export const SUPPORTED_IMAGE_EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png', 'avif'] as const
 
+type ImageExtension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number]
+
+export function resolveExistingImageExtensions(
+  product: Pick<Product, 'slug' | 'assetFolder' | 'nsfw'> & { images?: number },
+  imageIndex = 1
+): ImageExtension[] {
+  if ((product.images ?? 0) <= 0) return []
+  if (typeof window !== 'undefined') {
+    throw new Error('resolveExistingImageExtensions solo se puede usar en el servidor')
+  }
+
+  const dynamicRequire = eval('require') as unknown as (module: string) => unknown
+  const { existsSync } = dynamicRequire('fs') as typeof import('fs')
+  const path = dynamicRequire('path') as typeof import('path')
+  const assetFolder = resolveAssetFolder(product)
+  const directory = path.join(process.cwd(), 'public', assetFolder, product.slug)
+
+  return SUPPORTED_IMAGE_EXTENSIONS.filter((extension): extension is ImageExtension => {
+    const filePath = path.join(directory, `${imageIndex}.${extension}`)
+    return existsSync(filePath)
+  })
+}
+
 export function resolveAssetFolder(product: Pick<Product, 'assetFolder' | 'nsfw'>): 'nsfw-assets' | 'sfw-assets' {
   if (product.assetFolder) return product.assetFolder
   return product.nsfw ? 'nsfw-assets' : 'sfw-assets'
