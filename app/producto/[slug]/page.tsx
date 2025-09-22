@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { bySlug, formatAttributeLabel, formatAttributeValue, getProductProperties } from '@/lib/products'
 import StickyCTA from '@/components/StickyCTA'
-import NSFWGallery from '@/components/NSFWGallery'
+import ProductGallery from '@/components/product/ProductGallery'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import TrustBadges from '@/components/ui/TrustBadges'
 import SpecsTable from '@/components/ui/SpecsTable'
@@ -27,30 +27,81 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
     name: formatAttributeLabel(name),
     value: formatAttributeValue(value)
   }))
+  const checkoutHref = `/checkout/success?sku=${product.sku}&value=${product.price}`
+  const whatsappHref = `https://wa.me/51924281623?text=Consulta%20${product.sku}`
+
+  const bulletPoints = [
+    { label: 'Material', value: formatAttributeValue(product.attributes?.material) },
+    {
+      label: 'Dimensiones',
+      value: [product.attributes?.longitud, product.attributes?.diametro]
+        .map(formatAttributeValue)
+        .filter(Boolean)
+        .join(' · ')
+    },
+    { label: 'Peso', value: formatAttributeValue(product.attributes?.peso) },
+    { label: 'Garantía', value: formatAttributeValue(product.attributes?.garantia) }
+  ].filter(point => point.value && point.value !== 'undefined')
+
   return (
     <div>
       <Breadcrumbs items={[{ href: '/', label: 'Inicio' }, { href: `/categoria/${product.category}`, label: product.category }, { label: product.name }]} />
 
       <div className="grid md:grid-cols-2 gap-6 md:gap-8 mt-3">
-        <div className="aspect-square rounded-2xl bg-neutral-100 flex items-center justify-center">
-          {!isNSFW && (<span className="text-xs text-neutral-500">Imagen demostrativa</span>)}
-          {isNSFW && (<NSFWGallery slug={product.slug} count={product.images ?? 0} />)}
-        </div>
+        <ProductGallery
+          slug={product.slug}
+          name={product.name}
+          imageCount={product.images ?? 0}
+          nsfw={isNSFW}
+        />
         <div>
           <div className="flex items-center gap-2 text-xs text-neutral-500">
             {product.brand && <span className="uppercase tracking-wide">{product.brand}</span>}
             {product.badge && <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-700">{product.badge}</span>}
           </div>
           <h1 className="text-2xl font-semibold mt-1">{product.name}</h1>
-          <div className="text-brand-primary font-bold mt-2 text-xl">S/ {product.price.toFixed(2)}</div>
-          <div className="text-sm text-neutral-500 mt-1">SKU: {product.sku} {isNSFW && (<span className="ml-2 inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-700">Contenido sensible</span>)}</div>
+          <div className="mt-2 flex flex-wrap items-center gap-3">
+            <div className="text-brand-primary font-bold text-xl md:text-2xl">S/ {product.price.toFixed(2)}</div>
+            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-brand-primary">
+              <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-3 py-1">Envío 100% discreto</span>
+              <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-3 py-1">Empaque sin logos</span>
+            </div>
+          </div>
+          <div className="text-sm text-neutral-500 mt-1">
+            SKU: {product.sku} {isNSFW && (<span className="ml-2 inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-700">Contenido sensible</span>)}
+          </div>
 
-          <div className="mt-4 flex gap-3">
+          {bulletPoints.length > 0 && (
+            <ul className="mt-4 space-y-2 rounded-2xl bg-neutral-50 p-4 text-sm text-neutral-700">
+              {bulletPoints.map(point => (
+                <li key={point.label} className="flex items-start gap-2">
+                  <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-brand-primary/60" aria-hidden />
+                  <div>
+                    <span className="font-semibold text-neutral-900">{point.label}:</span> {point.value}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             {/* Este enlace simula la compra y envía los datos a la página de éxito para la conversión */}
-            <Link href={`/checkout/success?sku=${product.sku}&value=${product.price}`} className="px-5 py-3 rounded-xl bg-brand-primary text-white hover:opacity-90">
-              Comprar ahora (Simulación)
+            <Link
+              href={checkoutHref}
+              className="group inline-flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl bg-brand-primary px-6 py-4 text-center text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            >
+              <span className="text-base font-semibold">Comprar ahora</span>
+              <span className="text-xs text-white/80">Checkout seguro y discreto</span>
             </Link>
-            <a href={`https://wa.me/51924281623?text=Consulta%20${product.sku}`} className="px-5 py-3 rounded-xl border">WhatsApp</a>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="group inline-flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-brand-primary/20 bg-white px-6 py-4 text-center text-brand-primary shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            >
+              <span className="text-base font-semibold">WhatsApp 24/7</span>
+              <span className="text-xs text-brand-primary/80">Resolvemos tus dudas en minutos</span>
+            </a>
           </div>
 
           <TrustBadges className="mt-4" />
@@ -73,8 +124,9 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       </div>
 
       <StickyCTA
-        label={`Comprar S/ ${product.price.toFixed(2)}`}
-        href={`/checkout/success?sku=${product.sku}&value=${product.price}`}
+        price={product.price}
+        checkoutHref={checkoutHref}
+        whatsappHref={whatsappHref}
       />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
