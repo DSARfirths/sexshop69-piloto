@@ -3,83 +3,25 @@ name: Deploy to VPS
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch:
 
 concurrency:
-  group: deploy-to-vps
+  group: deploy-sexshop69
   cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Add host to known_hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      # Preparamos SSH: clave privada + known_hosts
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-      # (Opcional) Ver IP que verá Fail2Ban por si hubiese bloqueo
-      - name: Show runner outbound IP
-        run: curl -s https://ifconfig.me || true
-
-      # Ejecutamos comandos en el VPS
-      - name: SSH into VPS and deploy
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Run remote deploy script
+        uses: appleboy/ssh-action@v1.1.0
         with:
-          host:     ${{ secrets.SSH_HOST }}
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
-          port:     ${{ secrets.SSH_PORT }}
-          key:      ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
-            set -euo pipefail
-
-            echo "User:" $(whoami)
-            echo "Host:" $(hostname)
-            echo "PM2 path:" $(command -v pm2 || echo "pm2 not found")
-
-            APP_DIR="${{ secrets.APP_DIR }}"
-            PM2_NAME="${{ secrets.PM2_NAME }}"
-
-            # Asegura que existe el directorio
-            mkdir -p "$APP_DIR"
-            cd "$APP_DIR"
-
-            # Si no hay repo, clonamos; si hay, actualizamos
-            if [ ! -d ".git" ]; then
-              git clone --depth=1 https://github.com/DSARfirths/sexshop69-piloto.git "$APP_DIR"
-              cd "$APP_DIR"
-            else
-              git fetch --all
-              # Asegura que existe la rama main remota
-              git rev-parse --verify origin/main
-              git reset --hard origin/main
-            fi
-
-            # Instalamos y build
-            # (usa npm ci si está package-lock.json; si no, npm i)
-            if [ -f package-lock.json ]; then
-              npm ci
-            else
-              npm i
-            fi
-            npm run build
-
-            # Arranque / reload con PM2
-            if pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
-              pm2 reload "$PM2_NAME" --update-env
-            else
-              # Asegúrate que "start" en package.json es: `next start -p 3000`
-              pm2 start npm --name "$PM2_NAME" -- start
-            fi
-
-            # Persistencia al reinicio
-            pm2 save
+            bash /home/deploy/bin/deploy_sexshop69.sh
