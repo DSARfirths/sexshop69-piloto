@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import {
   DEFAULT_IMAGE_EXTENSIONS,
+  allProducts,
   bySlug,
   formatAttributeLabel,
   formatAttributeValue,
@@ -15,6 +16,12 @@ import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import TrustBadges from '@/components/ui/TrustBadges'
 import SpecsTable from '@/components/ui/SpecsTable'
 import Sections from '@/components/ui/Sections'
+
+export const runtime = 'nodejs'
+
+export function generateStaticParams() {
+  return allProducts().map(product => ({ slug: product.slug }))
+}
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const p = bySlug(params.slug)
