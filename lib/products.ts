@@ -53,6 +53,7 @@ export type Product = {
   images?: number
   brand?: string
   badge?: 'nuevo' | 'top' | 'promo'
+  bestSeller?: boolean
   features?: string[]
   using?: string[]
   care?: string[]
