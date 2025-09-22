@@ -4,10 +4,9 @@ import { useEffect, useMemo, useState } from 'react'
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import { AnimatePresence, motion } from 'framer-motion'
+import { SUPPORTED_IMAGE_EXTENSIONS } from '@/lib/products'
 
 const MotionWrapper = motion<{ className?: string }>('div')
-
-const EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png', 'avif'] as const
 
 const SAFE_PLACEHOLDER =
   'data:image/svg+xml;charset=UTF-8,' +
@@ -15,7 +14,7 @@ const SAFE_PLACEHOLDER =
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#f4f4f5"/><stop offset="100%" stop-color="#e4e4e7"/></linearGradient></defs><rect width="600" height="600" fill="url(#g)"/><text x="50%" y="50%" fill="#a1a1aa" font-family="sans-serif" font-size="28" font-weight="600" text-anchor="middle" dominant-baseline="middle">Vista previa</text></svg>`
   )
 
-type Extension = (typeof EXTENSIONS)[number]
+type Extension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number]
 
 type GalleryAssetProps = {
   basePath: string
@@ -28,7 +27,7 @@ type GalleryAssetProps = {
 function GalleryAsset({ basePath, alt, className, enabled, priority }: GalleryAssetProps) {
   const [extensionIndex, setExtensionIndex] = useState(0)
   const [failed, setFailed] = useState(false)
-  const extension: Extension = EXTENSIONS[extensionIndex]
+  const extension: Extension = SUPPORTED_IMAGE_EXTENSIONS[extensionIndex]
 
   useEffect(() => {
     setExtensionIndex(0)
@@ -69,7 +68,7 @@ function GalleryAsset({ basePath, alt, className, enabled, priority }: GalleryAs
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
       onError={() => {
-        if (extensionIndex < EXTENSIONS.length - 1) {
+        if (extensionIndex < SUPPORTED_IMAGE_EXTENSIONS.length - 1) {
           setExtensionIndex(prev => prev + 1)
         } else {
           setFailed(true)
@@ -84,24 +83,30 @@ type ProductGalleryProps = {
   name: string
   imageCount?: number
   nsfw?: boolean
+  assetFolder: 'nsfw-assets' | 'sfw-assets'
 }
 
-export default function ProductGallery({ slug, name, imageCount = 0, nsfw = false }: ProductGalleryProps) {
+export default function ProductGallery({ slug, name, imageCount = 0, nsfw = false, assetFolder }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isVerified, setIsVerified] = useState(false)
 
+  const hasImages = imageCount > 0
+  const requiresVerification = Boolean(nsfw && hasImages)
+
   useEffect(() => {
+    if (!requiresVerification) {
+      setIsVerified(true)
+      return
+    }
     if (typeof document === 'undefined') return
     const isOk = document.cookie.includes('age_ok=1')
     setIsVerified(isOk)
-  }, [])
-
-  const hasImages = nsfw && imageCount > 0
+  }, [requiresVerification])
 
   const imageSources = useMemo(() => {
     if (!hasImages) return []
-    return Array.from({ length: imageCount }, (_, index) => `/nsfw-assets/${slug}/${index + 1}`)
-  }, [hasImages, imageCount, slug])
+    return Array.from({ length: imageCount }, (_, index) => `/${assetFolder}/${slug}/${index + 1}`)
+  }, [assetFolder, hasImages, imageCount, slug])
 
   useEffect(() => {
     if (activeIndex >= imageSources.length) {
@@ -116,7 +121,7 @@ export default function ProductGallery({ slug, name, imageCount = 0, nsfw = fals
   }
 
   const showPlaceholder = !hasImages
-  const unlocked = hasImages ? isVerified : true
+  const unlocked = requiresVerification ? isVerified : true
 
   return (
     <div className="space-y-4">

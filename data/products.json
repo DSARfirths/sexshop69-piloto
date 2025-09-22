@@ -5,6 +5,8 @@
     "price": 39.9,
     "sku": "GA125",
     "category": "bienestar",
+    "assetFolder": "sfw-assets",
+    "images": 8,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -23,6 +25,8 @@
     "price": 59.9,
     "sku": "GS050",
     "category": "bienestar",
+    "assetFolder": "sfw-assets",
+    "images": 8,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -39,6 +43,8 @@
     "price": 24.9,
     "sku": "PRES12",
     "category": "bienestar",
+    "assetFolder": "sfw-assets",
+    "images": 5,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -55,6 +61,8 @@
     "price": 34.9,
     "sku": "SH100",
     "category": "bienestar",
+    "assetFolder": "sfw-assets",
+    "images": 1,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -71,6 +79,8 @@
     "price": 29.9,
     "sku": "ALOE100",
     "category": "bienestar",
+    "assetFolder": "sfw-assets",
+    "images": 0,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -87,6 +97,8 @@
     "price": 99.9,
     "sku": "LENNS",
     "category": "lenceria",
+    "assetFolder": "sfw-assets",
+    "images": 0,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -105,6 +117,8 @@
     "price": 119.9,
     "sku": "LERE",
     "category": "lenceria",
+    "assetFolder": "sfw-assets",
+    "images": 0,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -121,6 +135,8 @@
     "price": 109.9,
     "sku": "BBLANC",
     "category": "lenceria",
+    "assetFolder": "sfw-assets",
+    "images": 0,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -137,6 +153,8 @@
     "price": 89.9,
     "sku": "BMICRO",
     "category": "lenceria",
+    "assetFolder": "sfw-assets",
+    "images": 0,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -153,6 +171,8 @@
     "price": 129.9,
     "sku": "KRELAX",
     "category": "kits",
+    "assetFolder": "sfw-assets",
+    "images": 0,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -171,6 +191,8 @@
     "price": 179.9,
     "sku": "KANIV",
     "category": "kits",
+    "assetFolder": "sfw-assets",
+    "images": 0,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",
@@ -187,6 +209,8 @@
     "price": 149.9,
     "sku": "KREGD",
     "category": "kits",
+    "assetFolder": "sfw-assets",
+    "images": 0,
     "attributes": {
       "material": "No especificado (valor por defecto)",
       "longitud": "No especificada (valor por defecto)",

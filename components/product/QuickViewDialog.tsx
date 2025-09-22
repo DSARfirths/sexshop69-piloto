@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useMemo } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Dialog, Transition } from '@headlessui/react'
@@ -9,6 +9,8 @@ import {
   formatAttributeLabel,
   formatAttributeValue,
   getProductProperties,
+  resolveAssetFolder,
+  SUPPORTED_IMAGE_EXTENSIONS,
   type Product
 } from '@/lib/products'
 
@@ -20,6 +22,51 @@ const FALLBACK_IMAGE_SRC =
 
 const WHATSAPP_NUMBER = '51924281623'
 
+type AssetImageProps = {
+  basePath?: string | null
+  alt: string
+  className?: string
+  priority?: boolean
+  sizes?: string
+  shouldBlur?: boolean
+}
+
+function AssetImage({ basePath, alt, className, priority, sizes, shouldBlur }: AssetImageProps) {
+  const [extensionIndex, setExtensionIndex] = useState(0)
+  const [failed, setFailed] = useState(false)
+  const hasBasePath = Boolean(basePath)
+  const finalClassName = `${className ?? ''}${shouldBlur && hasBasePath ? ' blur-sm' : ''}`.trim()
+
+  useEffect(() => {
+    setExtensionIndex(0)
+    setFailed(false)
+  }, [basePath])
+
+  const src =
+    hasBasePath && !failed && basePath
+      ? `${basePath}.${SUPPORTED_IMAGE_EXTENSIONS[extensionIndex]}`
+      : FALLBACK_IMAGE_SRC
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      priority={priority}
+      sizes={sizes}
+      className={finalClassName}
+      onError={() => {
+        if (!hasBasePath) return
+        if (extensionIndex < SUPPORTED_IMAGE_EXTENSIONS.length - 1) {
+          setExtensionIndex(prev => prev + 1)
+        } else {
+          setFailed(true)
+        }
+      }}
+    />
+  )
+}
+
 type QuickViewDialogProps = {
   product: Product
   open: boolean
@@ -27,20 +74,23 @@ type QuickViewDialogProps = {
 }
 
 export default function QuickViewDialog({ product, open, onOpenChange }: QuickViewDialogProps) {
+  const assetFolder = resolveAssetFolder(product)
+  const hasImages = (product.images ?? 0) > 0
   const galleryImages = useMemo(() => {
-    if (!product.images || product.images <= 0 || !product.nsfw) return []
-    return Array.from({ length: Math.min(product.images, 4) }, (_, index) => ({
-      src: `/nsfw-assets/${product.slug}/${index + 1}.webp`,
+    if (!hasImages) return []
+    const limit = Math.min(product.images ?? 0, 4)
+    return Array.from({ length: limit }, (_, index) => ({
+      basePath: `/${assetFolder}/${product.slug}/${index + 1}`,
       alt: `${product.name} — imagen ${index + 1}`
     }))
-  }, [product])
+  }, [assetFolder, hasImages, product.images, product.name, product.slug])
 
   const properties = useMemo(() => {
     return getProductProperties(product.attributes, product.specs).slice(0, 4)
   }, [product])
 
   const features = product.features?.slice(0, 3) ?? []
-  const mainImage = galleryImages[0] ?? { src: FALLBACK_IMAGE_SRC, alt: product.name }
+  const mainImage = galleryImages[0] ?? { basePath: null, alt: product.name }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -81,26 +131,31 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                 <div className="grid gap-6 p-6 md:grid-cols-[1.2fr,1fr] md:p-8">
                   <div>
                     <div className="relative aspect-square overflow-hidden rounded-2xl bg-neutral-100">
-                      <Image
-                        src={mainImage.src}
+                      <AssetImage
+                        basePath={mainImage.basePath}
                         alt={mainImage.alt}
-                        fill
                         priority={open}
                         sizes="(min-width: 1024px) 480px, 80vw"
-                        className={`object-cover ${galleryImages.length > 0 ? 'md:hover:scale-[1.02] md:transition-transform md:duration-500' : ''}`}
+                        className={`object-cover ${
+                          galleryImages.length > 0 ? 'md:hover:scale-[1.02] md:transition-transform md:duration-500' : ''
+                        }`}
+                        shouldBlur={Boolean(product.nsfw)}
                       />
                     </div>
                     {galleryImages.length > 1 && (
                       <div className="mt-4 grid grid-cols-4 gap-2">
                         {galleryImages.slice(1).map((image, index) => (
-                          <div key={image.src} className="relative aspect-square overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100">
-                            <Image
-                              src={image.src}
+                          <div
+                            key={image.basePath}
+                            className="relative aspect-square overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100"
+                          >
+                            <AssetImage
+                              basePath={image.basePath}
                               alt={image.alt}
-                              fill
                               sizes="96px"
                               priority={open && index < 2}
                               className="object-cover"
+                              shouldBlur={Boolean(product.nsfw)}
                             />
                           </div>
                         ))}

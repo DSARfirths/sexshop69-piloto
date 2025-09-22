@@ -17,4 +17,4 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ## 4) Producción (recomendado DO + Cloudflare)
 - Build: npm run build && npm run start (pm2)
 - Nginx: proxy pass ➜ Node 3000; TLS; cache estáticos; limitar /api
-- CDN: activar en /_next/static y /nsfw-assets con headers ya configurados
+- CDN: activar en /_next/static, /sfw-assets y /nsfw-assets con headers ya configurados

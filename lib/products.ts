@@ -51,6 +51,7 @@ export type Product = {
   category: string
   nsfw?: boolean
   images?: number
+  assetFolder?: 'nsfw-assets' | 'sfw-assets'
   brand?: string
   badge?: 'nuevo' | 'top' | 'promo'
   bestSeller?: boolean
@@ -66,6 +67,13 @@ type RawProduct = Omit<Product, 'attributes'> & { attributes?: Partial<ProductAt
 
 const rawProducts = products as RawProduct[]
 
+export const SUPPORTED_IMAGE_EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png', 'avif'] as const
+
+export function resolveAssetFolder(product: Pick<Product, 'assetFolder' | 'nsfw'>): 'nsfw-assets' | 'sfw-assets' {
+  if (product.assetFolder) return product.assetFolder
+  return product.nsfw ? 'nsfw-assets' : 'sfw-assets'
+}
+
 function normalizeAttributes(attributes?: Partial<ProductAttributes>): ProductAttributes {
   const normalized: ProductAttributes = { ...DEFAULT_ATTRIBUTES }
   if (attributes) {
@@ -80,6 +88,7 @@ function normalizeAttributes(attributes?: Partial<ProductAttributes>): ProductAt
 
 const catalog: Product[] = rawProducts.map((product) => ({
   ...product,
+  assetFolder: resolveAssetFolder(product),
   attributes: normalizeAttributes(product.attributes)
 }))
 
