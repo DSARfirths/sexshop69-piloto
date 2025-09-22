@@ -1,7 +1,7 @@
-﻿'use client'
-import type { Product } from '@/lib/products'
+'use client'
+import { formatAttributeValue, type Product } from '@/lib/products'
 
-function Section({title,children}:{title:string;children:React.ReactNode}){
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <details className="border rounded-2xl p-4 open:shadow-sm mb-3" open>
       <summary className="cursor-pointer select-none text-base font-semibold">{title}</summary>
@@ -9,27 +9,28 @@ function Section({title,children}:{title:string;children:React.ReactNode}){
     </details>
   )
 }
-export default function Sections({product}:{product:Product}){
+export default function Sections({ product }: { product: Product }) {
+  const garantia = formatAttributeValue(product.attributes?.garantia)
   return (
     <div>
-      {product.features && product.features.length>0 && (
+      {product.features && product.features.length > 0 && (
         <Section title="Características y beneficios">
           <ul className="list-disc pl-5 space-y-1">
-            {product.features.map((f,i)=>(<li key={i}>{f}</li>))}
+            {product.features.map((f, i) => (<li key={i}>{f}</li>))}
           </ul>
         </Section>
       )}
-      {product.using && product.using.length>0 && (
+      {product.using && product.using.length > 0 && (
         <Section title="Cómo usar">
           <ol className="list-decimal pl-5 space-y-1">
-            {product.using.map((s,i)=>(<li key={i}>{s}</li>))}
+            {product.using.map((s, i) => (<li key={i}>{s}</li>))}
           </ol>
         </Section>
       )}
-      {product.care && product.care.length>0 && (
+      {product.care && product.care.length > 0 && (
         <Section title="Cuidado y limpieza">
           <ul className="list-disc pl-5 space-y-1">
-            {product.care.map((c,i)=>(<li key={i}>{c}</li>))}
+            {product.care.map((c, i) => (<li key={i}>{c}</li>))}
           </ul>
         </Section>
       )}
@@ -37,7 +38,7 @@ export default function Sections({product}:{product:Product}){
         <p>Envío discreto y rápido. Cambios por falla de fábrica en 7 días. Ver políticas completas en la sección legal.</p>
       </Section>
       <Section title="Garantía">
-        <p>Garantía limitada de 1 año por defecto de fabricación (gestión con tienda).</p>
+        <p>{garantia}</p>
       </Section>
     </div>
   )

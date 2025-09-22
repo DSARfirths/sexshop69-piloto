@@ -4,84 +4,192 @@
     "name": "Gel base agua 125ml",
     "price": 39.9,
     "sku": "GA125",
-    "category": "bienestar"
+    "category": "bienestar",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "gel-silicona-50",
     "name": "Gel silicona 50ml",
     "price": 59.9,
     "sku": "GS050",
-    "category": "bienestar"
+    "category": "bienestar",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "preservativo-12",
     "name": "Preservativos x12",
     "price": 24.9,
     "sku": "PRES12",
-    "category": "bienestar"
+    "category": "bienestar",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "spray-higiene-100",
     "name": "Spray higiene íntima 100ml",
     "price": 34.9,
     "sku": "SH100",
-    "category": "bienestar"
+    "category": "bienestar",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "lubricante-aloevera",
     "name": "Gel aloe vera 100ml",
     "price": 29.9,
     "sku": "ALOE100",
-    "category": "bienestar"
+    "category": "bienestar",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "lenceria-negra-satin",
     "name": "Lencería satín negra",
     "price": 99.9,
     "sku": "LENNS",
-    "category": "lenceria"
+    "category": "lenceria",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "lenceria-roja-encaje",
     "name": "Lencería encaje roja",
     "price": 119.9,
     "sku": "LERE",
-    "category": "lenceria"
+    "category": "lenceria",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "babydoll-blanco",
     "name": "Babydoll blanco clásico",
     "price": 109.9,
     "sku": "BBLANC",
-    "category": "lenceria"
+    "category": "lenceria",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "body-microfibra",
     "name": "Body microfibra elastic",
     "price": 89.9,
     "sku": "BMICRO",
-    "category": "lenceria"
+    "category": "lenceria",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "kit-relax",
     "name": "Kit relax pareja",
     "price": 129.9,
     "sku": "KRELAX",
-    "category": "kits"
+    "category": "kits",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "kit-aniversario",
     "name": "Kit aniversario",
     "price": 179.9,
     "sku": "KANIV",
-    "category": "kits"
+    "category": "kits",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "kit-regalo-discreto",
     "name": "Kit regalo discreto",
     "price": 149.9,
     "sku": "KREGD",
-    "category": "kits"
+    "category": "kits",
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "arnes-dillio-6",
@@ -90,7 +198,16 @@
     "sku": "ARDIL6",
     "category": "arneses",
     "nsfw": true,
-    "images": 3
+    "images": 3,
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "dillio-twister-6",
@@ -99,7 +216,16 @@
     "sku": "DITW6",
     "category": "consoladores",
     "nsfw": true,
-    "images": 4
+    "images": 4,
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "fetish-tronco-amor-inflable",
@@ -108,7 +234,16 @@
     "sku": "FFTRONCO",
     "category": "fetish",
     "nsfw": true,
-    "images": 8
+    "images": 8,
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "muneca-fantasia-mia",
@@ -117,7 +252,16 @@
     "sku": "MIAFX",
     "category": "munecas",
     "nsfw": true,
-    "images": 16
+    "images": 16,
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "super-bangin-butthole",
@@ -159,7 +303,16 @@
     "related": [
       "gel-agua-125",
       "spray-higiene-100"
-    ]
+    ],
+    "attributes": {
+      "material": "TPE / TPR grado íntimo",
+      "longitud": "~18–20 cm (aprox.)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": true,
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   },
   {
     "slug": "dillio-9",
@@ -168,6 +321,15 @@
     "sku": "DIL9",
     "category": "consoladores",
     "nsfw": true,
-    "images": 3
+    "images": 3,
+    "attributes": {
+      "material": "No especificado (valor por defecto)",
+      "longitud": "No especificada (valor por defecto)",
+      "diametro": "No especificado (valor por defecto)",
+      "vibracion": "No informado (valor por defecto)",
+      "waterproof": "No informado (valor por defecto)",
+      "peso": "No especificado (valor por defecto)",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
   }
 ]
