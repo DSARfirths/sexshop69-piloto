@@ -1,0 +1,236 @@
+'use client'
+
+import { useEffect, useMemo, useState, forwardRef, type FocusEvent } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
+type CTA = {
+  href: string
+  label: string
+}
+
+type HeroSlide = {
+  id: string
+  tag: string
+  title: string
+  description: string
+  primaryCta: CTA
+  secondaryCta: CTA
+  image: string
+}
+
+export const heroCarouselSlides: HeroSlide[] = [
+  {
+    id: 'parejas',
+    tag: 'Parejas curiosas',
+    title: 'Rituales sensoriales para dos',
+    description:
+      'Kits diseñados para despertar complicidad, con texturas, fragancias y juegos que preparan la escena perfecta.',
+    primaryCta: { href: '/categoria/kits', label: 'Comprar kits premium' },
+    secondaryCta: { href: '/asesoria', label: 'Recibir asesoría íntima' },
+    image: '/hero/parejas-rituales.jpg'
+  },
+  {
+    id: 'singles',
+    tag: 'Self love',
+    title: 'Autocuidado vibrante y discreto',
+    description:
+      'Vibradores silenciosos, lubricantes premium y accesorios mindfulness que elevan tu rutina personal.',
+    primaryCta: { href: '/categoria/bienestar', label: 'Descubrir bienestar íntimo' },
+    secondaryCta: { href: '/guia-autocuidado', label: 'Leer guía de autocuidado' },
+    image: '/hero/selflove-experience.jpg'
+  },
+  {
+    id: 'ediciones-limitadas',
+    tag: 'Ediciones limitadas',
+    title: 'Colecciones cápsula que solo duran un suspiro',
+    description:
+      'Diseños exclusivos, materiales veganos y packaging de colección para regalar (o regalarte).',
+    primaryCta: { href: '/colecciones', label: 'Explorar colecciones cápsula' },
+    secondaryCta: { href: '/envios', label: 'Ver política de envíos' },
+    image: '/hero/coleccion-capsula.jpg'
+  }
+]
+
+type HeroCarouselProps = {
+  slides?: HeroSlide[]
+  autoPlay?: boolean
+  autoPlayDelay?: number
+  className?: string
+}
+
+const baseButtonClasses =
+  'inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900'
+const primaryButtonClasses =
+  `${baseButtonClasses} bg-neutral-900 text-white shadow-md shadow-neutral-900/30 hover:bg-neutral-800`
+const secondaryButtonClasses =
+  `${baseButtonClasses} border border-neutral-900/20 bg-white/70 text-neutral-900 hover:border-neutral-900/50`
+type SlideMotionProps = HTMLMotionProps<'div'> & { className?: string }
+
+const SlideMotion = forwardRef<HTMLDivElement, SlideMotionProps>((props, ref) => <motion.div ref={ref} {...props} />)
+SlideMotion.displayName = 'SlideMotion'
+
+export default function HeroCarousel({
+  slides: providedSlides,
+  autoPlay = true,
+  autoPlayDelay = 7000,
+  className
+}: HeroCarouselProps) {
+  const slides = useMemo(() => providedSlides ?? heroCarouselSlides, [providedSlides])
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+
+  useEffect(() => {
+    if (slides.length === 0) {
+      setActiveIndex(0)
+    }
+  }, [slides.length])
+
+  useEffect(() => {
+    if (!autoPlay || isPaused || slides.length <= 1) return
+
+    const timer = window.setInterval(() => {
+      setActiveIndex(prev => (prev + 1) % slides.length)
+    }, autoPlayDelay)
+
+    return () => window.clearInterval(timer)
+  }, [autoPlay, autoPlayDelay, isPaused, slides.length])
+
+  useEffect(() => {
+    if (activeIndex >= slides.length) {
+      setActiveIndex(0)
+    }
+  }, [activeIndex, slides.length])
+
+  const goTo = (index: number) => {
+    setActiveIndex(((index % slides.length) + slides.length) % slides.length)
+  }
+
+  const handlePrevious = () => {
+    goTo(activeIndex - 1)
+  }
+
+  const handleNext = () => {
+    goTo(activeIndex + 1)
+  }
+
+  if (slides.length === 0) {
+    return null
+  }
+
+  const activeSlide = slides[activeIndex]
+
+  const containerClasses = [
+    'relative overflow-hidden rounded-3xl border border-white/10 bg-white/70 p-6 shadow-sm backdrop-blur lg:p-10',
+    className
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const handleBlurCapture = (event: FocusEvent<HTMLElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      setIsPaused(false)
+    }
+  }
+
+  return (
+    <section
+      aria-label="Destacados del catálogo"
+      className={containerClasses}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={handleBlurCapture}
+    >
+      <div className="flex items-center justify-between">
+        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">{activeSlide.tag}</div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handlePrevious}
+            aria-label="Ver destacado anterior"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-900/15 bg-white/60 text-neutral-900 transition hover:border-neutral-900/40 hover:text-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={handleNext}
+            aria-label="Ver siguiente destacado"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-900/15 bg-white/60 text-neutral-900 transition hover:border-neutral-900/40 hover:text-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          >
+            <ChevronRight className="h-4 w-4" aria-hidden />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <AnimatePresence mode="wait" initial={false}>
+          <SlideMotion
+            key={activeSlide.id}
+            className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -40 }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
+          >
+            <div aria-live="polite" className="contents">
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <h2 className="text-2xl font-semibold text-neutral-900 sm:text-3xl lg:text-[2.4rem] lg:leading-[1.05]">
+                    {activeSlide.title}
+                  </h2>
+                  <p className="text-sm leading-relaxed text-neutral-600 sm:text-base">{activeSlide.description}</p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <Link href={activeSlide.primaryCta.href} className={primaryButtonClasses}>
+                    {activeSlide.primaryCta.label}
+                  </Link>
+                  <Link href={activeSlide.secondaryCta.href} className={secondaryButtonClasses}>
+                    {activeSlide.secondaryCta.label}
+                  </Link>
+                </div>
+              </div>
+
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/40 bg-gradient-to-br from-[#7f00ff]/20 via-transparent to-[#ff6f91]/20">
+                <Image
+                  src={activeSlide.image}
+                  alt={activeSlide.title}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 480px, 100vw"
+                  priority={activeIndex === 0}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.65),_transparent_65%)] mix-blend-soft-light" aria-hidden />
+              </div>
+            </div>
+          </SlideMotion>
+        </AnimatePresence>
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-neutral-500">
+        <div className="flex items-center gap-2">
+          {slides.map((slide, index) => {
+            const isActive = index === activeIndex
+            return (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => goTo(index)}
+                className={`h-2.5 rounded-full transition ${isActive ? 'w-7 bg-neutral-900' : 'w-2.5 bg-neutral-400/50 hover:bg-neutral-500/70'}`}
+                aria-label={`Ir a la diapositiva: ${slide.title}`}
+                aria-current={isActive ? 'true' : 'false'}
+              />
+            )
+          })}
+        </div>
+        <span>
+          {activeIndex + 1}/{slides.length}
+        </span>
+      </div>
+    </section>
+  )
+}

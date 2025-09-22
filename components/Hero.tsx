@@ -15,10 +15,10 @@ const copyVariants: Variants = {
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-brand-primary/10 via-white to-brand-accent/10 p-6 sm:p-10 md:p-14">
+    <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#7f00ff]/30 via-[#e100ff]/20 to-[#ff6f91]/40 p-6 sm:p-10 md:p-14">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[url('/textures/hero-texture.svg')] bg-cover opacity-50 mix-blend-overlay" aria-hidden />
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/15 via-transparent to-brand-accent/30" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#7f00ff]/25 via-transparent to-[#ff6f91]/35" aria-hidden />
       </div>
 
       <div className="relative z-10 flex flex-col gap-10 md:flex-row md:items-center md:justify-between">
@@ -54,7 +54,7 @@ export default function Hero() {
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Link
                   href="#catalogo"
-                  className="inline-flex items-center justify-center rounded-full bg-brand-primary px-6 py-3 text-base font-semibold text-white shadow-lg shadow-brand-primary/30 transition"
+                  className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-neutral-900/30 transition hover:bg-neutral-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
                 >
                   Explorar catálogo seguro
                 </Link>
