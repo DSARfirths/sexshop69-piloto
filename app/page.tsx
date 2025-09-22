@@ -5,6 +5,7 @@ import { allProducts } from '@/lib/products'
 import CategoryCarousel from '@/components/home/CategoryCarousel'
 import BestSellers from '@/components/home/BestSellers'
 import TrustBadgesStrip from '@/components/home/TrustBadgesStrip'
+import HeroCarousel from '@/components/home/HeroCarousel'
 
 const categoryLabels: Record<string, string> = {
   bienestar: 'Bienestar intimo',
@@ -63,6 +64,9 @@ export default function Page() {
   return (
     <>
       <Hero />
+      <div className="mt-8">
+        <HeroCarousel />
+      </div>
       <div className="mt-6 space-y-6">
         <TrustBadgesStrip badges={TRUST_BADGES} />
         <CategoryCarousel
