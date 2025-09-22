@@ -9,6 +9,7 @@
     "clean": "rimraf .next"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.8",
     "autoprefixer": "10.4.20",
     "framer-motion": "11.2.6",
     "lucide-react": "0.453.0",

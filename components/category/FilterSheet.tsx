@@ -1,0 +1,227 @@
+'use client'
+
+import { Fragment } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import type { CategoryFilterState } from './filters-context'
+
+type CategoryFilterOptions = {
+  brands: string[]
+  materials: string[]
+  longitudes: string[]
+  diametros: string[]
+}
+
+type FilterSheetProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  filters: CategoryFilterState
+  options: CategoryFilterOptions
+  onToggleBrand: (brand: string) => void
+  onToggleMaterial: (material: string) => void
+  onSelectLongitud: (value: string | null) => void
+  onSelectDiametro: (value: string | null) => void
+  onReset: () => void
+}
+
+const sectionClass = 'space-y-2'
+const sectionTitleClass = 'text-sm font-semibold text-neutral-800'
+const toggleListClass = 'flex flex-wrap gap-2'
+const toggleClassBase =
+  'rounded-full border px-3 py-1 text-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
+const toggleActiveClass = 'border-brand-primary bg-brand-primary text-white shadow-sm'
+const toggleInactiveClass = 'border-neutral-200 bg-white text-neutral-700 hover:border-brand-primary/60'
+
+function ToggleGroup({
+  label,
+  values,
+  isActive,
+  onToggle
+}: {
+  label: string
+  values: string[]
+  isActive: (value: string) => boolean
+  onToggle: (value: string) => void
+}) {
+  if (!values.length) return null
+
+  return (
+    <div className={sectionClass}>
+      <p className={sectionTitleClass}>{label}</p>
+      <div className={toggleListClass}>
+        {values.map((value) => {
+          const active = isActive(value)
+          return (
+            <button
+              key={value}
+              type="button"
+              onClick={() => onToggle(value)}
+              className={`${toggleClassBase} ${active ? toggleActiveClass : toggleInactiveClass}`}
+              aria-pressed={active}
+            >
+              {value}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function SelectFilter({
+  label,
+  placeholder,
+  value,
+  options,
+  onChange
+}: {
+  label: string
+  placeholder: string
+  value: string | null
+  options: string[]
+  onChange: (value: string | null) => void
+}) {
+  if (!options.length) return null
+
+  return (
+    <div className={sectionClass}>
+      <label className={sectionTitleClass}>
+        {label}
+        <select
+          className="mt-1 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
+          value={value ?? ''}
+          onChange={(event) => {
+            const selected = event.target.value
+            onChange(selected ? selected : null)
+          }}
+        >
+          <option value="">{placeholder}</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+  )
+}
+
+function FilterContent({
+  filters,
+  options,
+  onToggleBrand,
+  onToggleMaterial,
+  onSelectLongitud,
+  onSelectDiametro,
+  onReset
+}: Omit<FilterSheetProps, 'open' | 'onOpenChange'>) {
+  return (
+    <div className="flex h-full flex-col gap-6 overflow-y-auto p-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-neutral-900">Filtros</h2>
+        <button
+          type="button"
+          onClick={onReset}
+          className="text-sm font-medium text-brand-primary hover:underline"
+        >
+          Limpiar
+        </button>
+      </div>
+      <div className="space-y-6">
+        <ToggleGroup
+          label="Marca"
+          values={options.brands}
+          isActive={(value) => filters.brands.includes(value)}
+          onToggle={onToggleBrand}
+        />
+        <ToggleGroup
+          label="Material"
+          values={options.materials}
+          isActive={(value) => filters.materials.includes(value)}
+          onToggle={onToggleMaterial}
+        />
+        <SelectFilter
+          label="Longitud"
+          placeholder="Selecciona una longitud"
+          value={filters.longitud}
+          options={options.longitudes}
+          onChange={onSelectLongitud}
+        />
+        <SelectFilter
+          label="Diámetro"
+          placeholder="Selecciona un diámetro"
+          value={filters.diametro}
+          options={options.diametros}
+          onChange={onSelectDiametro}
+        />
+      </div>
+    </div>
+  )
+}
+
+export default function FilterSheet({
+  open,
+  onOpenChange,
+  filters,
+  options,
+  onToggleBrand,
+  onToggleMaterial,
+  onSelectLongitud,
+  onSelectDiametro,
+  onReset
+}: FilterSheetProps) {
+  return (
+    <>
+      <aside className="hidden h-full w-full max-w-xs rounded-2xl border border-neutral-200 bg-white shadow-sm md:block">
+        <FilterContent
+          filters={filters}
+          options={options}
+          onToggleBrand={onToggleBrand}
+          onToggleMaterial={onToggleMaterial}
+          onSelectLongitud={onSelectLongitud}
+          onSelectDiametro={onSelectDiametro}
+          onReset={onReset}
+        />
+      </aside>
+      <Transition.Root show={open} as={Fragment}>
+        <Dialog as="div" className="relative z-50 md:hidden" onClose={onOpenChange}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-200"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-150"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-neutral-900/40" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 flex justify-end">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-200"
+              enterFrom="translate-y-full"
+              enterTo="translate-y-0"
+              leave="ease-in duration-150"
+              leaveFrom="translate-y-0"
+              leaveTo="translate-y-full"
+            >
+              <div className="relative flex h-[80vh] w-full max-w-md flex-col rounded-t-3xl border border-neutral-200 bg-white shadow-xl">
+                <FilterContent
+                  filters={filters}
+                  options={options}
+                  onToggleBrand={onToggleBrand}
+                  onToggleMaterial={onToggleMaterial}
+                  onSelectLongitud={onSelectLongitud}
+                  onSelectDiametro={onSelectDiametro}
+                  onReset={onReset}
+                />
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition.Root>
+    </>
+  )
+}
