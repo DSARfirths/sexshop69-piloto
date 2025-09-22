@@ -260,6 +260,46 @@
     "badge": "promo"
   },
   {
+    "slug": "king-cock",
+    "name": "King Cock 8\" Realista con Ventosa",
+    "price": 219.9,
+    "sku": "KC08SV",
+    "category": "consoladores",
+    "nsfw": true,
+    "images": 6,
+    "brand": "Pipedream",
+    "badge": "top",
+    "bestSeller": true,
+    "features": [
+      "Moldeado a mano para un acabado realista con venas y glande definidos",
+      "Ventosa de alta succión para uso manos libres en superficies lisas",
+      "Compatible con arneses O-ring estándar para juego en pareja"
+    ],
+    "specs": {
+      "longitud_total": "20 cm (8\")",
+      "longitud_insertable": "17.8 cm (7\")",
+      "diametro": "4.5 cm aprox.",
+      "material": "PVC libre de ftalatos",
+      "base": "Ventosa compatible con arnés",
+      "color": "Piel",
+      "origen": "Importado"
+    },
+    "related": [
+      "arnes-dillio-6",
+      "gel-agua-125",
+      "dillio-9"
+    ],
+    "attributes": {
+      "material": "PVC libre de ftalatos",
+      "longitud": "20 cm (8\")",
+      "diametro": "4.5 cm aprox.",
+      "vibracion": "No",
+      "waterproof": true,
+      "peso": "410 g aprox.",
+      "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
+    }
+  },
+  {
     "slug": "fetish-tronco-amor-inflable",
     "name": "Serie Fetish Fantasy – Tronco de amor inflable",
     "price": 299.9,
