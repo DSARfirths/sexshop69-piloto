@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { motion, type HTMLMotionProps } from 'framer-motion'
 import QuickViewDialog from '@/components/product/QuickViewDialog'
 import { useCategoryFilters } from '@/components/category/filters-context'
-import { resolveAssetFolder, SUPPORTED_IMAGE_EXTENSIONS, type Product } from '@/lib/products'
+import { DEFAULT_IMAGE_EXTENSIONS, resolveAssetFolder, type Product } from '@/lib/products'
 
 const BADGE_LABELS: Record<NonNullable<Product['badge']>, string> = {
   nuevo: 'Nuevo',
@@ -49,16 +49,18 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
   const hasGallery = Boolean(p.images && p.images > 0)
   const assetFolder = resolveAssetFolder(p)
   const mainImageBasePath = hasGallery ? `/${assetFolder}/${p.slug}/1` : null
+  const imageExtensions = p.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
+  const hasExtensions = imageExtensions.length > 0
   const mainImageSrc =
-    hasGallery && !imageFailed && mainImageBasePath
-      ? `${mainImageBasePath}.${SUPPORTED_IMAGE_EXTENSIONS[extensionIndex]}`
+    hasGallery && !imageFailed && mainImageBasePath && hasExtensions
+      ? `${mainImageBasePath}.${imageExtensions[Math.min(extensionIndex, imageExtensions.length - 1)]}`
       : FALLBACK_IMAGE_SRC
   const shouldPriorityLoad = Boolean(highlightBadge || p.badge === 'top')
 
   useEffect(() => {
     setExtensionIndex(0)
     setImageFailed(false)
-  }, [mainImageBasePath])
+  }, [mainImageBasePath, imageExtensions])
 
   useEffect(() => {
     return () => {
@@ -131,22 +133,22 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
                 {displayBadge}
               </div>
             )}
-              <Image
-                src={mainImageSrc}
-                alt={p.name}
-                fill
-                priority={shouldPriorityLoad}
-                sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 90vw"
-                className={`h-full w-full object-cover transition duration-500 ${hasGallery ? 'group-hover:scale-105' : ''}`}
-                onError={() => {
-                  if (!hasGallery || !mainImageBasePath) return
-                  if (extensionIndex < SUPPORTED_IMAGE_EXTENSIONS.length - 1) {
-                    setExtensionIndex(prev => prev + 1)
-                  } else {
-                    setImageFailed(true)
-                  }
-                }}
-              />
+            <Image
+              src={mainImageSrc}
+              alt={p.name}
+              fill
+              priority={shouldPriorityLoad}
+              sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 90vw"
+              className={`h-full w-full object-cover transition duration-500 ${hasGallery ? 'group-hover:scale-105' : ''}`}
+              onError={() => {
+                if (!hasGallery || !mainImageBasePath || !hasExtensions) return
+                if (extensionIndex < imageExtensions.length - 1) {
+                  setExtensionIndex(prev => prev + 1)
+                } else {
+                  setImageFailed(true)
+                }
+              }}
+            />
           </div>
           <div className="mt-3 space-y-1">
             <div className="line-clamp-2 font-medium text-neutral-900">{p.name}</div>

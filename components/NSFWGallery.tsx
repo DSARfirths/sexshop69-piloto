@@ -1,17 +1,24 @@
 'use client'
 import { useState } from 'react'
-import { resolveAssetFolder, SUPPORTED_IMAGE_EXTENSIONS } from '@/lib/products'
+import { DEFAULT_IMAGE_EXTENSIONS, resolveAssetFolder, type ImageExtension } from '@/lib/products'
 
-type Extension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number]
-
-function NSFWImage({ slug, index }: { slug: string; index: number }) {
+function NSFWImage({
+  slug,
+  index,
+  extensions
+}: {
+  slug: string
+  index: number
+  extensions: readonly ImageExtension[]
+}) {
   const [extIndex, setExtIndex] = useState(0)
   const [failed, setFailed] = useState(false)
-  const ext: Extension = SUPPORTED_IMAGE_EXTENSIONS[extIndex]
+  const hasExtensions = extensions.length > 0
+  const ext = hasExtensions ? extensions[Math.min(extIndex, extensions.length - 1)] : undefined
   const assetFolder = resolveAssetFolder({ nsfw: true })
-  const src = `/${assetFolder}/${slug}/${index}.${ext}`
+  const src = ext ? `/${assetFolder}/${slug}/${index}.${ext}` : undefined
 
-  if (failed) {
+  if (failed || !src) {
     return (
       <div className="w-full rounded-xl border border-dashed p-6 text-center text-xs text-neutral-500">
         Imagen {index} no disponible
@@ -26,7 +33,7 @@ function NSFWImage({ slug, index }: { slug: string; index: number }) {
       className="w-full rounded-xl border"
       loading="lazy"
       onError={() => {
-        if (extIndex < SUPPORTED_IMAGE_EXTENSIONS.length - 1) {
+        if (extIndex < extensions.length - 1) {
           setExtIndex(prev => prev + 1)
         } else {
           setFailed(true)
@@ -36,7 +43,15 @@ function NSFWImage({ slug, index }: { slug: string; index: number }) {
   )
 }
 
-export default function NSFWGallery({ slug, count }: { slug: string; count: number }) {
+export default function NSFWGallery({
+  slug,
+  count,
+  imageExtensions = DEFAULT_IMAGE_EXTENSIONS
+}: {
+  slug: string
+  count: number
+  imageExtensions?: readonly ImageExtension[]
+}) {
   const [show, setShow] = useState(false)
   if (!count) {
     return <div className="text-xs text-neutral-500">Imágenes disponibles al publicar</div>
@@ -52,7 +67,7 @@ export default function NSFWGallery({ slug, count }: { slug: string; count: numb
       ) : (
         <div className="space-y-3">
           {Array.from({ length: count }).map((_, i) => (
-            <NSFWImage key={i} slug={slug} index={i + 1} />
+            <NSFWImage key={i} slug={slug} index={i + 1} extensions={imageExtensions} />
           ))}
         </div>
       )}
