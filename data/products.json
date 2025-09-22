@@ -13,7 +13,9 @@
       "waterproof": "No informado (valor por defecto)",
       "peso": "No especificado (valor por defecto)",
       "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
-    }
+    },
+    "bestSeller": true,
+    "badge": "top"
   },
   {
     "slug": "gel-silicona-50",
@@ -93,7 +95,9 @@
       "waterproof": "No informado (valor por defecto)",
       "peso": "No especificado (valor por defecto)",
       "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
-    }
+    },
+    "bestSeller": true,
+    "badge": "nuevo"
   },
   {
     "slug": "lenceria-roja-encaje",
@@ -157,7 +161,9 @@
       "waterproof": "No informado (valor por defecto)",
       "peso": "No especificado (valor por defecto)",
       "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
-    }
+    },
+    "bestSeller": true,
+    "badge": "top"
   },
   {
     "slug": "kit-aniversario",
@@ -225,7 +231,9 @@
       "waterproof": "No informado (valor por defecto)",
       "peso": "No especificado (valor por defecto)",
       "garantia": "Garantía limitada de 1 año por defecto de fabricación (valor por defecto)"
-    }
+    },
+    "bestSeller": true,
+    "badge": "promo"
   },
   {
     "slug": "fetish-tronco-amor-inflable",
