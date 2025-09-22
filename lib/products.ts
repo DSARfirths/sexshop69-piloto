@@ -52,6 +52,7 @@ export type Product = {
   nsfw?: boolean
   images?: number
   assetFolder?: 'nsfw-assets' | 'sfw-assets'
+  imageSet?: ImageExtension[]
   brand?: string
   badge?: 'nuevo' | 'top' | 'promo'
   bestSeller?: boolean
@@ -67,63 +68,19 @@ type RawProduct = Omit<Product, 'attributes'> & { attributes?: Partial<ProductAt
 
 const rawProducts = products as RawProduct[]
 
-export const SUPPORTED_IMAGE_EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png', 'avif'] as const
+export const SUPPORTED_IMAGE_EXTENSIONS = ['avif', 'webp', 'jpg', 'jpeg', 'png'] as const
 
-type ImageExtension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number]
+export type ImageExtension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number]
 
-export function resolveExistingImageExtensions(
-  product: Pick<Product, 'slug' | 'assetFolder' | 'nsfw'> & { images?: number },
-  imageIndex = 1
-): ImageExtension[] {
-  if ((product.images ?? 0) <= 0) return []
-  const serverOnlyError = new Error('resolveExistingImageExtensions solo se puede usar en el servidor')
+export const DEFAULT_IMAGE_EXTENSIONS = ['avif', 'webp'] as const satisfies readonly ImageExtension[]
 
-  try {
-    if (typeof window !== 'undefined') {
-      throw serverOnlyError
-    }
-
-    const dynamicRequire = (() => {
-      try {
-        return eval('require') as unknown as (module: string) => unknown
-      } catch (error) {
-        return undefined
-      }
-    })()
-
-    if (typeof dynamicRequire !== 'function') return []
-
-    const fsModule = (() => {
-      try {
-        return dynamicRequire('fs') as typeof import('fs')
-      } catch (error) {
-        return undefined
-      }
-    })()
-
-    const pathModule = (() => {
-      try {
-        return dynamicRequire('path') as typeof import('path')
-      } catch (error) {
-        return undefined
-      }
-    })()
-
-    if (!fsModule?.existsSync || !pathModule?.join) return []
-
-    const assetFolder = resolveAssetFolder(product)
-    const directory = pathModule.join(process.cwd(), 'public', assetFolder, product.slug)
-
-    return SUPPORTED_IMAGE_EXTENSIONS.filter((extension): extension is ImageExtension => {
-      const filePath = pathModule.join(directory, `${imageIndex}.${extension}`)
-      return fsModule.existsSync(filePath)
-    })
-  } catch (error) {
-    if (error === serverOnlyError) {
-      throw error
-    }
-    return []
-  }
+function normalizeImageSet(imageSet?: ImageExtension[]): ImageExtension[] | undefined {
+  if (!imageSet || imageSet.length === 0) return undefined
+  const validExtensions = imageSet.filter((extension): extension is ImageExtension =>
+    SUPPORTED_IMAGE_EXTENSIONS.includes(extension)
+  )
+  const uniqueExtensions = Array.from(new Set(validExtensions))
+  return uniqueExtensions.length > 0 ? uniqueExtensions : undefined
 }
 
 export function resolveAssetFolder(product: Pick<Product, 'assetFolder' | 'nsfw'>): 'nsfw-assets' | 'sfw-assets' {
@@ -146,6 +103,7 @@ function normalizeAttributes(attributes?: Partial<ProductAttributes>): ProductAt
 const catalog: Product[] = rawProducts.map((product) => ({
   ...product,
   assetFolder: resolveAssetFolder(product),
+  imageSet: normalizeImageSet(product.imageSet),
   attributes: normalizeAttributes(product.attributes)
 }))
 

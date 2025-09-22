@@ -2,12 +2,12 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import {
+  DEFAULT_IMAGE_EXTENSIONS,
   bySlug,
   formatAttributeLabel,
   formatAttributeValue,
   getProductProperties,
-  resolveAssetFolder,
-  resolveExistingImageExtensions
+  resolveAssetFolder
 } from '@/lib/products'
 import StickyCTA from '@/components/StickyCTA'
 import ProductGallery from '@/components/product/ProductGallery'
@@ -24,10 +24,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const canonical = `/producto/${p.slug}`
   const hasImages = (p.images ?? 0) > 0
   const assetFolder = resolveAssetFolder(p)
-  const imageExtensions = hasImages ? resolveExistingImageExtensions(p) : []
-  const hasValidImages = imageExtensions.length > 0
+  const imageExtensions = p.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
+  const availableExtensions = hasImages ? imageExtensions : []
+  const hasValidImages = availableExtensions.length > 0
   const openGraphImages = hasValidImages
-    ? imageExtensions.map(extension => ({
+    ? availableExtensions.map(extension => ({
         url: `/${assetFolder}/${p.slug}/1.${extension}`,
         alt: `${p.name} — vista 1`
       }))
@@ -60,8 +61,11 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
   const product = bySlug(params.slug)
   if (!product) return notFound()
   const assetFolder = resolveAssetFolder(product)
-  const availableImageExtensions = (product.images ?? 0) > 0 ? resolveExistingImageExtensions(product) : []
-  const imageUrls = availableImageExtensions.map(extension => `/${assetFolder}/${product.slug}/1.${extension}`)
+  const imageExtensions = product.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
+  const hasImages = (product.images ?? 0) > 0
+  const imageUrls = hasImages
+    ? imageExtensions.map(extension => `/${assetFolder}/${product.slug}/1.${extension}`)
+    : []
   const isNSFW = !!product.nsfw
   const structuredProperties = getProductProperties(product.attributes, product.specs).map(([name, value]) => ({
     '@type': 'PropertyValue',
@@ -95,6 +99,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           imageCount={product.images ?? 0}
           nsfw={isNSFW}
           assetFolder={assetFolder}
+          imageExtensions={imageExtensions}
         />
         <div>
           <div className="flex items-center gap-2 text-xs text-neutral-500">

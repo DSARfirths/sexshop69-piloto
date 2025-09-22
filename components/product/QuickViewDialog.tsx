@@ -6,11 +6,12 @@ import Link from 'next/link'
 import { Dialog, Transition } from '@headlessui/react'
 import { X, MessageCircle, ShoppingBag } from 'lucide-react'
 import {
+  DEFAULT_IMAGE_EXTENSIONS,
   formatAttributeLabel,
   formatAttributeValue,
   getProductProperties,
   resolveAssetFolder,
-  SUPPORTED_IMAGE_EXTENSIONS,
+  type ImageExtension,
   type Product
 } from '@/lib/products'
 
@@ -29,22 +30,24 @@ type AssetImageProps = {
   priority?: boolean
   sizes?: string
   shouldBlur?: boolean
+  extensions: readonly ImageExtension[]
 }
 
-function AssetImage({ basePath, alt, className, priority, sizes, shouldBlur }: AssetImageProps) {
+function AssetImage({ basePath, alt, className, priority, sizes, shouldBlur, extensions }: AssetImageProps) {
   const [extensionIndex, setExtensionIndex] = useState(0)
   const [failed, setFailed] = useState(false)
   const hasBasePath = Boolean(basePath)
+  const hasExtensions = extensions.length > 0
   const finalClassName = `${className ?? ''}${shouldBlur && hasBasePath ? ' blur-sm' : ''}`.trim()
 
   useEffect(() => {
     setExtensionIndex(0)
     setFailed(false)
-  }, [basePath])
+  }, [basePath, extensions])
 
   const src =
-    hasBasePath && !failed && basePath
-      ? `${basePath}.${SUPPORTED_IMAGE_EXTENSIONS[extensionIndex]}`
+    hasBasePath && !failed && basePath && hasExtensions
+      ? `${basePath}.${extensions[Math.min(extensionIndex, extensions.length - 1)]}`
       : FALLBACK_IMAGE_SRC
 
   return (
@@ -57,7 +60,7 @@ function AssetImage({ basePath, alt, className, priority, sizes, shouldBlur }: A
       className={finalClassName}
       onError={() => {
         if (!hasBasePath) return
-        if (extensionIndex < SUPPORTED_IMAGE_EXTENSIONS.length - 1) {
+        if (extensionIndex < extensions.length - 1) {
           setExtensionIndex(prev => prev + 1)
         } else {
           setFailed(true)
@@ -76,6 +79,7 @@ type QuickViewDialogProps = {
 export default function QuickViewDialog({ product, open, onOpenChange }: QuickViewDialogProps) {
   const assetFolder = resolveAssetFolder(product)
   const hasImages = (product.images ?? 0) > 0
+  const imageExtensions = product.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
   const galleryImages = useMemo(() => {
     if (!hasImages) return []
     const limit = Math.min(product.images ?? 0, 4)
@@ -140,6 +144,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                           galleryImages.length > 0 ? 'md:hover:scale-[1.02] md:transition-transform md:duration-500' : ''
                         }`}
                         shouldBlur={Boolean(product.nsfw)}
+                        extensions={imageExtensions}
                       />
                     </div>
                     {galleryImages.length > 1 && (
@@ -156,6 +161,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                               priority={open && index < 2}
                               className="object-cover"
                               shouldBlur={Boolean(product.nsfw)}
+                              extensions={imageExtensions}
                             />
                           </div>
                         ))}

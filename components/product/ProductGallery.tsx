@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import { AnimatePresence, motion } from 'framer-motion'
-import { SUPPORTED_IMAGE_EXTENSIONS } from '@/lib/products'
+import type { ImageExtension } from '@/lib/products'
 
 const MotionWrapper = motion<{ className?: string }>('div')
 
@@ -14,25 +14,25 @@ const SAFE_PLACEHOLDER =
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#f4f4f5"/><stop offset="100%" stop-color="#e4e4e7"/></linearGradient></defs><rect width="600" height="600" fill="url(#g)"/><text x="50%" y="50%" fill="#a1a1aa" font-family="sans-serif" font-size="28" font-weight="600" text-anchor="middle" dominant-baseline="middle">Vista previa</text></svg>`
   )
 
-type Extension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number]
-
 type GalleryAssetProps = {
   basePath: string
   alt: string
   className?: string
   enabled: boolean
   priority?: boolean
+  extensions: readonly ImageExtension[]
 }
 
-function GalleryAsset({ basePath, alt, className, enabled, priority }: GalleryAssetProps) {
+function GalleryAsset({ basePath, alt, className, enabled, priority, extensions }: GalleryAssetProps) {
   const [extensionIndex, setExtensionIndex] = useState(0)
   const [failed, setFailed] = useState(false)
-  const extension: Extension = SUPPORTED_IMAGE_EXTENSIONS[extensionIndex]
+  const hasExtensions = extensions.length > 0
+  const extension = hasExtensions ? extensions[Math.min(extensionIndex, extensions.length - 1)] : undefined
 
   useEffect(() => {
     setExtensionIndex(0)
     setFailed(false)
-  }, [basePath])
+  }, [basePath, extensions])
 
   if (!enabled) {
     return (
@@ -58,6 +58,18 @@ function GalleryAsset({ basePath, alt, className, enabled, priority }: GalleryAs
     )
   }
 
+  if (!extension) {
+    return (
+      <img
+        src={SAFE_PLACEHOLDER}
+        alt={`${alt} no disponible`}
+        className={className}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    )
+  }
+
   const src = `${basePath}.${extension}`
 
   return (
@@ -68,7 +80,7 @@ function GalleryAsset({ basePath, alt, className, enabled, priority }: GalleryAs
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
       onError={() => {
-        if (extensionIndex < SUPPORTED_IMAGE_EXTENSIONS.length - 1) {
+        if (extensionIndex < extensions.length - 1) {
           setExtensionIndex(prev => prev + 1)
         } else {
           setFailed(true)
@@ -84,9 +96,17 @@ type ProductGalleryProps = {
   imageCount?: number
   nsfw?: boolean
   assetFolder: 'nsfw-assets' | 'sfw-assets'
+  imageExtensions: readonly ImageExtension[]
 }
 
-export default function ProductGallery({ slug, name, imageCount = 0, nsfw = false, assetFolder }: ProductGalleryProps) {
+export default function ProductGallery({
+  slug,
+  name,
+  imageCount = 0,
+  nsfw = false,
+  assetFolder,
+  imageExtensions
+}: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isVerified, setIsVerified] = useState(false)
 
@@ -166,6 +186,7 @@ export default function ProductGallery({ slug, name, imageCount = 0, nsfw = fals
                           enabled
                           priority={activeIndex === 0}
                           className="h-full w-full object-cover"
+                          extensions={imageExtensions}
                         />
                       </Zoom>
                     </div>
@@ -175,6 +196,7 @@ export default function ProductGallery({ slug, name, imageCount = 0, nsfw = fals
                       alt={`${name} — vista censurada`}
                       enabled={false}
                       className="h-full w-full object-cover blur-xl"
+                      extensions={imageExtensions}
                     />
                   )}
                 </MotionWrapper>
@@ -209,6 +231,7 @@ export default function ProductGallery({ slug, name, imageCount = 0, nsfw = fals
                     alt={`${name} — miniatura ${index + 1}`}
                     enabled
                     className="h-full w-full object-cover"
+                    extensions={imageExtensions}
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-neutral-900/70 text-[11px] font-semibold uppercase tracking-wide text-white">
