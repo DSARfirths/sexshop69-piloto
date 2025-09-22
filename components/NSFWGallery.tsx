@@ -1,15 +1,15 @@
 'use client'
 import { useState } from 'react'
+import { resolveAssetFolder, SUPPORTED_IMAGE_EXTENSIONS } from '@/lib/products'
 
-const EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png', 'avif'] as const
-
-type Extension = (typeof EXTENSIONS)[number]
+type Extension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number]
 
 function NSFWImage({ slug, index }: { slug: string; index: number }) {
   const [extIndex, setExtIndex] = useState(0)
   const [failed, setFailed] = useState(false)
-  const ext: Extension = EXTENSIONS[extIndex]
-  const src = `/nsfw-assets/${slug}/${index}.${ext}`
+  const ext: Extension = SUPPORTED_IMAGE_EXTENSIONS[extIndex]
+  const assetFolder = resolveAssetFolder({ nsfw: true })
+  const src = `/${assetFolder}/${slug}/${index}.${ext}`
 
   if (failed) {
     return (
@@ -26,7 +26,7 @@ function NSFWImage({ slug, index }: { slug: string; index: number }) {
       className="w-full rounded-xl border"
       loading="lazy"
       onError={() => {
-        if (extIndex < EXTENSIONS.length - 1) {
+        if (extIndex < SUPPORTED_IMAGE_EXTENSIONS.length - 1) {
           setExtIndex(prev => prev + 1)
         } else {
           setFailed(true)

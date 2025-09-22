@@ -1,7 +1,14 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { bySlug, formatAttributeLabel, formatAttributeValue, getProductProperties } from '@/lib/products'
+import {
+  bySlug,
+  formatAttributeLabel,
+  formatAttributeValue,
+  getProductProperties,
+  resolveAssetFolder,
+  SUPPORTED_IMAGE_EXTENSIONS
+} from '@/lib/products'
 import StickyCTA from '@/components/StickyCTA'
 import ProductGallery from '@/components/product/ProductGallery'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -16,9 +23,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const description = 'Página de producto (piloto ad-safe, mobile-first).'
   const canonical = `/producto/${p.slug}`
   const hasImages = (p.images ?? 0) > 0
+  const assetFolder = resolveAssetFolder(p)
   const openGraphImages = hasImages
-    ? ['webp', 'jpg', 'jpeg', 'png', 'avif'].map(extension => ({
-        url: `/nsfw-assets/${p.slug}/1.${extension}`,
+    ? SUPPORTED_IMAGE_EXTENSIONS.map(extension => ({
+        url: `/${assetFolder}/${p.slug}/1.${extension}`,
         alt: `${p.name} — vista 1`
       }))
     : undefined
@@ -36,7 +44,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       url: canonical,
       siteName: 'SexShop del Perú 69',
       images: openGraphImages
-    },
+    } as Metadata['openGraph'],
     twitter: {
       card: hasImages ? 'summary_large_image' : 'summary',
       title,
@@ -49,6 +57,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default function ProductPage({ params }: { params: { slug: string } }) {
   const product = bySlug(params.slug)
   if (!product) return notFound()
+  const assetFolder = resolveAssetFolder(product)
   const isNSFW = !!product.nsfw
   const structuredProperties = getProductProperties(product.attributes, product.specs).map(([name, value]) => ({
     '@type': 'PropertyValue',
@@ -81,6 +90,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           name={product.name}
           imageCount={product.images ?? 0}
           nsfw={isNSFW}
+          assetFolder={assetFolder}
         />
         <div>
           <div className="flex items-center gap-2 text-xs text-neutral-500">
