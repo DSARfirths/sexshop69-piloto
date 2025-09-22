@@ -6,12 +6,24 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ChatBubble } from '@/components/ChatBubble'
 import { AgeGate } from '@/components/AgeGate'
-import Tracker from './Tracker';
+import Tracker from './Tracker'
 
-export const metadata: Metadata = {
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+
+const baseMetadata: Metadata = {
   title: 'SexShop del Perú 69 — Piloto',
   description: 'Piloto seguro, mobile-first, con landings A/B y anti-indexación de imágenes sensibles.'
 }
+
+export const metadata: Metadata = {
+  ...baseMetadata,
+  metadataBase: siteUrl ? new URL(siteUrl) : undefined
+}
+
+// Nota: para personalizar títulos y descripciones por categoría o producto,
+// actualice los métodos `generateMetadata` en `app/categoria/[slug]/page.tsx`
+// y `app/producto/[slug]/page.tsx`. Allí también se pueden ajustar etiquetas
+// canonical, Open Graph o reglas de indexación específicas.
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;

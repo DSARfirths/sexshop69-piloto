@@ -12,9 +12,37 @@ import Sections from '@/components/ui/Sections'
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const p = bySlug(params.slug)
   if (!p) return {}
+  const title = `${p.name} — SexShop del Perú 69`
+  const description = 'Página de producto (piloto ad-safe, mobile-first).'
+  const canonical = `/producto/${p.slug}`
+  const hasImages = (p.images ?? 0) > 0
+  const openGraphImages = hasImages
+    ? ['webp', 'jpg', 'jpeg', 'png', 'avif'].map(extension => ({
+        url: `/nsfw-assets/${p.slug}/1.${extension}`,
+        alt: `${p.name} — vista 1`
+      }))
+    : undefined
+
   return {
-    title: `${p.name} — SexShop del Perú 69`,
-    description: 'Página de producto (piloto ad-safe, mobile-first).'
+    title,
+    description,
+    alternates: {
+      canonical
+    },
+    openGraph: {
+      type: 'product',
+      title,
+      description,
+      url: canonical,
+      siteName: 'SexShop del Perú 69',
+      images: openGraphImages
+    },
+    twitter: {
+      card: hasImages ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      images: openGraphImages?.map(image => image.url)
+    }
   }
 }
 
