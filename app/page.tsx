@@ -42,7 +42,7 @@ export default function Page(){
 
       {otherCategories.length > 0 && (
         <section className="mt-8">
-          <h2 className="text-lg font-semibold text-neutral-800 mb-3">Catálogo completo</h2>
+          <h2 className="text-lg font-semibold text-neutral-800 mb-3">Catalogo completo</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {otherCategories.map(slug => {
               const label = labelFor(slug)
