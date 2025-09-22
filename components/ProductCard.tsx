@@ -123,32 +123,34 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
             onTouchMove: handleTouchMove
           } as unknown as HTMLMotionProps<'a'>)}
         >
-          <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100">
-            <div
-              className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 via-transparent to-brand-accent/20 opacity-0 transition group-hover:opacity-100"
-              aria-hidden
-            />
-            {displayBadge && (
-              <div className="absolute left-3 top-3 inline-flex items-center rounded-full bg-neutral-900/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-lg">
-                {displayBadge}
-              </div>
-            )}
-            <Image
-              src={mainImageSrc}
-              alt={p.name}
-              fill
-              priority={shouldPriorityLoad}
-              sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 90vw"
-              className={`h-full w-full object-cover transition duration-500 ${hasGallery ? 'group-hover:scale-105' : ''}`}
-              onError={() => {
-                if (!hasGallery || !mainImageBasePath || !hasExtensions) return
-                if (extensionIndex < imageExtensions.length - 1) {
-                  setExtensionIndex(prev => prev + 1)
-                } else {
-                  setImageFailed(true)
-                }
-              }}
-            />
+          <div className="relative aspect-[4/3] rounded-xl border border-neutral-200 bg-neutral-100 p-2">
+            <div className="relative h-full w-full overflow-hidden rounded-lg">
+              <div
+                className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 via-transparent to-brand-accent/20 opacity-0 transition group-hover:opacity-100"
+                aria-hidden
+              />
+              {displayBadge && (
+                <div className="absolute left-2.5 top-2.5 inline-flex items-center rounded-full bg-neutral-900/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-lg">
+                  {displayBadge}
+                </div>
+              )}
+              <Image
+                src={mainImageSrc}
+                alt={p.name}
+                fill
+                priority={shouldPriorityLoad}
+                sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 90vw"
+                className={`h-full w-full object-cover transition duration-500 ${hasGallery ? 'group-hover:scale-105' : ''}`}
+                onError={() => {
+                  if (!hasGallery || !mainImageBasePath || !hasExtensions) return
+                  if (extensionIndex < imageExtensions.length - 1) {
+                    setExtensionIndex(prev => prev + 1)
+                  } else {
+                    setImageFailed(true)
+                  }
+                }}
+              />
+            </div>
           </div>
           <div className="mt-3 space-y-1">
             <div className="line-clamp-2 font-medium text-neutral-900">{p.name}</div>
