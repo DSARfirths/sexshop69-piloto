@@ -1,7 +1,7 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { bySlug } from '@/lib/products'
+import { bySlug, formatAttributeLabel, formatAttributeValue, getProductProperties } from '@/lib/products'
 import StickyCTA from '@/components/StickyCTA'
 import NSFWGallery from '@/components/NSFWGallery'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -18,13 +18,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function ProductPage({ params }: { params: { slug: string } }){
+export default function ProductPage({ params }: { params: { slug: string } }) {
   const product = bySlug(params.slug)
   if (!product) return notFound()
   const isNSFW = !!product.nsfw
+  const structuredProperties = getProductProperties(product.attributes, product.specs).map(([name, value]) => ({
+    '@type': 'PropertyValue',
+    name: formatAttributeLabel(name),
+    value: formatAttributeValue(value)
+  }))
   return (
     <div>
-      <Breadcrumbs items={[{href:'/',label:'Inicio'},{href:`/categoria/${product.category}`,label:product.category},{label:product.name}]} />
+      <Breadcrumbs items={[{ href: '/', label: 'Inicio' }, { href: `/categoria/${product.category}`, label: product.category }, { label: product.name }]} />
 
       <div className="grid md:grid-cols-2 gap-6 md:gap-8 mt-3">
         <div className="aspect-square rounded-2xl bg-neutral-100 flex items-center justify-center">
@@ -50,9 +55,9 @@ export default function ProductPage({ params }: { params: { slug: string } }){
 
           <TrustBadges className="mt-4" />
 
-          {product.features && product.features.length>0 && (
+          {product.features && product.features.length > 0 && (
             <ul className="mt-5 list-disc pl-5 text-neutral-700 text-sm space-y-1">
-              {product.features.slice(0,4).map((f,i)=>(<li key={i}>{f}</li>))}
+              {product.features.slice(0, 4).map((f, i) => (<li key={i}>{f}</li>))}
             </ul>
           )}
         </div>
@@ -63,7 +68,7 @@ export default function ProductPage({ params }: { params: { slug: string } }){
           <Sections product={product} />
         </div>
         <aside>
-          {product.specs && <SpecsTable specs={product.specs} />}
+          <SpecsTable attributes={product.attributes} specs={product.specs} />
         </aside>
       </div>
 
@@ -72,12 +77,12 @@ export default function ProductPage({ params }: { params: { slug: string } }){
         href={`/checkout/success?sku=${product.sku}&value=${product.price}`}
       />
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         '@context': 'https://schema.org', '@type': 'Product', name: product.name, sku: product.sku,
         brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
         offers: { '@type': 'Offer', price: product.price, priceCurrency: 'PEN', availability: 'https://schema.org/InStock' },
-        additionalProperty: product.specs ? Object.entries(product.specs).map(([name,value])=>({ '@type':'PropertyValue', name, value })) : []
-      })}} />
+        additionalProperty: structuredProperties
+      }) }} />
     </div>
   )
 }
