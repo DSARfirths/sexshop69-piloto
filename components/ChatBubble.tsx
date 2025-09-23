@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MessageCircle } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { bySlug, byCategory, type Product } from '@/lib/products'
@@ -55,6 +55,23 @@ export function ChatBubble() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
+  useEffect(() => {
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => setOpen(false)
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('sexshop:chat-open', handleOpen)
+      window.addEventListener('sexshop:chat-close', handleClose)
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('sexshop:chat-open', handleOpen)
+        window.removeEventListener('sexshop:chat-close', handleClose)
+      }
+    }
+  }, [])
+
   const ctx = useMemo(() => getCtx(pathname), [pathname])
   const suggestions = useMemo(() => buildSuggestions(ctx), [ctx])
 
@@ -63,29 +80,37 @@ export function ChatBubble() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="h-14 w-14 rounded-full shadow-lg bg-brand-accent text-white flex items-center justify-center"
+          className="flex h-14 w-14 items-center justify-center rounded-full border border-fuchsia-400/40 bg-fuchsia-500/90 text-white shadow-xl transition-transform duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-200/80"
           aria-label="Abrir asistente"
         >
           <MessageCircle />
         </button>
       )}
       {open && (
-        <div className="w-[320px] rounded-2xl shadow-2xl bg-white border p-3">
-          <div className="text-sm font-semibold">Asistente SexShop69</div>
-          <p className="text-xs text-neutral-600 mt-1">
+        <div className="w-[320px] rounded-2xl border border-fuchsia-500/30 bg-neutral-950/95 p-4 text-neutral-100 shadow-[0_24px_60px_-15px_rgba(255,0,140,0.6)] backdrop-blur">
+          <div className="text-sm font-semibold text-white">Asistente SexShop69</div>
+          <p className="mt-1 text-xs text-neutral-300">
             Experta sugerente (modo seguro). No muestra imágenes; sugiere enlaces al producto/checkout.
           </p>
           <ul className="mt-3 space-y-2">
             {suggestions.map((s, i) => (
               <li key={i}>
-                <a className="block text-sm px-3 py-2 rounded-xl border hover:bg-neutral-50" href={s.href}>
+                <a
+                  className="block rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm transition hover:border-fuchsia-400/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                  href={s.href}
+                >
                   {s.label}
                 </a>
               </li>
             ))}
           </ul>
-          <div className="flex justify-end mt-3">
-            <button onClick={() => setOpen(false)} className="text-xs opacity-70">Cerrar</button>
+          <div className="mt-3 flex justify-end">
+            <button
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium text-fuchsia-100 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+            >
+              Cerrar
+            </button>
           </div>
         </div>
       )}
