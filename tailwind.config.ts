@@ -1,4 +1,6 @@
 import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
+
 export default {
   content: [
     './app/**/*.{ts,tsx}',
@@ -6,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', ...defaultTheme.fontFamily.sans]
+      },
       colors: {
         brand: {
           primary: '#0A1F44',

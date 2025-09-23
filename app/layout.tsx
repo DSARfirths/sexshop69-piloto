@@ -32,8 +32,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <head>
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+          crossOrigin="anonymous"
+        />
         {gaId && (
           <>
+            <link
+              rel="preconnect"
+              href="https://www.googletagmanager.com"
+            />
+            <link rel="preconnect" href="https://www.google-analytics.com" />
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
               strategy="afterInteractive"
@@ -48,6 +65,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               `}
             </Script>
           </>
+        )}
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <link rel="preconnect" href="https://plausible.io" />
         )}
       </head>
       <body className="min-h-screen bg-white text-neutral-900 antialiased">
