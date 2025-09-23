@@ -6,9 +6,28 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, Search, X } from 'lucide-react'
 
 import SearchOverlay from './header/SearchOverlay'
+import categoriesData from '@/data/categories.json'
 
 const MotionWrapper: any = motion.div
 const MotionMobileMenu: any = motion.div
+
+type Category = {
+  slug: string
+  label: string
+  children?: {
+    slug: string
+    label: string
+  }[]
+}
+
+const staticLinks = [
+  {
+    href: '/ads/variant-a',
+    label: 'Promo A',
+  },
+]
+
+const categories = categoriesData as Category[]
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -34,18 +53,50 @@ export default function Header() {
           </Link>
 
           <nav className="hidden gap-6 text-sm md:flex">
-            <Link href="/categoria/bienestar" className="transition hover:text-brand-primary">
-              Bienestar
-            </Link>
-            <Link href="/categoria/lenceria" className="transition hover:text-brand-primary">
-              Lencería
-            </Link>
-            <Link href="/categoria/kits" className="transition hover:text-brand-primary">
-              Kits
-            </Link>
-            <Link href="/ads/variant-a" className="transition hover:text-brand-primary">
-              Promo A
-            </Link>
+            {categories.map((category) => {
+              const hasChildren = category.children && category.children.length > 0
+
+              if (!hasChildren) {
+                return (
+                  <Link
+                    key={category.slug}
+                    href={`/categoria/${category.slug}`}
+                    className="transition hover:text-brand-primary"
+                  >
+                    {category.label}
+                  </Link>
+                )
+              }
+
+              return (
+                <div key={category.slug} className="group relative">
+                  <Link
+                    href={`/categoria/${category.slug}`}
+                    className="transition hover:text-brand-primary"
+                  >
+                    {category.label}
+                  </Link>
+
+                  <div className="pointer-events-none absolute left-0 top-full hidden min-w-[14rem] flex-col gap-1 rounded-lg border border-neutral-100 bg-white p-3 text-sm text-neutral-700 shadow-lg transition group-hover:pointer-events-auto group-hover:flex group-focus-within:pointer-events-auto group-focus-within:flex">
+                    {category.children?.map((child) => (
+                      <Link
+                        key={child.slug}
+                        href={`/categoria/${child.slug}`}
+                        className="rounded-md px-2 py-1 transition hover:bg-neutral-50 hover:text-brand-primary"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+
+            {staticLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="transition hover:text-brand-primary">
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           <div className="flex items-center gap-1 md:gap-2">
@@ -80,18 +131,38 @@ export default function Header() {
               className="overflow-hidden border-t border-neutral-100 bg-white/90 backdrop-blur md:hidden"
             >
               <div className="mx-auto flex flex-col gap-3 px-4 py-3 text-sm">
-                <Link href="/categoria/bienestar" onClick={() => setMenuOpen(false)} className="py-1">
-                  Bienestar
-                </Link>
-                <Link href="/categoria/lenceria" onClick={() => setMenuOpen(false)} className="py-1">
-                  Lencería
-                </Link>
-                <Link href="/categoria/kits" onClick={() => setMenuOpen(false)} className="py-1">
-                  Kits
-                </Link>
-                <Link href="/ads/variant-a" onClick={() => setMenuOpen(false)} className="py-1">
-                  Promo A
-                </Link>
+                {categories.map((category) => (
+                  <div key={category.slug} className="flex flex-col gap-2">
+                    <Link
+                      href={`/categoria/${category.slug}`}
+                      onClick={() => setMenuOpen(false)}
+                      className="py-1"
+                    >
+                      {category.label}
+                    </Link>
+
+                    {category.children && category.children.length > 0 && (
+                      <div className="ml-3 flex flex-col gap-2 border-l border-neutral-200 pl-3 text-sm text-neutral-600">
+                        {category.children.map((child) => (
+                          <Link
+                            key={child.slug}
+                            href={`/categoria/${child.slug}`}
+                            onClick={() => setMenuOpen(false)}
+                            className="py-0.5"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {staticLinks.map((link) => (
+                  <Link key={link.href} href={link.href} onClick={() => setMenuOpen(false)} className="py-1">
+                    {link.label}
+                  </Link>
+                ))}
               </div>
             </MotionMobileMenu>
           )}
