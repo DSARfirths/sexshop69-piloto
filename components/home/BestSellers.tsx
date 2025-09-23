@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 import { motion, type Variants } from 'framer-motion'
 import type { Product } from '@/lib/products'
 import ProductCard from '@/components/ProductCard'
@@ -31,8 +32,13 @@ export default function BestSellers({ products }: BestSellersProps) {
             <h2 className="text-2xl font-semibold text-neutral-900">Más vendidos</h2>
             <p className="text-sm text-neutral-600">Selección curada por preferencia de la comunidad y disponibilidad inmediata.</p>
           </div>
-          <Link href="/categoria/bienestar" className="text-sm font-semibold text-brand-primary hover:underline">
-            Ver catálogo completo
+          <Link
+            href="/categoria/bienestar"
+            role="button"
+            className="group inline-flex items-center gap-2 self-start text-sm font-semibold text-brand-primary transition-colors hover:text-brand-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          >
+            Descubrir más
+            <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
       </motion.div>
