@@ -123,8 +123,8 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
             onTouchMove: handleTouchMove
           } as unknown as HTMLMotionProps<'a'>)}
         >
-          <div className="relative aspect-[4/3] rounded-xl border border-neutral-200 bg-neutral-100 p-2">
-            <div className="relative h-full w-full overflow-hidden rounded-lg">
+          <div className="relative aspect-[4/3] rounded-2xl border border-neutral-200 bg-neutral-100 p-4">
+            <div className="relative h-full w-full overflow-hidden rounded-xl">
               <div
                 className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 via-transparent to-brand-accent/20 opacity-0 transition group-hover:opacity-100"
                 aria-hidden
@@ -140,7 +140,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
                 fill
                 priority={shouldPriorityLoad}
                 sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 90vw"
-                className={`h-full w-full object-cover transition duration-500 ${hasGallery ? 'group-hover:scale-105' : ''}`}
+                className="h-full w-full object-contain transition duration-500"
                 onError={() => {
                   if (!hasGallery || !mainImageBasePath || !hasExtensions) return
                   if (extensionIndex < imageExtensions.length - 1) {
