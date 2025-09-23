@@ -8,6 +8,7 @@ import ProductCard from '@/components/ProductCard'
 
 type BestSellersProps = {
   products: Product[]
+  headingId?: string
 }
 
 const sectionVariants: Variants = {
@@ -15,7 +16,7 @@ const sectionVariants: Variants = {
   visible: { opacity: 1, y: 0 }
 }
 
-export default function BestSellers({ products }: BestSellersProps) {
+export default function BestSellers({ products, headingId }: BestSellersProps) {
   if (!products.length) return null
 
   return (
@@ -29,7 +30,9 @@ export default function BestSellers({ products }: BestSellersProps) {
       >
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-neutral-900">Más vendidos</h2>
+            <h2 id={headingId} className="text-2xl font-semibold text-neutral-900">
+              Más vendidos
+            </h2>
             <p className="text-sm text-neutral-600">Selección curada por preferencia de la comunidad y disponibilidad inmediata.</p>
           </div>
           <Link

@@ -18,6 +18,7 @@ type DragBounds = { left: number; right: number }
 type CategoryCarouselProps = {
   title?: string
   subtitle?: string
+  headingId?: string
   categories: CategoryItem[]
 }
 
@@ -34,7 +35,7 @@ const MotionTrack = motion.div as any
 
 const MotionCard = motion.div as any
 
-export default function CategoryCarousel({ title, subtitle, categories }: CategoryCarouselProps) {
+export default function CategoryCarousel({ title, subtitle, headingId, categories }: CategoryCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const [dragConstraints, setDragConstraints] = useState<DragBounds>({ left: 0, right: 0 })
@@ -63,7 +64,9 @@ export default function CategoryCarousel({ title, subtitle, categories }: Catego
     <section className="space-y-4" id="catalogo">
       {title && (
         <div className="space-y-1">
-          <h2 className="text-xl font-semibold text-neutral-900">{title}</h2>
+          <h2 id={headingId} className="text-xl font-semibold text-neutral-900">
+            {title}
+          </h2>
           {subtitle && <p className="text-sm text-neutral-600">{subtitle}</p>}
         </div>
       )}
