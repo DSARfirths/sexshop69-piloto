@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, type Variants } from 'framer-motion'
 
 type CategoryItem = {
@@ -9,6 +10,7 @@ type CategoryItem = {
   label: string
   description?: string
   isSensitive?: boolean
+  image?: string
 }
 
 type DragBounds = { left: number; right: number }
@@ -84,8 +86,19 @@ export default function CategoryCarousel({ title, subtitle, categories }: Catego
             >
               <Link
                 href={`/categoria/${category.slug}`}
-                className="block h-full rounded-2xl border border-neutral-200 bg-white/90 p-5 shadow-sm shadow-neutral-200/60 transition hover:-translate-y-1 hover:shadow-lg"
+                className="flex h-full flex-col items-center rounded-2xl border border-neutral-200 bg-white/90 p-4 text-center shadow-sm shadow-neutral-200/60 transition hover:-translate-y-1 hover:shadow-lg"
               >
+                {category.image && (
+                  <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
+                    <Image
+                      src={category.image}
+                      alt={`${category.label} — miniatura de categoría`}
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                  </div>
+                )}
                 <div className="text-base font-semibold text-neutral-900">{category.label}</div>
                 <div className="mt-2 text-sm text-neutral-600">{category.description}</div>
               </Link>
@@ -98,8 +111,19 @@ export default function CategoryCarousel({ title, subtitle, categories }: Catego
           <Link
             key={category.slug}
             href={`/categoria/${category.slug}`}
-            className="block rounded-2xl border border-neutral-200 bg-white/90 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="flex flex-col items-center rounded-2xl border border-neutral-200 bg-white/90 p-4 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
+            {category.image && (
+              <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
+                <Image
+                  src={category.image}
+                  alt={`${category.label} — miniatura de categoría`}
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
+              </div>
+            )}
             <div className="text-base font-semibold text-neutral-900">{category.label}</div>
             <div className="mt-2 text-sm text-neutral-600">{category.description}</div>
           </Link>

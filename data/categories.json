@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "bienestar",
+    "label": "Bienestar íntimo",
+    "image": "/category-thumbnails/bienestar.jpg",
+    "isSensitive": false
+  },
+  {
+    "slug": "lenceria",
+    "label": "Lencería",
+    "image": "/category-thumbnails/lenceria.jpg",
+    "isSensitive": false
+  },
+  {
+    "slug": "kits",
+    "label": "Kits de regalo",
+    "image": "/category-thumbnails/kits.jpg",
+    "isSensitive": false
+  },
+  {
+    "slug": "arneses",
+    "label": "Arneses con arnés",
+    "image": "/category-thumbnails/arneses.jpg",
+    "isSensitive": true
+  },
+  {
+    "slug": "consoladores",
+    "label": "Consoladores",
+    "image": "/category-thumbnails/consoladores.jpg",
+    "isSensitive": true
+  },
+  {
+    "slug": "fetish",
+    "label": "Fetish y BDSM",
+    "image": "/category-thumbnails/fetish.jpg",
+    "isSensitive": true
+  },
+  {
+    "slug": "munecas",
+    "label": "Muñecas realistas",
+    "image": "/category-thumbnails/munecas.jpg",
+    "isSensitive": true
+  },
+  {
+    "slug": "anales",
+    "label": "Juegos anales",
+    "image": "/category-thumbnails/anales.jpg",
+    "isSensitive": true
+  }
+]

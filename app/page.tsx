@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { PackageCheck, ShieldCheck, LockKeyhole } from 'lucide-react'
 import Hero from '@/components/Hero'
@@ -6,27 +7,18 @@ import CategoryCarousel from '@/components/home/CategoryCarousel'
 import BestSellers from '@/components/home/BestSellers'
 import TrustBadgesStrip from '@/components/home/TrustBadgesStrip'
 import HeroCarousel from '@/components/home/HeroCarousel'
-
-const categoryLabels: Record<string, string> = {
-  bienestar: 'Bienestar intimo',
-  lenceria: 'Lenceria',
-  kits: 'Kits de regalo',
-  arneses: 'Arneses con arnes',
-  consoladores: 'Consoladores',
-  fetish: 'Fetish y BDSM',
-  munecas: 'Muñecas realistas',
-  anales: 'Juegos anales'
-}
+import categoriesData from '@/data/categories.json'
 
 const featuredCategories = ['bienestar', 'lenceria', 'kits'] as const
 
-function labelFor(slug: string) {
-  if (slug in categoryLabels) return categoryLabels[slug]
-  return slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+type CategoryDefinition = {
+  slug: string
+  label: string
+  image: string
+  isSensitive?: boolean
 }
+
+type AvailableCategory = CategoryDefinition & { isSensitive: boolean }
 
 const TRUST_BADGES = [
   {
@@ -48,17 +40,22 @@ const TRUST_BADGES = [
 
 export default function Page() {
   const products = allProducts()
-  const catalogCategories = Array.from(new Set(products.map(p => p.category)))
-  const featuredSet = new Set<string>(featuredCategories)
-  const featured = featuredCategories.filter(slug => catalogCategories.includes(slug))
-  const otherCategories = catalogCategories.filter(slug => !featuredSet.has(slug))
   const nsfwCategories = new Set(products.filter(p => p.nsfw).map(p => p.category))
-  const orderedCategories = [...featured, ...otherCategories]
-  const categoriesForCarousel = orderedCategories.map(slug => ({
-    slug,
-    label: labelFor(slug),
-    isSensitive: nsfwCategories.has(slug)
-  }))
+  const catalogCategories = new Set(products.map(p => p.category))
+  const typedCategories = categoriesData as CategoryDefinition[]
+  const availableCategories: AvailableCategory[] = typedCategories
+    .filter(category => catalogCategories.has(category.slug))
+    .map(category => ({
+      ...category,
+      isSensitive: category.isSensitive || nsfwCategories.has(category.slug)
+    }))
+  const availableBySlug = new Map(availableCategories.map(category => [category.slug, category]))
+  const featured = featuredCategories
+    .map(slug => availableBySlug.get(slug))
+    .filter((category): category is AvailableCategory => Boolean(category))
+  const featuredSet = new Set(featured.map(category => category.slug))
+  const otherCategories = availableCategories.filter(category => !featuredSet.has(category.slug))
+  const categoriesForCarousel = [...featured, ...otherCategories]
   const bestSellers = products.filter(product => product.bestSeller)
 
   return (
@@ -77,29 +74,27 @@ export default function Page() {
       </div>
       <div className="mt-10 space-y-10">
         <BestSellers products={bestSellers} />
-        {otherCategories.length > 0 && (
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-neutral-900">¿Buscas algo más específico?</h2>
-            <p className="text-sm text-neutral-600">
-              Recorre las categorías sensibles y temáticas creadas para diferentes niveles de experiencia.
-            </p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {otherCategories.map(slug => {
-                const label = labelFor(slug)
-                const isSensitive = nsfwCategories.has(slug)
-                return (
-                  <Link
-                    key={slug}
-                    href={`/categoria/${slug}`}
-                    className="block rounded-2xl border border-neutral-200 bg-white/90 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-                  >
-                    <div className="text-base font-semibold text-neutral-900">{label}</div>
-                    <div className="mt-2 text-sm text-neutral-600">
-                      {isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad'}
-                    </div>
-                  </Link>
-                )
-              })}
+        {otherCategories.map(category => (
+                <Link
+                  key={category.slug}
+                  href={`/categoria/${category.slug}`}
+                  className="flex flex-col items-center rounded-2xl border border-neutral-200 bg-white/90 p-4 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
+                    <Image
+                      src={category.image}
+                      alt={`${category.label} — miniatura de categoría`}
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="text-base font-semibold text-neutral-900">{category.label}</div>
+                  <div className="mt-2 text-sm text-neutral-600">
+                    {category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad'}
+                  </div>
+                </Link>
+              ))}
             </div>
           </section>
         )}
