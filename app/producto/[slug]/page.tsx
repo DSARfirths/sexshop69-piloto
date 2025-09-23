@@ -21,13 +21,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const title = `${p.name} — SexShop del Perú 69`
   const description = 'Página de producto (piloto ad-safe, mobile-first).'
   const canonical = `/producto/${p.slug}`
-  const hasImages = p.imageCount > 0 && p.imageFilenames.length > 0
-  const imageUrls = hasImages
-    ? p.imageFilenames
-        .map(filename => filename?.replace(/\..+$/, '') ?? '')
-        .filter(Boolean)
-        .map(basename => `/products/${p.slug}/${basename}.webp`)
-    : []
+  const imageCount = p.imageFilenames.length
+  const imageUrls = Array.from({ length: imageCount }, (_, index) => `/products/${p.slug}/${index + 1}.webp`)
   const hasValidImages = imageUrls.length > 0
   const openGraphImages = imageUrls.length > 0
     ? imageUrls.slice(0, 4).map((url, index) => ({ url, alt: `${p.name} — vista ${index + 1}` }))
@@ -58,13 +53,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default function ProductPage({ params }: { params: { slug: string } }) {
   const product = bySlug(params.slug)
   if (!product) return notFound()
-  const hasImages = product.imageCount > 0 && product.imageFilenames.length > 0
-  const imageUrls = hasImages
-    ? product.imageFilenames
-        .map(filename => filename?.replace(/\..+$/, '') ?? '')
-        .filter(Boolean)
-        .map(basename => `/products/${product.slug}/${basename}.webp`)
-    : []
+  const imageCount = product.imageFilenames.length
+  const imageUrls = Array.from({ length: imageCount }, (_, index) => `/products/${product.slug}/${index + 1}.webp`)
   const isNSFW = !!product.nsfw
   const structuredProperties = getProductProperties(product.attributes, product.specs).map(([name, value]) => ({
     '@type': 'PropertyValue',
@@ -72,15 +62,21 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
     value: formatAttributeValue(value)
   }))
   const salePrice = typeof product.salePrice === 'number' ? product.salePrice : null
-  const hasSalePrice = salePrice !== null
-  const checkoutPrice = salePrice ?? product.regularPrice
-  const checkoutHref = `/checkout/success?sku=${product.sku}&value=${checkoutPrice}`
-  const displayPrice = checkoutPrice.toFixed(2)
+  const hasSalePrice = salePrice !== null && salePrice > 0 && salePrice < product.regularPrice
+  const activePrice = hasSalePrice ? salePrice : product.regularPrice
+  const discountPercentage = hasSalePrice
+    ? Math.round(((product.regularPrice - salePrice) / product.regularPrice) * 100)
+    : 0
+  const discountLabel = discountPercentage > 0 ? `${discountPercentage}%` : null
+  const discountBadge = discountLabel ? `${discountLabel} DSCTO` : null
+  const checkoutHref = `/checkout/success?sku=${product.sku}&value=${activePrice}`
+  const displayPrice = activePrice.toFixed(2)
   const regularPrice = product.regularPrice.toFixed(2)
   const whatsappMessage = encodeURIComponent(`Consulta ${product.sku} - S/ ${displayPrice}`)
   const whatsappHref = `https://wa.me/51924281623?text=${whatsappMessage}`
 
   const bulletPoints = [
+    { label: 'Marca', value: formatAttributeValue(product.attributes?.brand) },
     { label: 'Material', value: formatAttributeValue(product.attributes?.material) },
     {
       label: 'Dimensiones',
@@ -90,6 +86,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         .join(' · ')
     },
     { label: 'Peso', value: formatAttributeValue(product.attributes?.peso) },
+    { label: 'País de origen', value: formatAttributeValue(product.attributes?.countryOfOrigin) },
     { label: 'Garantía', value: formatAttributeValue(product.attributes?.garantia) }
   ].filter(point => point.value && point.value !== 'undefined')
 
@@ -101,20 +98,35 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         <ProductGallery
           slug={product.slug}
           name={product.name}
-          imageBasenames={product.imageBasenames}
+          imageCount={imageCount}
+          imageFilenames={product.imageFilenames}
           nsfw={isNSFW}
         />
         <div>
-          <div className="flex items-center gap-2 text-xs text-neutral-500">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-500">
             {product.brand && <span className="uppercase tracking-wide">{product.brand}</span>}
-            {product.badge && <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-700">{product.badge}</span>}
+            {product.badge && (
+              <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-700">{product.badge}</span>
+            )}
+            {discountBadge && (
+              <span className="px-2 py-0.5 rounded bg-rose-100 text-rose-600 font-semibold uppercase tracking-wide">
+                {discountBadge}
+              </span>
+            )}
           </div>
           <h1 className="text-2xl font-semibold mt-1">{product.name}</h1>
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <div className="flex items-baseline gap-3 text-brand-primary font-bold text-xl md:text-2xl">
-              <span>S/ {displayPrice}</span>
-              {hasSalePrice && (
-                <span className="text-base font-medium text-neutral-400 line-through">S/ {regularPrice}</span>
+          <div className="mt-2 flex flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-baseline gap-2 text-brand-primary">
+                <span className="text-3xl font-bold md:text-4xl">S/ {displayPrice}</span>
+                {hasSalePrice && (
+                  <span className="text-lg font-semibold text-neutral-400 line-through">S/ {regularPrice}</span>
+                )}
+              </div>
+              {hasSalePrice && discountLabel && (
+                <span className="inline-flex items-center rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-rose-600">
+                  -{discountLabel}
+                </span>
               )}
             </div>
             <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-brand-primary">
@@ -179,7 +191,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       </div>
 
       <StickyCTA
-        price={checkoutPrice}
+        price={activePrice}
         regularPrice={product.regularPrice}
         checkoutHref={checkoutHref}
         whatsappHref={whatsappHref}
@@ -189,7 +201,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         '@context': 'https://schema.org', '@type': 'Product', name: product.name, sku: product.sku,
         brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
         image: imageUrls.length > 0 ? imageUrls : undefined,
-        offers: { '@type': 'Offer', price: checkoutPrice, priceCurrency: 'PEN', availability: 'https://schema.org/InStock' },
+        offers: { '@type': 'Offer', price: activePrice, priceCurrency: 'PEN', availability: 'https://schema.org/InStock' },
         additionalProperty: structuredProperties
       }) }} />
     </div>
