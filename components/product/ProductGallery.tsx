@@ -93,16 +93,16 @@ function GalleryAsset({ basePath, alt, className, enabled, priority, extensions 
 type ProductGalleryProps = {
   slug: string
   name: string
-  imageCount?: number
+  imageBasenames: string[]
   nsfw?: boolean
-  assetFolder: 'nsfw-assets' | 'sfw-assets'
+  assetFolder: 'products'
   imageExtensions: readonly ImageExtension[]
 }
 
 export default function ProductGallery({
   slug,
   name,
-  imageCount = 0,
+  imageBasenames,
   nsfw = false,
   assetFolder,
   imageExtensions
@@ -110,7 +110,7 @@ export default function ProductGallery({
   const [activeIndex, setActiveIndex] = useState(0)
   const [isVerified, setIsVerified] = useState(false)
 
-  const hasImages = imageCount > 0
+  const hasImages = imageBasenames.length > 0
   const requiresVerification = Boolean(nsfw && hasImages)
 
   useEffect(() => {
@@ -125,8 +125,8 @@ export default function ProductGallery({
 
   const imageSources = useMemo(() => {
     if (!hasImages) return []
-    return Array.from({ length: imageCount }, (_, index) => `/${assetFolder}/${slug}/${index + 1}`)
-  }, [assetFolder, hasImages, imageCount, slug])
+    return imageBasenames.map(basename => `/${assetFolder}/${slug}/${basename}`)
+  }, [assetFolder, hasImages, imageBasenames, slug])
 
   useEffect(() => {
     if (activeIndex >= imageSources.length) {

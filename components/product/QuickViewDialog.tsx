@@ -78,16 +78,16 @@ type QuickViewDialogProps = {
 
 export default function QuickViewDialog({ product, open, onOpenChange }: QuickViewDialogProps) {
   const assetFolder = resolveAssetFolder(product)
-  const hasImages = (product.images ?? 0) > 0
+  const hasImages = product.imageCount > 0 && product.imageBasenames.length > 0
   const imageExtensions = product.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
   const galleryImages = useMemo(() => {
     if (!hasImages) return []
-    const limit = Math.min(product.images ?? 0, 4)
-    return Array.from({ length: limit }, (_, index) => ({
-      basePath: `/${assetFolder}/${product.slug}/${index + 1}`,
+    const basenames = product.imageBasenames.slice(0, Math.min(product.imageCount, 4))
+    return basenames.map((basename, index) => ({
+      basePath: `/${assetFolder}/${product.slug}/${basename}`,
       alt: `${product.name} — imagen ${index + 1}`
     }))
-  }, [assetFolder, hasImages, product.images, product.name, product.slug])
+  }, [assetFolder, hasImages, product.imageBasenames, product.imageCount, product.name, product.slug])
 
   const properties = useMemo(() => {
     return getProductProperties(product.attributes, product.specs).slice(0, 4)
@@ -95,6 +95,8 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
 
   const features = product.features?.slice(0, 3) ?? []
   const mainImage = galleryImages[0] ?? { basePath: null, alt: product.name }
+  const checkoutPrice = product.salePrice ?? product.regularPrice
+  const displayPrice = checkoutPrice.toFixed(2)
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -177,7 +179,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                         {product.brand && product.badge && <span className="mx-2 text-neutral-300">•</span>}
                         {product.badge && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold uppercase text-amber-700">{product.badge}</span>}
                       </Dialog.Description>
-                      <div className="text-2xl font-bold text-brand-primary">S/ {product.price.toFixed(2)}</div>
+                      <div className="text-2xl font-bold text-brand-primary">S/ {displayPrice}</div>
                       {features.length > 0 && (
                         <ul className="space-y-2 rounded-2xl bg-neutral-50 p-4 text-sm text-neutral-700">
                           {features.map((feature, index) => (
@@ -202,7 +204,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
 
                     <div className="space-y-3">
                       <Link
-                        href={`/checkout/success?sku=${product.sku}&value=${product.price}`}
+                        href={`/checkout/success?sku=${product.sku}&value=${checkoutPrice}`}
                         className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-primary px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                         onClick={() => onOpenChange(false)}
                       >
