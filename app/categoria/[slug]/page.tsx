@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import CategoryFiltersClient from './category-filters-client'
-import { allProducts } from '@/lib/products'
+import { allProducts, getCategoryLabel } from '@/lib/products'
 
 const CATEGORY_LABELS: Record<string, string> = {
   bienestar: 'Bienestar intimo',
@@ -21,6 +21,8 @@ const sensitiveCategories = new Set(
 
 function categoryLabelFor(slug: string) {
   if (CATEGORY_LABELS[slug]) return CATEGORY_LABELS[slug]
+  const labelFromData = getCategoryLabel(slug)
+  if (labelFromData) return labelFromData
   return slug
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))

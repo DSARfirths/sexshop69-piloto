@@ -199,14 +199,20 @@ const catalog: Product[] = (productsData as RawProduct[]).map(product => {
 })
 
 const categorySlugLookup = new Map<string, Set<string>>()
+const categoryLabelLookup = new Map<string, string>()
 
 function registerCategory(category: RawCategory) {
-  const childSlugs = category.children?.map(child => child.slug) ?? []
+  const categoryLabel = category.label ?? category.slug
+  categoryLabelLookup.set(category.slug, categoryLabel)
+
+  const children = category.children ?? []
+  const childSlugs = children.map(child => child.slug)
   const parentSet = new Set<string>([category.slug, ...childSlugs])
   categorySlugLookup.set(category.slug, parentSet)
 
-  childSlugs.forEach(childSlug => {
-    categorySlugLookup.set(childSlug, new Set<string>([childSlug, category.slug]))
+  children.forEach(child => {
+    categoryLabelLookup.set(child.slug, child.label ?? child.slug)
+    categorySlugLookup.set(child.slug, new Set<string>([child.slug, category.slug]))
   })
 }
 
@@ -245,8 +251,11 @@ export function allProducts(): Product[] {
 
 export function byCategory(slug: string): Product[] {
   const normalizedSlug = slug.trim()
-  const relatedSlugs = categorySlugLookup.get(normalizedSlug) ?? new Set<string>([normalizedSlug])
+  const relatedSlugs = categorySlugLookup.get(normalizedSlug) ?? null
   return catalog.filter(product => {
+    if (product.category === normalizedSlug) return true
+    if (product.subCategory === normalizedSlug) return true
+    if (!relatedSlugs) return false
     if (relatedSlugs.has(product.category)) return true
     if (product.subCategory && relatedSlugs.has(product.subCategory)) return true
     return false
@@ -255,6 +264,10 @@ export function byCategory(slug: string): Product[] {
 
 export function bySlug(slug: string): Product | undefined {
   return catalog.find(product => product.slug === slug)
+}
+
+export function getCategoryLabel(slug: string): string | undefined {
+  return categoryLabelLookup.get(slug.trim())
 }
 
 export function getOffers(): Product[] {
