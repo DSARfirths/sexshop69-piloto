@@ -69,14 +69,17 @@ export default function Page() {
         <CategoryCarousel
           title="Explora por categoría"
           subtitle="Mobile-first con desliz lateral — arrastra para descubrir más."
+          headingId="explora-por-categoria"
           categories={categoriesForCarousel}
         />
       </div>
       <div className="mt-10 space-y-10">
-        <BestSellers products={bestSellers} />
+        <BestSellers products={bestSellers} headingId="mas-vendidos" />
         {otherCategories.length > 0 && (
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-neutral-900">¿Buscas algo más específico?</h2>
+            <h2 id="buscas-algo-mas-especifico" className="text-xl font-semibold text-neutral-900">
+              ¿Buscas algo más específico?
+            </h2>
             <p className="text-sm text-neutral-600">
               Recorre las categorías sensibles y temáticas creadas para diferentes niveles de experiencia.
             </p>
