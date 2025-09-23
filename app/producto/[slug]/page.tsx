@@ -48,7 +48,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       canonical
     },
     openGraph: {
-      type: 'product',
       title,
       description,
       url: canonical,
