@@ -74,29 +74,36 @@ export default function Page() {
       </div>
       <div className="mt-10 space-y-10">
         <BestSellers products={bestSellers} />
-        {otherCategories.map(category => (
-                <Link
-                  key={category.slug}
-                  href={`/categoria/${category.slug}`}
-                  className="flex flex-col items-center rounded-2xl border border-neutral-200 bg-white/90 p-4 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
-                    <Image
-                      src={category.image}
-                      alt={`${category.label} — miniatura de categoría`}
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="text-base font-semibold text-neutral-900">{category.label}</div>
-                  <div className="mt-2 text-sm text-neutral-600">
-                    {category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad'}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
+        {otherCategories.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-neutral-900">¿Buscas algo más específico?</h2>
+            <p className="text-sm text-neutral-600">
+              Recorre las categorías sensibles y temáticas creadas para diferentes niveles de experiencia.
+            </p>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {otherCategories.map(category => (
+                    <Link
+                      key={category.slug}
+                      href={`/categoria/${category.slug}`}
+                      className="flex flex-col items-center rounded-2xl border border-neutral-200 bg-white/90 p-4 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                    >
+                      <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
+                        <Image
+                          src={category.image}
+                          alt={`${category.label} — miniatura de categoría`}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="text-base font-semibold text-neutral-900">{category.label}</div>
+                      <div className="mt-2 text-sm text-neutral-600">
+                        {category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad'}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+            </section>
         )}
       </div>
     </>
