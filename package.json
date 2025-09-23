@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "clean": "rimraf .next"
+    "clean": "rimraf .next",
+    "test": "vitest run"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.8",
@@ -19,6 +20,7 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-medium-image-zoom": "^5.4.0",
+    "sanitize-html": "^2.17.0",
     "tailwindcss": "3.4.10",
     "typescript": "5.5.4",
     "zod": "3.23.8"
@@ -27,6 +29,7 @@
     "@types/node": "24.5.2",
     "@types/react": "19.1.13",
     "@types/react-dom": "^19.1.9",
-    "rimraf": "5.0.10"
+    "rimraf": "5.0.10",
+    "vitest": "^3.2.4"
   }
 }

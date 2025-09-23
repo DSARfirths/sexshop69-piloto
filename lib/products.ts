@@ -1,9 +1,58 @@
+import sanitizeHtml from 'sanitize-html'
+
 import productsData from '@/data/products.json'
 import categoriesData from '@/data/categories.json'
 
 export type Specs = Record<string, string | number | boolean>
 export type ProductAttributeValue = string | number | boolean | null
 export type ProductAttributes = Record<string, ProductAttributeValue>
+
+const PRODUCT_DESCRIPTION_ALLOWED_TAGS = [
+  'a',
+  'abbr',
+  'b',
+  'blockquote',
+  'br',
+  'code',
+  'em',
+  'i',
+  'li',
+  'ol',
+  'p',
+  'strong',
+  'sub',
+  'sup',
+  'ul'
+] as const
+
+const PRODUCT_DESCRIPTION_ALLOWED_ATTRIBUTES: Readonly<Record<string, readonly string[]>> = {
+  a: ['href', 'rel', 'target', 'title']
+}
+
+const PRODUCT_DESCRIPTION_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: PRODUCT_DESCRIPTION_ALLOWED_TAGS as unknown as string[],
+  allowedAttributes: PRODUCT_DESCRIPTION_ALLOWED_ATTRIBUTES as sanitizeHtml.IOptions['allowedAttributes'],
+  allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+  allowedSchemesAppliedToAttributes: ['href'],
+  disallowedTagsMode: 'discard',
+  allowProtocolRelative: false
+}
+
+/**
+ * Sanitizes HTML snippets coming from the product catalog before rendering.
+ *
+ * Allowed tags: a, abbr, b, blockquote, br, code, em, i, li, ol, p, strong, sub, sup, ul.
+ * Allowed attributes: a[href|rel|target|title]. Links are limited to http, https, mailto and tel schemes.
+ *
+ * Any inline style/class/color attributes or event handlers are removed by the sanitizer.
+ */
+export function sanitizeDescriptionHtml(rawHtml: string | null | undefined): string | null {
+  if (!rawHtml) return null
+  const sanitized = sanitizeHtml(rawHtml, PRODUCT_DESCRIPTION_SANITIZE_OPTIONS).trim()
+  return sanitized.length > 0 ? sanitized : null
+}
+
+export { PRODUCT_DESCRIPTION_ALLOWED_TAGS, PRODUCT_DESCRIPTION_ALLOWED_ATTRIBUTES }
 
 const DEFAULT_ATTRIBUTES: ProductAttributes = {
   material: 'No especificado (valor por defecto)',
@@ -160,12 +209,13 @@ const catalog: Product[] = (productsData as RawProduct[]).map(product => {
   const attributes = normalizeAttributes(product.attributes)
   const brandValue = attributes.brand
   const brand = typeof brandValue === 'string' && brandValue.trim().length > 0 ? brandValue : null
+  const descriptionHtml = sanitizeDescriptionHtml(product.descriptionHtml)
 
   return {
     id: product.id,
     slug: product.slug,
     name: product.name,
-    descriptionHtml: product.descriptionHtml ?? null,
+    descriptionHtml,
     descriptionText: product.descriptionText ?? null,
     shortDescription: product.shortDescription ?? null,
     regularPrice: product.regularPrice,
