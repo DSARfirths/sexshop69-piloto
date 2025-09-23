@@ -39,7 +39,7 @@ export const SUPPORTED_IMAGE_EXTENSIONS = ['avif', 'webp', 'jpg', 'jpeg', 'png']
 
 export type ImageExtension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number]
 
-export const DEFAULT_IMAGE_EXTENSIONS = ['avif', 'webp'] as const satisfies readonly ImageExtension[]
+export const DEFAULT_IMAGE_EXTENSIONS = ['webp'] as const satisfies readonly ImageExtension[]
 
 export type ProductBadge = 'nuevo' | 'top' | 'promo'
 

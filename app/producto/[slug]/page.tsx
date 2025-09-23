@@ -1,15 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import {
-  DEFAULT_IMAGE_EXTENSIONS,
-  allProducts,
-  bySlug,
-  formatAttributeLabel,
-  formatAttributeValue,
-  getProductProperties,
-  resolveAssetFolder
-} from '@/lib/products'
+import { allProducts, bySlug, formatAttributeLabel, formatAttributeValue, getProductProperties } from '@/lib/products'
 import StickyCTA from '@/components/StickyCTA'
 import ProductGallery from '@/components/product/ProductGallery'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -30,9 +22,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const description = 'Página de producto (piloto ad-safe, mobile-first).'
   const canonical = `/producto/${p.slug}`
   const hasImages = p.imageCount > 0 && p.imageFilenames.length > 0
-  const assetFolder = resolveAssetFolder(p)
   const imageUrls = hasImages
-    ? p.imageFilenames.map(filename => `/${assetFolder}/${p.slug}/${filename}`)
+    ? p.imageFilenames
+        .map(filename => filename?.replace(/\..+$/, '') ?? '')
+        .filter(Boolean)
+        .map(basename => `/products/${p.slug}/${basename}.webp`)
     : []
   const hasValidImages = imageUrls.length > 0
   const openGraphImages = imageUrls.length > 0
@@ -64,11 +58,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default function ProductPage({ params }: { params: { slug: string } }) {
   const product = bySlug(params.slug)
   if (!product) return notFound()
-  const assetFolder = resolveAssetFolder(product)
-  const imageExtensions = product.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
-  const hasImages = product.imageCount > 0 && product.imageBasenames.length > 0
+  const hasImages = product.imageCount > 0 && product.imageFilenames.length > 0
   const imageUrls = hasImages
-    ? product.imageFilenames.map(filename => `/${assetFolder}/${product.slug}/${filename}`)
+    ? product.imageFilenames
+        .map(filename => filename?.replace(/\..+$/, '') ?? '')
+        .filter(Boolean)
+        .map(basename => `/products/${product.slug}/${basename}.webp`)
     : []
   const isNSFW = !!product.nsfw
   const structuredProperties = getProductProperties(product.attributes, product.specs).map(([name, value]) => ({
@@ -76,9 +71,14 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
     name: formatAttributeLabel(name),
     value: formatAttributeValue(value)
   }))
-  const checkoutPrice = product.salePrice ?? product.regularPrice
+  const salePrice = typeof product.salePrice === 'number' ? product.salePrice : null
+  const hasSalePrice = salePrice !== null
+  const checkoutPrice = salePrice ?? product.regularPrice
   const checkoutHref = `/checkout/success?sku=${product.sku}&value=${checkoutPrice}`
-  const whatsappHref = `https://wa.me/51924281623?text=Consulta%20${product.sku}`
+  const displayPrice = checkoutPrice.toFixed(2)
+  const regularPrice = product.regularPrice.toFixed(2)
+  const whatsappMessage = encodeURIComponent(`Consulta ${product.sku} - S/ ${displayPrice}`)
+  const whatsappHref = `https://wa.me/51924281623?text=${whatsappMessage}`
 
   const bulletPoints = [
     { label: 'Material', value: formatAttributeValue(product.attributes?.material) },
@@ -103,8 +103,6 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           name={product.name}
           imageBasenames={product.imageBasenames}
           nsfw={isNSFW}
-          assetFolder={assetFolder}
-          imageExtensions={imageExtensions}
         />
         <div>
           <div className="flex items-center gap-2 text-xs text-neutral-500">
@@ -113,7 +111,12 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           </div>
           <h1 className="text-2xl font-semibold mt-1">{product.name}</h1>
           <div className="mt-2 flex flex-wrap items-center gap-3">
-            <div className="text-brand-primary font-bold text-xl md:text-2xl">S/ {checkoutPrice.toFixed(2)}</div>
+            <div className="flex items-baseline gap-3 text-brand-primary font-bold text-xl md:text-2xl">
+              <span>S/ {displayPrice}</span>
+              {hasSalePrice && (
+                <span className="text-base font-medium text-neutral-400 line-through">S/ {regularPrice}</span>
+              )}
+            </div>
             <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-brand-primary">
               <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-3 py-1">Envío 100% discreto</span>
               <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-3 py-1">Empaque sin logos</span>
@@ -175,7 +178,12 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         </aside>
       </div>
 
-      <StickyCTA price={checkoutPrice} checkoutHref={checkoutHref} whatsappHref={whatsappHref} />
+      <StickyCTA
+        price={checkoutPrice}
+        regularPrice={product.regularPrice}
+        checkoutHref={checkoutHref}
+        whatsappHref={whatsappHref}
+      />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         '@context': 'https://schema.org', '@type': 'Product', name: product.name, sku: product.sku,

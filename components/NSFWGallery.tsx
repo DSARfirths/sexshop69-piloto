@@ -1,24 +1,15 @@
 'use client'
 import { useState } from 'react'
-import { DEFAULT_IMAGE_EXTENSIONS, resolveAssetFolder, type ImageExtension } from '@/lib/products'
 
-function NSFWImage({
-  slug,
-  index,
-  extensions
-}: {
-  slug: string
-  index: number
-  extensions: readonly ImageExtension[]
-}) {
-  const [extIndex, setExtIndex] = useState(0)
+function buildNSFWSrc(slug: string, index: number) {
+  return `/products/${slug}/${index}.webp`
+}
+
+function NSFWImage({ slug, index }: { slug: string; index: number }) {
   const [failed, setFailed] = useState(false)
-  const hasExtensions = extensions.length > 0
-  const ext = hasExtensions ? extensions[Math.min(extIndex, extensions.length - 1)] : undefined
-  const assetFolder = resolveAssetFolder({ nsfw: true })
-  const src = ext ? `/${assetFolder}/${slug}/${index}.${ext}` : undefined
+  const src = failed ? null : buildNSFWSrc(slug, index)
 
-  if (failed || !src) {
+  if (!src) {
     return (
       <div className="w-full rounded-xl border border-dashed p-6 text-center text-xs text-neutral-500">
         Imagen {index} no disponible
@@ -32,26 +23,12 @@ function NSFWImage({
       alt={`Imagen ${index} de ${slug}`}
       className="w-full rounded-xl border"
       loading="lazy"
-      onError={() => {
-        if (extIndex < extensions.length - 1) {
-          setExtIndex(prev => prev + 1)
-        } else {
-          setFailed(true)
-        }
-      }}
+      onError={() => setFailed(true)}
     />
   )
 }
 
-export default function NSFWGallery({
-  slug,
-  count,
-  imageExtensions = DEFAULT_IMAGE_EXTENSIONS
-}: {
-  slug: string
-  count: number
-  imageExtensions?: readonly ImageExtension[]
-}) {
+export default function NSFWGallery({ slug, count }: { slug: string; count: number }) {
   const [show, setShow] = useState(false)
   if (!count) {
     return <div className="text-xs text-neutral-500">Imágenes disponibles al publicar</div>
@@ -67,7 +44,7 @@ export default function NSFWGallery({
       ) : (
         <div className="space-y-3">
           {Array.from({ length: count }).map((_, i) => (
-            <NSFWImage key={i} slug={slug} index={i + 1} extensions={imageExtensions} />
+            <NSFWImage key={i} slug={slug} index={i + 1} />
           ))}
         </div>
       )}

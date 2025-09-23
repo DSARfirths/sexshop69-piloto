@@ -5,15 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Dialog, Transition } from '@headlessui/react'
 import { X, MessageCircle, ShoppingBag } from 'lucide-react'
-import {
-  DEFAULT_IMAGE_EXTENSIONS,
-  formatAttributeLabel,
-  formatAttributeValue,
-  getProductProperties,
-  resolveAssetFolder,
-  type ImageExtension,
-  type Product
-} from '@/lib/products'
+import { formatAttributeLabel, formatAttributeValue, getProductProperties, type Product } from '@/lib/products'
 
 const FALLBACK_IMAGE_SRC =
   'data:image/svg+xml;charset=UTF-8,' +
@@ -24,31 +16,31 @@ const FALLBACK_IMAGE_SRC =
 const WHATSAPP_NUMBER = '51924281623'
 
 type AssetImageProps = {
-  basePath?: string | null
+  productSlug: string
+  filename?: string | null
   alt: string
   className?: string
   priority?: boolean
   sizes?: string
   shouldBlur?: boolean
-  extensions: readonly ImageExtension[]
 }
 
-function AssetImage({ basePath, alt, className, priority, sizes, shouldBlur, extensions }: AssetImageProps) {
-  const [extensionIndex, setExtensionIndex] = useState(0)
+function buildImageSrc(productSlug: string, filename?: string | null) {
+  if (!filename) return null
+  const basename = filename.replace(/\..+$/, '')
+  if (!basename) return null
+  return `/products/${productSlug}/${basename}.webp`
+}
+
+function AssetImage({ productSlug, filename, alt, className, priority, sizes, shouldBlur }: AssetImageProps) {
   const [failed, setFailed] = useState(false)
-  const hasBasePath = Boolean(basePath)
-  const hasExtensions = extensions.length > 0
-  const finalClassName = `${className ?? ''}${shouldBlur && hasBasePath ? ' blur-sm' : ''}`.trim()
+  const finalClassName = `${className ?? ''}${shouldBlur && filename ? ' blur-sm' : ''}`.trim()
 
   useEffect(() => {
-    setExtensionIndex(0)
     setFailed(false)
-  }, [basePath, extensions])
+  }, [filename, productSlug])
 
-  const src =
-    hasBasePath && !failed && basePath && hasExtensions
-      ? `${basePath}.${extensions[Math.min(extensionIndex, extensions.length - 1)]}`
-      : FALLBACK_IMAGE_SRC
+  const src = !failed ? buildImageSrc(productSlug, filename) ?? FALLBACK_IMAGE_SRC : FALLBACK_IMAGE_SRC
 
   return (
     <Image
@@ -59,12 +51,8 @@ function AssetImage({ basePath, alt, className, priority, sizes, shouldBlur, ext
       sizes={sizes}
       className={finalClassName}
       onError={() => {
-        if (!hasBasePath) return
-        if (extensionIndex < extensions.length - 1) {
-          setExtensionIndex(prev => prev + 1)
-        } else {
-          setFailed(true)
-        }
+        if (!filename) return
+        setFailed(true)
       }}
     />
   )
@@ -77,26 +65,34 @@ type QuickViewDialogProps = {
 }
 
 export default function QuickViewDialog({ product, open, onOpenChange }: QuickViewDialogProps) {
-  const assetFolder = resolveAssetFolder(product)
-  const hasImages = product.imageCount > 0 && product.imageBasenames.length > 0
-  const imageExtensions = product.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
+  const hasImages = product.imageCount > 0 && product.imageFilenames.length > 0
   const galleryImages = useMemo(() => {
     if (!hasImages) return []
-    const basenames = product.imageBasenames.slice(0, Math.min(product.imageCount, 4))
-    return basenames.map((basename, index) => ({
-      basePath: `/${assetFolder}/${product.slug}/${basename}`,
+    const filenames = product.imageFilenames.slice(0, Math.min(product.imageCount, 4))
+    return filenames.map((filename, index) => ({
+      filename,
       alt: `${product.name} — imagen ${index + 1}`
     }))
-  }, [assetFolder, hasImages, product.imageBasenames, product.imageCount, product.name, product.slug])
+  }, [hasImages, product.imageCount, product.imageFilenames, product.name])
 
   const properties = useMemo(() => {
     return getProductProperties(product.attributes, product.specs).slice(0, 4)
   }, [product])
 
   const features = product.features?.slice(0, 3) ?? []
-  const mainImage = galleryImages[0] ?? { basePath: null, alt: product.name }
-  const checkoutPrice = product.salePrice ?? product.regularPrice
+  const mainImage = galleryImages[0] ?? { filename: null, alt: product.name }
+  const salePrice = typeof product.salePrice === 'number' ? product.salePrice : null
+  const hasSalePrice = salePrice !== null
+  const checkoutPrice = salePrice ?? product.regularPrice
   const displayPrice = checkoutPrice.toFixed(2)
+  const regularPrice = product.regularPrice.toFixed(2)
+  const discountPercentage =
+    hasSalePrice && product.regularPrice > 0
+      ? Math.round(((product.regularPrice - checkoutPrice) / product.regularPrice) * 100)
+      : null
+  const checkoutHref = `/checkout/success?sku=${product.sku}&value=${checkoutPrice}`
+  const whatsappMessage = encodeURIComponent(`Consulta ${product.sku} - S/ ${displayPrice}`)
+  const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -138,7 +134,8 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                   <div>
                     <div className="relative aspect-square overflow-hidden rounded-2xl bg-neutral-100">
                       <AssetImage
-                        basePath={mainImage.basePath}
+                        productSlug={product.slug}
+                        filename={mainImage.filename}
                         alt={mainImage.alt}
                         priority={open}
                         sizes="(min-width: 1024px) 480px, 80vw"
@@ -146,24 +143,23 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                           galleryImages.length > 0 ? 'md:hover:scale-[1.02] md:transition-transform md:duration-500' : ''
                         }`}
                         shouldBlur={Boolean(product.nsfw)}
-                        extensions={imageExtensions}
                       />
                     </div>
                     {galleryImages.length > 1 && (
                       <div className="mt-4 grid grid-cols-4 gap-2">
                         {galleryImages.slice(1).map((image, index) => (
                           <div
-                            key={image.basePath}
+                            key={image.filename ?? index}
                             className="relative aspect-square overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100"
                           >
                             <AssetImage
-                              basePath={image.basePath}
+                              productSlug={product.slug}
+                              filename={image.filename}
                               alt={image.alt}
                               sizes="96px"
                               priority={open && index < 2}
                               className="object-cover"
                               shouldBlur={Boolean(product.nsfw)}
-                              extensions={imageExtensions}
                             />
                           </div>
                         ))}
@@ -179,7 +175,17 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                         {product.brand && product.badge && <span className="mx-2 text-neutral-300">•</span>}
                         {product.badge && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold uppercase text-amber-700">{product.badge}</span>}
                       </Dialog.Description>
-                      <div className="text-2xl font-bold text-brand-primary">S/ {displayPrice}</div>
+                      <div className="flex flex-wrap items-baseline gap-3">
+                        <span className="text-2xl font-bold text-brand-primary">S/ {displayPrice}</span>
+                        {hasSalePrice && (
+                          <span className="text-base font-medium text-neutral-400 line-through">S/ {regularPrice}</span>
+                        )}
+                        {hasSalePrice && discountPercentage && discountPercentage > 0 && (
+                          <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                            -{discountPercentage}%
+                          </span>
+                        )}
+                      </div>
                       {features.length > 0 && (
                         <ul className="space-y-2 rounded-2xl bg-neutral-50 p-4 text-sm text-neutral-700">
                           {features.map((feature, index) => (
@@ -204,14 +210,14 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
 
                     <div className="space-y-3">
                       <Link
-                        href={`/checkout/success?sku=${product.sku}&value=${checkoutPrice}`}
+                        href={checkoutHref}
                         className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-primary px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                         onClick={() => onOpenChange(false)}
                       >
                         <ShoppingBag className="h-4 w-4" /> Comprar ahora
                       </Link>
                       <a
-                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=Consulta%20${encodeURIComponent(product.sku)}`}
+                        href={whatsappHref}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-brand-primary hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"

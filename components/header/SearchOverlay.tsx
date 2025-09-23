@@ -144,52 +144,64 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
               <AnimatePresence initial={false}>
                 {filteredProducts.length > 0 ? (
                   <ul className="space-y-3">
-                    {filteredProducts.map((product) => (
-                      <MotionResult
-                        key={product.slug}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        transition={{ duration: 0.2, ease: 'easeOut' }}
-                        className="rounded-2xl border border-neutral-100 bg-white/80 p-4 shadow-sm backdrop-blur-sm"
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <h3 className="text-sm font-semibold text-neutral-900">
-                              {highlightMatches(product.name, query)}
-                            </h3>
-                            <p className="mt-1 text-xs uppercase tracking-wide text-neutral-500">
-                              SKU: {highlightMatches(product.sku, query)}
-                            </p>
-                            <p className="mt-1 text-xs text-neutral-500">
-                              Categoría: {highlightMatches(product.category, query)}
-                            </p>
+                    {filteredProducts.map(product => {
+                      const salePrice = typeof product.salePrice === 'number' ? product.salePrice : null
+                      const hasSalePrice = salePrice !== null
+                      const displayPrice = (salePrice ?? product.regularPrice).toFixed(2)
+                      const regularPrice = product.regularPrice.toFixed(2)
+                      const primaryImageSlug = product.imageFilenames?.[0]?.replace(/\..+$/, '') ?? null
+
+                      return (
+                        <MotionResult
+                          key={product.slug}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.2, ease: 'easeOut' }}
+                          className="rounded-2xl border border-neutral-100 bg-white/80 p-4 shadow-sm backdrop-blur-sm"
+                          data-image-slug={primaryImageSlug ?? undefined}
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <h3 className="text-sm font-semibold text-neutral-900">
+                                {highlightMatches(product.name, query)}
+                              </h3>
+                              <p className="mt-1 text-xs uppercase tracking-wide text-neutral-500">
+                                SKU: {highlightMatches(product.sku, query)}
+                              </p>
+                              <p className="mt-1 text-xs text-neutral-500">
+                                Categoría: {highlightMatches(product.category, query)}
+                              </p>
+                            </div>
+                            <div className="flex flex-col items-end gap-1 text-right">
+                              <span className="text-sm font-semibold text-brand-primary">S/ {displayPrice}</span>
+                              {hasSalePrice && (
+                                <span className="text-xs font-medium text-neutral-400 line-through">S/ {regularPrice}</span>
+                              )}
+                            </div>
                           </div>
-                          <span className="text-sm font-semibold text-brand-primary">
-                            S/ {(product.salePrice ?? product.regularPrice).toFixed(2)}
-                          </span>
-                        </div>
-                        <div className="mt-3 flex flex-wrap gap-2 text-sm">
-                          <Link
-                            href={`/producto/${product.slug}`}
-                            onClick={onClose}
-                            className="inline-flex items-center gap-2 rounded-full border border-brand-primary/30 bg-brand-primary/10 px-4 py-2 font-medium text-brand-primary transition hover:bg-brand-primary/20"
-                          >
-                            Ver producto
-                          </Link>
-                          <a
-                            href={`https://wa.me/51924281623?text=Consulta%20${encodeURIComponent(product.sku)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 font-medium text-neutral-700 transition hover:border-brand-primary/40 hover:text-brand-primary"
-                            onClick={onClose}
-                          >
-                            <MessageCircle className="h-4 w-4" />
-                            WhatsApp
-                          </a>
-                        </div>
-                      </MotionResult>
-                    ))}
+                          <div className="mt-3 flex flex-wrap gap-2 text-sm">
+                            <Link
+                              href={`/producto/${product.slug}`}
+                              onClick={onClose}
+                              className="inline-flex items-center gap-2 rounded-full border border-brand-primary/30 bg-brand-primary/10 px-4 py-2 font-medium text-brand-primary transition hover:bg-brand-primary/20"
+                            >
+                              Ver producto
+                            </Link>
+                            <a
+                              href={`https://wa.me/51924281623?text=Consulta%20${encodeURIComponent(product.sku)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 font-medium text-neutral-700 transition hover:border-brand-primary/40 hover:text-brand-primary"
+                              onClick={onClose}
+                            >
+                              <MessageCircle className="h-4 w-4" />
+                              WhatsApp
+                            </a>
+                          </div>
+                        </MotionResult>
+                      )
+                    })}
                   </ul>
                 ) : (
                   <MotionEmpty
