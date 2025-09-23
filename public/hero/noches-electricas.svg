@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Fondo neón para noches eléctricas</title>
+  <desc id="desc">Fondo oscuro con destellos violetas y verdes que evocan lencería futurista.</desc>
+  <defs>
+    <radialGradient id="halo" cx="35%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#c86bff" stop-opacity="0.9" />
+      <stop offset="45%" stop-color="#3c0d46" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#010207" stop-opacity="1" />
+    </radialGradient>
+    <linearGradient id="mesh" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7effbf" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#7a1bff" stop-opacity="0.05" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#020109" />
+  <rect width="100%" height="100%" fill="url(#halo)" />
+  <g fill="none" stroke="url(#mesh)" stroke-width="3" opacity="0.6">
+    <path d="M-40 860 C280 660 560 1020 880 820 S1480 740 1500 1080" />
+    <path d="M-40 980 C220 780 580 1120 940 900 S1460 780 1540 1080" opacity="0.5" />
+  </g>
+  <g fill="#7effbf" fill-opacity="0.18">
+    <polygon points="1240,240 1340,420 1180,420" />
+    <polygon points="220,220 320,400 160,400" />
+  </g>
+</svg>

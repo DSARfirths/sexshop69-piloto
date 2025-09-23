@@ -23,34 +23,44 @@ type HeroSlide = {
 
 export const heroCarouselSlides: HeroSlide[] = [
   {
-    id: 'parejas',
+    id: 'parejas-curiosas',
     tag: 'Parejas curiosas',
-    title: 'Rituales sensoriales para dos',
+    title: 'Exploraciones sensuales sincronizadas',
     description:
-      'Kits diseñados para despertar complicidad, con texturas, fragancias y juegos que preparan la escena perfecta.',
-    primaryCta: { href: '/categoria/kits', label: 'Comprar kits premium' },
-    secondaryCta: { href: '/asesoria', label: 'Recibir asesoría íntima' },
-    image: '/hero/parejas-rituales.jpg'
+      'Accesorios conectados y aromas inmersivos que encienden el juego previo con destellos neón y complicidad absoluta.',
+    primaryCta: { href: '/categoria/parejas', label: 'Ver sets para parejas' },
+    secondaryCta: { href: '/experiencias/guiadas', label: 'Descubrir experiencias guiadas' },
+    image: '/hero/parejas-curiosas-neon.svg'
   },
   {
-    id: 'singles',
-    tag: 'Self love',
-    title: 'Autocuidado vibrante y discreto',
+    id: 'autocuidado-vibrante',
+    tag: 'Autocuidado vibrante',
+    title: 'Rituales de placer high-tech',
     description:
-      'Vibradores silenciosos, lubricantes premium y accesorios mindfulness que elevan tu rutina personal.',
-    primaryCta: { href: '/categoria/bienestar', label: 'Descubrir bienestar íntimo' },
-    secondaryCta: { href: '/guia-autocuidado', label: 'Leer guía de autocuidado' },
-    image: '/hero/selflove-experience.jpg'
+      'Vibradores inteligentes, aceites sensoriales y playlists binaurales listos para elevar tu energía personal.',
+    primaryCta: { href: '/categoria/autocuidado', label: 'Explorar autocuidado futurista' },
+    secondaryCta: { href: '/club-vibes', label: 'Unirme al Club Vibes' },
+    image: '/hero/autocuidado-vibrante-neon.svg'
   },
   {
-    id: 'ediciones-limitadas',
-    tag: 'Ediciones limitadas',
-    title: 'Colecciones cápsula que solo duran un suspiro',
+    id: 'juguetes-anales-premium',
+    tag: 'Juguetes anales premium',
+    title: 'Sensaciones profundas con precisión',
     description:
-      'Diseños exclusivos, materiales veganos y packaging de colección para regalar (o regalarte).',
-    primaryCta: { href: '/colecciones', label: 'Explorar colecciones cápsula' },
-    secondaryCta: { href: '/envios', label: 'Ver política de envíos' },
-    image: '/hero/coleccion-capsula.jpg'
+      'Diseños ergonómicos en silicona médica y acabados cromados para explorar con seguridad, lujo y control total.',
+    primaryCta: { href: '/categoria/juguetes-anales', label: 'Ver selección premium' },
+    secondaryCta: { href: '/blog/guia-anal', label: 'Leer guía de uso experto' },
+    image: '/hero/juguetes-anales-premium.svg'
+  },
+  {
+    id: 'noches-electricas',
+    tag: 'Noches eléctricas',
+    title: 'Lencería y bondage glow',
+    description:
+      'Atuendos lumínicos, cueros suaves y accesorios modulables para construir fantasías futuristas que brillan en la oscuridad.',
+    primaryCta: { href: '/categoria/lenceria', label: 'Descubrir lencería glow' },
+    secondaryCta: { href: '/rituales/nocturnos', label: 'Diseñar mi ritual nocturno' },
+    image: '/hero/noches-electricas.svg'
   }
 ]
 
