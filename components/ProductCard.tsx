@@ -8,7 +8,7 @@ import QuickViewDialog from '@/components/product/QuickViewDialog'
 import { useCategoryFilters } from '@/components/category/filters-context'
 import { DEFAULT_IMAGE_EXTENSIONS, resolveAssetFolder, type Product } from '@/lib/products'
 
-const BADGE_LABELS: Record<NonNullable<Product['badge']>, string> = {
+const BADGE_LABELS: Record<'nuevo' | 'top' | 'promo', string> = {
   nuevo: 'Nuevo',
   top: 'Top',
   promo: 'Promo'
@@ -45,12 +45,17 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
     return undefined
   }, [filtersContext, p.attributes?.material, p.brand])
 
-  const displayBadge = highlightBadge ?? filterBadge ?? (p.badge ? BADGE_LABELS[p.badge] : undefined)
-  const hasGallery = Boolean(p.images && p.images > 0)
+  const resolvedBadge =
+    p.badge && typeof p.badge === 'string' && p.badge in BADGE_LABELS
+      ? BADGE_LABELS[p.badge as keyof typeof BADGE_LABELS]
+      : p.badge ?? undefined
+  const displayBadge = highlightBadge ?? filterBadge ?? resolvedBadge
+  const hasGallery = p.imageCount > 0 && Boolean(p.primaryImageBasename)
   const assetFolder = resolveAssetFolder(p)
-  const mainImageBasePath = hasGallery ? `/${assetFolder}/${p.slug}/1` : null
+  const mainImageBasePath = hasGallery && p.primaryImageBasename ? `/${assetFolder}/${p.slug}/${p.primaryImageBasename}` : null
   const imageExtensions = p.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
   const hasExtensions = imageExtensions.length > 0
+  const displayPrice = (p.salePrice ?? p.regularPrice).toFixed(2)
   const mainImageSrc =
     hasGallery && !imageFailed && mainImageBasePath && hasExtensions
       ? `${mainImageBasePath}.${imageExtensions[Math.min(extensionIndex, imageExtensions.length - 1)]}`
@@ -154,7 +159,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
           </div>
           <div className="mt-3 space-y-1">
             <div className="line-clamp-2 font-medium text-neutral-900">{p.name}</div>
-            <div className="font-semibold text-brand-primary">S/ {p.price.toFixed(2)}</div>
+            <div className="font-semibold text-brand-primary">S/ {displayPrice}</div>
             {p.brand && <div className="text-xs uppercase tracking-wide text-neutral-500">{p.brand}</div>}
           </div>
         </motion.a>

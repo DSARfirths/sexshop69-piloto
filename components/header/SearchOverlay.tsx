@@ -166,7 +166,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                             </p>
                           </div>
                           <span className="text-sm font-semibold text-brand-primary">
-                            S/ {product.price.toFixed(2)}
+                            S/ {(product.salePrice ?? product.regularPrice).toFixed(2)}
                           </span>
                         </div>
                         <div className="mt-3 flex flex-wrap gap-2 text-sm">

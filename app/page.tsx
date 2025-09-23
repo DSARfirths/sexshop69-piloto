@@ -14,11 +14,11 @@ const featuredCategories = ['bienestar', 'lenceria', 'kits'] as const
 type CategoryDefinition = {
   slug: string
   label: string
-  image: string
+  image: string | null
   isSensitive?: boolean
 }
 
-type AvailableCategory = CategoryDefinition & { isSensitive: boolean }
+type AvailableCategory = Omit<CategoryDefinition, 'image'> & { image: string; isSensitive: boolean }
 
 const TRUST_BADGES = [
   {
@@ -47,6 +47,7 @@ export default function Page() {
     .filter(category => catalogCategories.has(category.slug))
     .map(category => ({
       ...category,
+      image: category.image ?? CATEGORY_FALLBACK_IMAGE,
       isSensitive: category.isSensitive || nsfwCategories.has(category.slug)
     }))
   const availableBySlug = new Map(availableCategories.map(category => [category.slug, category]))
@@ -92,7 +93,7 @@ export default function Page() {
                     >
                       <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
                         <Image
-                          src={category.image}
+                          src={category.image ?? CATEGORY_FALLBACK_IMAGE}
                           alt={`${category.label} — miniatura de categoría`}
                           fill
                           sizes="80px"
@@ -112,3 +113,9 @@ export default function Page() {
     </>
   )
 }
+const CATEGORY_FALLBACK_IMAGE =
+  'data:image/svg+xml;charset=UTF-8,' +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#f4f4f5"/><stop offset="100%" stop-color="#e4e4e7"/></linearGradient></defs><rect width="160" height="160" fill="url(#g)"/><text x="50%" y="50%" fill="#a1a1aa" font-family="sans-serif" font-size="14" font-weight="600" text-anchor="middle" dominant-baseline="middle">Categoría</text></svg>`
+  )
+
