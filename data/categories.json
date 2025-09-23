@@ -1,50 +1,202 @@
 [
   {
-    "slug": "bienestar",
-    "label": "Bienestar íntimo",
-    "image": "/category-thumbnails/bienestar.jpg",
-    "isSensitive": false
-  },
-  {
-    "slug": "lenceria",
-    "label": "Lencería",
-    "image": "/category-thumbnails/lenceria.jpg",
-    "isSensitive": false
-  },
-  {
-    "slug": "kits",
-    "label": "Kits de regalo",
-    "image": "/category-thumbnails/kits.jpg",
-    "isSensitive": false
-  },
-  {
-    "slug": "arneses",
-    "label": "Arneses con arnés",
-    "image": "/category-thumbnails/arneses.jpg",
-    "isSensitive": true
+    "slug": "vibradores",
+    "label": "Vibradores",
+    "image": null,
+    "isSensitive": true,
+    "children": [
+      {
+        "slug": "clitorales",
+        "label": "Clitorales"
+      },
+      {
+        "slug": "rabbits",
+        "label": "Rabbits"
+      },
+      {
+        "slug": "punto-g",
+        "label": "Punto G"
+      },
+      {
+        "slug": "inalambricos",
+        "label": "Inalámbricos"
+      },
+      {
+        "slug": "jelly",
+        "label": "Jelly"
+      },
+      {
+        "slug": "cyberskin",
+        "label": "Cyberskin"
+      },
+      {
+        "slug": "extremo",
+        "label": "Extremo"
+      },
+      {
+        "slug": "piel",
+        "label": "Piel"
+      }
+    ]
   },
   {
     "slug": "consoladores",
     "label": "Consoladores",
-    "image": "/category-thumbnails/consoladores.jpg",
-    "isSensitive": true
+    "image": null,
+    "isSensitive": true,
+    "children": [
+      {
+        "slug": "dobles",
+        "label": "Dobles"
+      },
+      {
+        "slug": "realistas-extremos",
+        "label": "Realistas/Extremos"
+      }
+    ]
+  },
+  {
+    "slug": "masturbadores",
+    "label": "Masturbadores",
+    "image": null,
+    "isSensitive": true,
+    "children": [
+      {
+        "slug": "masculinos",
+        "label": "Masculinos"
+      },
+      {
+        "slug": "fleshlight",
+        "label": "Fleshlight"
+      }
+    ]
+  },
+  {
+    "slug": "arneses",
+    "label": "Arneses y Prótesis",
+    "image": null,
+    "isSensitive": true,
+    "children": [
+      {
+        "slug": "protesis",
+        "label": "Prótesis"
+      }
+    ]
+  },
+  {
+    "slug": "muñecas",
+    "label": "Muñecas",
+    "image": null,
+    "isSensitive": true,
+    "children": [
+      {
+        "slug": "inflables",
+        "label": "Inflables"
+      },
+      {
+        "slug": "ultimate-fantasy",
+        "label": "Ultimate Fantasy"
+      }
+    ]
   },
   {
     "slug": "fetish",
-    "label": "Fetish y BDSM",
-    "image": "/category-thumbnails/fetish.jpg",
-    "isSensitive": true
+    "label": "Fetish & Bondage",
+    "image": null,
+    "isSensitive": true,
+    "children": [
+      {
+        "slug": "bondage",
+        "label": "Bondage"
+      }
+    ]
   },
   {
-    "slug": "munecas",
-    "label": "Muñecas realistas",
-    "image": "/category-thumbnails/munecas.jpg",
-    "isSensitive": true
+    "slug": "pareja",
+    "label": "Para Pareja",
+    "image": null,
+    "isSensitive": true,
+    "children": [
+      {
+        "slug": "anillos",
+        "label": "Anillos"
+      }
+    ]
   },
   {
-    "slug": "anales",
-    "label": "Juegos anales",
-    "image": "/category-thumbnails/anales.jpg",
-    "isSensitive": true
+    "slug": "lubricantes",
+    "label": "Lubricantes y Aceites",
+    "image": null,
+    "isSensitive": false,
+    "children": [
+      {
+        "slug": "sabores",
+        "label": "Sabores"
+      },
+      {
+        "slug": "aceites",
+        "label": "Aceites/masajes"
+      }
+    ]
+  },
+  {
+    "slug": "bienestar",
+    "label": "Bienestar / Salud sexual",
+    "image": null,
+    "isSensitive": false,
+    "children": [
+      {
+        "slug": "afrodisiacos",
+        "label": "Afrodisíacos"
+      },
+      {
+        "slug": "potenciadores",
+        "label": "Potenciadores"
+      },
+      {
+        "slug": "bombas",
+        "label": "Bombas de succión"
+      },
+      {
+        "slug": "higiene-intima",
+        "label": "Higiene íntima"
+      },
+      {
+        "slug": "suplementos",
+        "label": "Suplementos"
+      }
+    ]
+  },
+  {
+    "slug": "accesorios",
+    "label": "Accesorios",
+    "image": null,
+    "isSensitive": true,
+    "children": [
+      {
+        "slug": "fundas-penianas",
+        "label": "Fundas penianas"
+      },
+      {
+        "slug": "bolas-chinas",
+        "label": "Bolas chinas/Geisha"
+      },
+      {
+        "slug": "varios",
+        "label": "Varios"
+      }
+    ]
+  },
+  {
+    "slug": "feromonas",
+    "label": "Feromonas",
+    "image": null,
+    "isSensitive": false
+  },
+  {
+    "slug": "ofertas",
+    "label": "Ofertas",
+    "image": null,
+    "isSensitive": false
   }
 ]
