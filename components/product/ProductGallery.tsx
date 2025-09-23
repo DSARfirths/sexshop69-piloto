@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react'
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import { AnimatePresence, motion } from 'framer-motion'
-import type { ImageExtension } from '@/lib/products'
 
 const MotionWrapper = motion<{ className?: string }>('div')
 
@@ -15,30 +14,31 @@ const SAFE_PLACEHOLDER =
   )
 
 type GalleryAssetProps = {
-  basePath: string
+  slug: string
+  basename: string
   alt: string
   className?: string
   enabled: boolean
   priority?: boolean
-  extensions: readonly ImageExtension[]
 }
 
-function GalleryAsset({ basePath, alt, className, enabled, priority, extensions }: GalleryAssetProps) {
-  const [extensionIndex, setExtensionIndex] = useState(0)
+function buildImageSrc(slug: string, basename: string) {
+  if (!basename) return null
+  return `/products/${slug}/${basename}.webp`
+}
+
+function GalleryAsset({ slug, basename, alt, className, enabled, priority }: GalleryAssetProps) {
   const [failed, setFailed] = useState(false)
-  const hasExtensions = extensions.length > 0
-  const extension = hasExtensions ? extensions[Math.min(extensionIndex, extensions.length - 1)] : undefined
 
   useEffect(() => {
-    setExtensionIndex(0)
     setFailed(false)
-  }, [basePath, extensions])
+  }, [basename, slug])
 
-  if (!enabled) {
+  if (!enabled || failed) {
     return (
       <img
         src={SAFE_PLACEHOLDER}
-        alt={alt}
+        alt={enabled ? `${alt} no disponible` : alt}
         className={className}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
@@ -46,19 +46,9 @@ function GalleryAsset({ basePath, alt, className, enabled, priority, extensions 
     )
   }
 
-  if (failed) {
-    return (
-      <img
-        src={SAFE_PLACEHOLDER}
-        alt={`${alt} no disponible`}
-        className={className}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding="async"
-      />
-    )
-  }
+  const src = buildImageSrc(slug, basename)
 
-  if (!extension) {
+  if (!src) {
     return (
       <img
         src={SAFE_PLACEHOLDER}
@@ -69,8 +59,6 @@ function GalleryAsset({ basePath, alt, className, enabled, priority, extensions 
       />
     )
   }
-
-  const src = `${basePath}.${extension}`
 
   return (
     <img
@@ -79,13 +67,7 @@ function GalleryAsset({ basePath, alt, className, enabled, priority, extensions 
       className={className}
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
-      onError={() => {
-        if (extensionIndex < extensions.length - 1) {
-          setExtensionIndex(prev => prev + 1)
-        } else {
-          setFailed(true)
-        }
-      }}
+      onError={() => setFailed(true)}
     />
   )
 }
@@ -95,18 +77,9 @@ type ProductGalleryProps = {
   name: string
   imageBasenames: string[]
   nsfw?: boolean
-  assetFolder: 'products'
-  imageExtensions: readonly ImageExtension[]
 }
 
-export default function ProductGallery({
-  slug,
-  name,
-  imageBasenames,
-  nsfw = false,
-  assetFolder,
-  imageExtensions
-}: ProductGalleryProps) {
+export default function ProductGallery({ slug, name, imageBasenames, nsfw = false }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isVerified, setIsVerified] = useState(false)
 
@@ -125,8 +98,8 @@ export default function ProductGallery({
 
   const imageSources = useMemo(() => {
     if (!hasImages) return []
-    return imageBasenames.map(basename => `/${assetFolder}/${slug}/${basename}`)
-  }, [assetFolder, hasImages, imageBasenames, slug])
+    return imageBasenames
+  }, [hasImages, imageBasenames])
 
   useEffect(() => {
     if (activeIndex >= imageSources.length) {
@@ -181,22 +154,22 @@ export default function ProductGallery({
                     <div className="h-full w-full">
                       <Zoom>
                         <GalleryAsset
-                          basePath={imageSources[activeIndex]}
+                          slug={slug}
+                          basename={imageSources[activeIndex]}
                           alt={`${name} — vista ${activeIndex + 1}`}
                           enabled
                           priority={activeIndex === 0}
                           className="h-full w-full object-cover"
-                          extensions={imageExtensions}
                         />
                       </Zoom>
                     </div>
                   ) : (
                     <GalleryAsset
-                      basePath={imageSources[activeIndex]}
+                      slug={slug}
+                      basename={imageSources[activeIndex]}
                       alt={`${name} — vista censurada`}
                       enabled={false}
                       className="h-full w-full object-cover blur-xl"
-                      extensions={imageExtensions}
                     />
                   )}
                 </MotionWrapper>
@@ -224,19 +197,19 @@ export default function ProductGallery({
                     ? 'border-brand-primary shadow-lg ring-2 ring-brand-primary/30'
                     : 'border-transparent bg-neutral-100 hover:border-neutral-300'
                 }`}
-              >
-                {unlocked ? (
-                  <GalleryAsset
-                    basePath={source}
-                    alt={`${name} — miniatura ${index + 1}`}
-                    enabled
-                    className="h-full w-full object-cover"
-                    extensions={imageExtensions}
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-neutral-900/70 text-[11px] font-semibold uppercase tracking-wide text-white">
-                    18+
-                  </div>
+                >
+                  {unlocked ? (
+                    <GalleryAsset
+                      slug={slug}
+                      basename={source}
+                      alt={`${name} — miniatura ${index + 1}`}
+                      enabled
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-neutral-900/70 text-[11px] font-semibold uppercase tracking-wide text-white">
+                      18+
+                    </div>
                 )}
                 {!isActive && unlocked && (
                   <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/0 opacity-0 transition-opacity duration-200 hover:opacity-30" />

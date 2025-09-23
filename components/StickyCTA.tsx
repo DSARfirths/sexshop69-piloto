@@ -6,17 +6,21 @@ import type { CSSProperties } from 'react'
 
 type StickyCTAProps = {
   price: number
+  regularPrice?: number
   checkoutHref: string
   whatsappHref: string
 }
 
 const MotionContainer = motion<{ className?: string; style?: CSSProperties }>('div')
 
-export default function StickyCTA({ price, checkoutHref, whatsappHref }: StickyCTAProps) {
+export default function StickyCTA({ price, regularPrice, checkoutHref, whatsappHref }: StickyCTAProps) {
   const containerClassName = 'fixed inset-x-0 bottom-0 z-50 bg-gradient-to-t from-white via-white/95 to-white/20 pb-4 pt-2 md:hidden'
   const containerStyle: CSSProperties = {
     paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)'
   }
+  const displayPrice = price.toFixed(2)
+  const hasReferencePrice = typeof regularPrice === 'number' && regularPrice > price
+  const formattedRegularPrice = hasReferencePrice ? regularPrice.toFixed(2) : null
 
   return (
     <MotionContainer
@@ -30,7 +34,12 @@ export default function StickyCTA({ price, checkoutHref, whatsappHref }: StickyC
         <div className="rounded-3xl border border-neutral-200 bg-white/95 p-4 shadow-xl backdrop-blur">
           <div className="flex items-baseline justify-between text-neutral-900">
             <span className="text-xs uppercase tracking-wide text-neutral-500">Total estimado</span>
-            <span className="text-lg font-semibold">S/ {price.toFixed(2)}</span>
+            <span className="flex items-baseline gap-2 text-lg font-semibold">
+              <span>S/ {displayPrice}</span>
+              {formattedRegularPrice && (
+                <span className="text-sm font-medium text-neutral-400 line-through">S/ {formattedRegularPrice}</span>
+              )}
+            </span>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <Link

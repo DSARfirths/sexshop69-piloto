@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { motion, type HTMLMotionProps } from 'framer-motion'
 import QuickViewDialog from '@/components/product/QuickViewDialog'
 import { useCategoryFilters } from '@/components/category/filters-context'
-import { DEFAULT_IMAGE_EXTENSIONS, resolveAssetFolder, type Product } from '@/lib/products'
+import { type Product } from '@/lib/products'
 
 const BADGE_LABELS: Record<'nuevo' | 'top' | 'promo', string> = {
   nuevo: 'Nuevo',
@@ -28,7 +28,6 @@ type ProductCardProps = {
 export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
   const filtersContext = useCategoryFilters()
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false)
-  const [extensionIndex, setExtensionIndex] = useState(0)
   const [imageFailed, setImageFailed] = useState(false)
   const longPressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const didTriggerQuickView = useRef(false)
@@ -50,22 +49,21 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
       ? BADGE_LABELS[p.badge as keyof typeof BADGE_LABELS]
       : p.badge ?? undefined
   const displayBadge = highlightBadge ?? filterBadge ?? resolvedBadge
-  const hasGallery = p.imageCount > 0 && Boolean(p.primaryImageBasename)
-  const assetFolder = resolveAssetFolder(p)
-  const mainImageBasePath = hasGallery && p.primaryImageBasename ? `/${assetFolder}/${p.slug}/${p.primaryImageBasename}` : null
-  const imageExtensions = p.imageSet ?? DEFAULT_IMAGE_EXTENSIONS
-  const hasExtensions = imageExtensions.length > 0
-  const displayPrice = (p.salePrice ?? p.regularPrice).toFixed(2)
+  const hasGallery = p.imageCount > 0 && Boolean(p.imageFilenames[0])
+  const primaryImageBasename = p.imageFilenames[0]?.replace(/\..+$/, '') ?? null
   const mainImageSrc =
-    hasGallery && !imageFailed && mainImageBasePath && hasExtensions
-      ? `${mainImageBasePath}.${imageExtensions[Math.min(extensionIndex, imageExtensions.length - 1)]}`
+    hasGallery && !imageFailed && primaryImageBasename
+      ? `/products/${p.slug}/${primaryImageBasename}.webp`
       : FALLBACK_IMAGE_SRC
+  const salePrice = typeof p.salePrice === 'number' ? p.salePrice : null
+  const hasSalePrice = salePrice !== null
+  const displayPrice = (salePrice ?? p.regularPrice).toFixed(2)
+  const regularPrice = p.regularPrice.toFixed(2)
   const shouldPriorityLoad = Boolean(highlightBadge || p.badge === 'top')
 
   useEffect(() => {
-    setExtensionIndex(0)
     setImageFailed(false)
-  }, [mainImageBasePath, imageExtensions])
+  }, [primaryImageBasename, p.slug])
 
   useEffect(() => {
     return () => {
@@ -147,19 +145,20 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
                 sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 90vw"
                 className="h-full w-full object-contain transition duration-500"
                 onError={() => {
-                  if (!hasGallery || !mainImageBasePath || !hasExtensions) return
-                  if (extensionIndex < imageExtensions.length - 1) {
-                    setExtensionIndex(prev => prev + 1)
-                  } else {
-                    setImageFailed(true)
-                  }
+                  if (!hasGallery) return
+                  setImageFailed(true)
                 }}
               />
             </div>
           </div>
           <div className="mt-3 space-y-1">
             <div className="line-clamp-2 font-medium text-neutral-900">{p.name}</div>
-            <div className="font-semibold text-brand-primary">S/ {displayPrice}</div>
+            <div className="flex items-baseline gap-2">
+              <span className="font-semibold text-brand-primary">S/ {displayPrice}</span>
+              {hasSalePrice && (
+                <span className="text-sm font-medium text-neutral-400 line-through">S/ {regularPrice}</span>
+              )}
+            </div>
             {p.brand && <div className="text-xs uppercase tracking-wide text-neutral-500">{p.brand}</div>}
           </div>
         </motion.a>
