@@ -9,6 +9,7 @@ type CategoryItem = {
   slug: string
   label: string
   description?: string
+  subtitle?: string
   isSensitive?: boolean
   image?: string
 }
@@ -34,6 +35,45 @@ const cardVariants: Variants = {
 const MotionTrack = motion.div as any
 
 const MotionCard = motion.div as any
+const MotionArticle = motion.article
+
+export type CategoryCardProps = {
+  category: CategoryItem & { description: string; subtitle: string }
+  href?: string
+}
+
+export function CategoryCard({ category, href = `/categoria/${category.slug}` }: CategoryCardProps) {
+  return (
+    <Link href={href} className="group block h-full">
+      <MotionArticle
+        whileHover={{ y: -6, boxShadow: '0 18px 30px -16px rgba(15,23,42,0.35)' }}
+        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+        className="flex h-full min-h-[280px] w-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white text-left shadow-lg"
+      >
+        {category.image ? (
+          <div className="relative h-40 w-full overflow-hidden rounded-t-2xl bg-neutral-100">
+            <Image
+              src={category.image}
+              alt={`${category.label} — miniatura de categoría`}
+              fill
+              sizes="(max-width: 768px) 220px, 280px"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+            />
+          </div>
+        ) : (
+          <div className="flex h-40 w-full items-center justify-center rounded-t-2xl bg-neutral-100 text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">
+            Explorar categoría
+          </div>
+        )}
+        <div className="flex flex-1 flex-col gap-1 px-5 pb-6 pt-4">
+          <h3 className="text-lg font-extrabold uppercase text-neutral-900">{category.label}</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">{category.subtitle}</p>
+          <p className="text-sm font-semibold uppercase text-neutral-600">{category.description}</p>
+        </div>
+      </MotionArticle>
+    </Link>
+  )
+}
 
 export default function CategoryCarousel({ title, subtitle, headingId, categories }: CategoryCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -43,8 +83,20 @@ export default function CategoryCarousel({ title, subtitle, headingId, categorie
   const computedCategories = useMemo(() => categories.map(category => ({
     ...category,
     description:
-      category.description ?? (category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad')
+      category.description ?? (category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad'),
+    subtitle:
+      category.subtitle ?? (category.isSensitive ? 'Contenido adulto' : 'Bienestar y cuidado')
   })), [categories])
+
+  const highlightedCategories = useMemo(
+    () => computedCategories.slice(0, 8),
+    [computedCategories]
+  )
+
+  const remainingCategories = useMemo(
+    () => computedCategories.slice(8),
+    [computedCategories]
+  )
 
   useEffect(() => {
     function updateBounds() {
@@ -70,10 +122,13 @@ export default function CategoryCarousel({ title, subtitle, headingId, categorie
           {subtitle && <p className="text-sm text-neutral-600">{subtitle}</p>}
         </div>
       )}
-      <div ref={containerRef} className="overflow-hidden">
+      <div
+        ref={containerRef}
+        className="overflow-hidden md:hidden"
+      >
         <MotionTrack
           ref={trackRef}
-          className="flex gap-4 pb-2"
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           drag="x"
           dragConstraints={dragConstraints}
           dragElastic={0.12}
@@ -85,52 +140,39 @@ export default function CategoryCarousel({ title, subtitle, headingId, categorie
               initial="hidden"
               animate="visible"
               variants={cardVariants}
-              className="min-w-[220px] max-w-[240px] flex-1"
+              className="min-w-[200px] max-w-[220px] snap-start"
             >
-              <Link
-                href={`/categoria/${category.slug}`}
-                className="flex h-full flex-col items-center rounded-2xl border border-neutral-200 bg-white/90 p-4 text-center shadow-sm shadow-neutral-200/60 transition hover:-translate-y-1 hover:shadow-lg"
-              >
-                {category.image && (
-                  <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
-                    <Image
-                      src={category.image}
-                      alt={`${category.label} — miniatura de categoría`}
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-                <div className="text-base font-semibold text-neutral-900">{category.label}</div>
-                <div className="mt-2 text-sm text-neutral-600">{category.description}</div>
-              </Link>
+              <CategoryCard category={category} />
             </MotionCard>
           ))}
+          <MotionCard className="min-w-[200px] max-w-[220px] snap-start">
+            <Link href="/categoria" className="block h-full">
+              <MotionArticle
+                whileHover={{ y: -6, boxShadow: '0 18px 30px -16px rgba(15,23,42,0.35)' }}
+                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                className="flex h-full min-h-[280px] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-white text-center font-semibold uppercase text-neutral-700 shadow-lg"
+              >
+                Ver todas
+              </MotionArticle>
+            </Link>
+          </MotionCard>
         </MotionTrack>
       </div>
-      <div className="hidden gap-4 md:grid md:grid-cols-3">
-        {computedCategories.map(category => (
-          <Link
-            key={category.slug}
-            href={`/categoria/${category.slug}`}
-            className="flex flex-col items-center rounded-2xl border border-neutral-200 bg-white/90 p-4 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-            {category.image && (
-              <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
-                <Image
-                  src={category.image}
-                  alt={`${category.label} — miniatura de categoría`}
-                  fill
-                  sizes="80px"
-                  className="object-cover"
-                />
-              </div>
-            )}
-            <div className="text-base font-semibold text-neutral-900">{category.label}</div>
-            <div className="mt-2 text-sm text-neutral-600">{category.description}</div>
-          </Link>
+      <div className="hidden gap-5 md:grid md:grid-cols-3 xl:grid-cols-4">
+        {highlightedCategories.map(category => (
+          <CategoryCard key={category.slug} category={category} />
         ))}
+        {remainingCategories.length > 0 && (
+          <Link href="/categoria" className="block h-full">
+            <MotionArticle
+              whileHover={{ y: -6, boxShadow: '0 18px 30px -16px rgba(15,23,42,0.35)' }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+              className="flex h-full min-h-[280px] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-white text-center font-semibold uppercase text-neutral-700 shadow-lg"
+            >
+              Ver más categorías
+            </MotionArticle>
+          </Link>
+        )}
       </div>
     </section>
   )

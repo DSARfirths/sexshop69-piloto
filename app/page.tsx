@@ -1,9 +1,7 @@
-import Image from 'next/image'
-import Link from 'next/link'
 import { PackageCheck, ShieldCheck, LockKeyhole } from 'lucide-react'
 import Hero from '@/components/Hero'
 import { allProducts, getBestSellers, getNewArrivals, getOffers } from '@/lib/products'
-import CategoryCarousel from '@/components/home/CategoryCarousel'
+import CategoryCarousel, { CategoryCard } from '@/components/home/CategoryCarousel'
 import BestSellers from '@/components/home/BestSellers'
 import TrustBadgesStrip from '@/components/home/TrustBadgesStrip'
 import HeroCarousel from '@/components/home/HeroCarousel'
@@ -65,6 +63,11 @@ export default function Page() {
   const otherCategories = availableCategories.filter(
     category => !featured.some(featuredCategory => featuredCategory.slug === category.slug)
   )
+  const normalizedOtherCategories = otherCategories.map(category => ({
+    ...category,
+    description: category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad',
+    subtitle: category.isSensitive ? 'Contenido adulto' : 'Bienestar y cuidado'
+  }))
   const carouselCategories = featured.length > 0 ? featured : availableCategories
 
   return (
@@ -108,7 +111,7 @@ export default function Page() {
             showBestSellerHighlight={false}
           />
         )}
-        {otherCategories.length > 0 && (
+        {normalizedOtherCategories.length > 0 && (
           <section className="space-y-4">
             <h2 id="buscas-algo-mas-especifico" className="text-xl font-semibold text-neutral-900">
               ¿Buscas algo más específico?
@@ -116,30 +119,12 @@ export default function Page() {
             <p className="text-sm text-neutral-600">
               Recorre las categorías sensibles y temáticas creadas para diferentes niveles de experiencia.
             </p>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {otherCategories.map(category => (
-                  <Link
-                    key={category.slug}
-                    href={`/categoria/${category.slug}`}
-                    className="flex flex-col items-center rounded-2xl border border-neutral-200 bg-white/90 p-4 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-                  >
-                    <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
-                      <Image
-                        src={category.image ?? CATEGORY_FALLBACK_IMAGE}
-                        alt={`${category.label} — miniatura de categoría`}
-                        fill
-                        sizes="80px"
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="text-base font-semibold text-neutral-900">{category.label}</div>
-                    <div className="mt-2 text-sm text-neutral-600">
-                      {category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad'}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {normalizedOtherCategories.map(category => (
+                <CategoryCard key={category.slug} category={category} />
+              ))}
+            </div>
+          </section>
         )}
       </div>
     </>
