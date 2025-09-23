@@ -13,6 +13,14 @@ export default function Sections({ product }: { product: Product }) {
   const garantia = formatAttributeValue(product.attributes?.garantia)
   return (
     <div>
+      {product.descriptionHtml && (
+        <Section title="Descripción del producto">
+          <div
+            className="space-y-3 text-neutral-700 [&_a]:text-brand-primary [&_a]:underline [&_a:hover]:text-brand-primary/80 [&_li]:ml-5 [&_li]:list-disc [&_ol]:ml-5 [&_ol]:list-decimal [&_p]:leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+          />
+        </Section>
+      )}
       {product.features && product.features.length > 0 && (
         <Section title="Características y beneficios">
           <ul className="list-disc pl-5 space-y-1">
