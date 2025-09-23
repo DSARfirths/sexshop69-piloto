@@ -160,6 +160,19 @@ export default function CategoryFiltersClient() {
 
   const filteredProducts = useMemo(() => filterProducts(products, filters), [products, filters])
 
+  useEffect(() => {
+    if (!slug) return
+    if (products.length > 0) {
+      console.info(
+        `[CategoryFiltersClient] ${products.length} productos disponibles para la categoría o subcategoría "${slug}".`
+      )
+    } else {
+      console.warn(
+        `[CategoryFiltersClient] No se encontraron productos para la categoría o subcategoría "${slug}".`
+      )
+    }
+  }, [slug, products.length])
+
   const toggleValue = useCallback(
     (key: 'brands' | 'materials', value: string) => {
       setFilters((prev) => {
