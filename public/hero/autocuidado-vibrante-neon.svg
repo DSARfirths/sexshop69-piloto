@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Fondo neón para autocuidado vibrante</title>
+  <desc id="desc">Texturas holográficas en tonos azul eléctrico y rosa vibrante sobre fondo negro.</desc>
+  <defs>
+    <radialGradient id="pulse" cx="70%" cy="25%" r="60%">
+      <stop offset="0%" stop-color="#63f6ff" stop-opacity="0.85" />
+      <stop offset="45%" stop-color="#1b0d56" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#010104" stop-opacity="1" />
+    </radialGradient>
+    <linearGradient id="wave" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff7bff" stop-opacity="0.55" />
+      <stop offset="50%" stop-color="#2d45ff" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0.15" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#010104" />
+  <rect width="100%" height="100%" fill="url(#pulse)" />
+  <g fill="none" stroke="url(#wave)" stroke-width="3" opacity="0.75">
+    <path d="M-50 220 C180 160 420 240 660 220 S1140 160 1470 220" />
+    <path d="M-50 360 C210 300 480 380 750 360 S1230 300 1510 360" opacity="0.6" />
+    <path d="M-50 500 C240 440 530 520 820 500 S1320 440 1550 500" opacity="0.45" />
+  </g>
+  <g fill="#ff9af6" fill-opacity="0.16">
+    <circle cx="260" cy="820" r="190" />
+    <circle cx="420" cy="890" r="120" />
+    <circle cx="340" cy="680" r="80" />
+  </g>
+</svg>
