@@ -14,45 +14,25 @@ const SAFE_PLACEHOLDER =
   )
 
 type GalleryAssetProps = {
-  slug: string
-  basename: string
+  src: string
   alt: string
   className?: string
   enabled: boolean
   priority?: boolean
 }
 
-function buildImageSrc(slug: string, basename: string) {
-  if (!basename) return null
-  return `/products/${slug}/${basename}.webp`
-}
-
-function GalleryAsset({ slug, basename, alt, className, enabled, priority }: GalleryAssetProps) {
+function GalleryAsset({ src, alt, className, enabled, priority }: GalleryAssetProps) {
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     setFailed(false)
-  }, [basename, slug])
+  }, [src])
 
   if (!enabled || failed) {
     return (
       <img
         src={SAFE_PLACEHOLDER}
         alt={enabled ? `${alt} no disponible` : alt}
-        className={className}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding="async"
-      />
-    )
-  }
-
-  const src = buildImageSrc(slug, basename)
-
-  if (!src) {
-    return (
-      <img
-        src={SAFE_PLACEHOLDER}
-        alt={`${alt} no disponible`}
         className={className}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
@@ -75,15 +55,28 @@ function GalleryAsset({ slug, basename, alt, className, enabled, priority }: Gal
 type ProductGalleryProps = {
   slug: string
   name: string
-  imageBasenames: string[]
+  imageCount?: number
+  imageFilenames?: string[]
   nsfw?: boolean
 }
 
-export default function ProductGallery({ slug, name, imageBasenames, nsfw = false }: ProductGalleryProps) {
+function buildImageSrc(slug: string, index: number) {
+  if (index < 0) return null
+  return `/products/${slug}/${index + 1}.webp`
+}
+
+export default function ProductGallery({ slug, name, imageCount, imageFilenames, nsfw = false }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isVerified, setIsVerified] = useState(false)
 
-  const hasImages = imageBasenames.length > 0
+  const totalImages = useMemo(() => {
+    if (Array.isArray(imageFilenames) && imageFilenames.length > 0) {
+      return imageFilenames.length
+    }
+    return typeof imageCount === 'number' && imageCount > 0 ? imageCount : 0
+  }, [imageCount, imageFilenames])
+
+  const hasImages = totalImages > 0
   const requiresVerification = Boolean(nsfw && hasImages)
 
   useEffect(() => {
@@ -98,8 +91,11 @@ export default function ProductGallery({ slug, name, imageBasenames, nsfw = fals
 
   const imageSources = useMemo(() => {
     if (!hasImages) return []
-    return imageBasenames
-  }, [hasImages, imageBasenames])
+    const count = totalImages
+    return Array.from({ length: count }, (_, index) => buildImageSrc(slug, index)).filter(
+      (src): src is string => Boolean(src)
+    )
+  }, [hasImages, slug, totalImages])
 
   useEffect(() => {
     if (activeIndex >= imageSources.length) {
@@ -154,8 +150,7 @@ export default function ProductGallery({ slug, name, imageBasenames, nsfw = fals
                     <div className="h-full w-full">
                       <Zoom>
                         <GalleryAsset
-                          slug={slug}
-                          basename={imageSources[activeIndex]}
+                          src={imageSources[activeIndex]}
                           alt={`${name} — vista ${activeIndex + 1}`}
                           enabled
                           priority={activeIndex === 0}
@@ -165,8 +160,7 @@ export default function ProductGallery({ slug, name, imageBasenames, nsfw = fals
                     </div>
                   ) : (
                     <GalleryAsset
-                      slug={slug}
-                      basename={imageSources[activeIndex]}
+                      src={imageSources[activeIndex]}
                       alt={`${name} — vista censurada`}
                       enabled={false}
                       className="h-full w-full object-cover blur-xl"
@@ -200,8 +194,7 @@ export default function ProductGallery({ slug, name, imageBasenames, nsfw = fals
                 >
                   {unlocked ? (
                     <GalleryAsset
-                      slug={slug}
-                      basename={source}
+                      src={source}
                       alt={`${name} — miniatura ${index + 1}`}
                       enabled
                       className="h-full w-full object-cover"
