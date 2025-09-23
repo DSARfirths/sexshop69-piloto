@@ -2,7 +2,9 @@
   {
     "slug": "vibradores",
     "label": "Vibradores",
-    "image": null,
+    "image": "/categories/vibradores.svg",
+    "tagline": "Contenido sensible 18+",
+    "subtitle": "Estímulos precisos para cada ritmo.",
     "isSensitive": true,
     "children": [
       {
@@ -42,7 +44,9 @@
   {
     "slug": "consoladores",
     "label": "Consoladores",
-    "image": null,
+    "image": "/categories/consoladores.svg",
+    "tagline": "Contenido sensible 18+",
+    "subtitle": "Formas y texturas para explorar sin límites.",
     "isSensitive": true,
     "children": [
       {
@@ -58,7 +62,9 @@
   {
     "slug": "masturbadores",
     "label": "Masturbadores",
-    "image": null,
+    "image": "/categories/masturbadores.svg",
+    "tagline": "Contenido sensible 18+",
+    "subtitle": "Sensaciones envolventes para tus momentos a solas.",
     "isSensitive": true,
     "children": [
       {
@@ -74,7 +80,9 @@
   {
     "slug": "arneses",
     "label": "Arneses y Prótesis",
-    "image": null,
+    "image": "/categories/arneses.svg",
+    "tagline": "Contenido sensible 18+",
+    "subtitle": "Versatilidad y soporte para cada fantasía.",
     "isSensitive": true,
     "children": [
       {
@@ -86,7 +94,9 @@
   {
     "slug": "muñecas",
     "label": "Muñecas",
-    "image": null,
+    "image": "/categories/munecas.svg",
+    "tagline": "Contenido sensible 18+",
+    "subtitle": "Compañía realista y personalizable.",
     "isSensitive": true,
     "children": [
       {
@@ -102,7 +112,9 @@
   {
     "slug": "fetish",
     "label": "Fetish & Bondage",
-    "image": null,
+    "image": "/categories/fetish.svg",
+    "tagline": "Contenido sensible 18+",
+    "subtitle": "Accesorios para juego seguro y consensuado.",
     "isSensitive": true,
     "children": [
       {
@@ -114,7 +126,9 @@
   {
     "slug": "pareja",
     "label": "Para Pareja",
-    "image": null,
+    "image": "/categories/pareja.svg",
+    "tagline": "Contenido sensible 18+",
+    "subtitle": "Compartan nuevas experiencias juntxs.",
     "isSensitive": true,
     "children": [
       {
@@ -126,7 +140,9 @@
   {
     "slug": "lubricantes",
     "label": "Lubricantes y Aceites",
-    "image": null,
+    "image": "/categories/lubricantes.svg",
+    "tagline": "Explorar con seguridad",
+    "subtitle": "Texturas cuidadosas para acompañar cada encuentro.",
     "isSensitive": false,
     "children": [
       {
@@ -142,7 +158,9 @@
   {
     "slug": "bienestar",
     "label": "Bienestar / Salud sexual",
-    "image": null,
+    "image": "/categories/bienestar.svg",
+    "tagline": "Explorar con seguridad",
+    "subtitle": "Productos que cuidan tu cuerpo y energía.",
     "isSensitive": false,
     "children": [
       {
@@ -170,7 +188,9 @@
   {
     "slug": "accesorios",
     "label": "Accesorios",
-    "image": null,
+    "image": "/categories/accesorios.svg",
+    "tagline": "Contenido sensible 18+",
+    "subtitle": "Complementos creativos para tu colección.",
     "isSensitive": true,
     "children": [
       {
@@ -190,13 +210,17 @@
   {
     "slug": "feromonas",
     "label": "Feromonas",
-    "image": null,
+    "image": "/categories/feromonas.svg",
+    "tagline": "Explorar con seguridad",
+    "subtitle": "Aromas y concentrados para despertar sentidos.",
     "isSensitive": false
   },
   {
     "slug": "ofertas",
     "label": "Ofertas",
-    "image": null,
+    "image": "/categories/ofertas.svg",
+    "tagline": "Explorar con seguridad",
+    "subtitle": "Descuentos exclusivos para animarte a probar.",
     "isSensitive": false
   }
 ]
