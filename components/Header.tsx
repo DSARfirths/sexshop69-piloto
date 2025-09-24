@@ -54,8 +54,22 @@ const categories = categoriesData as Category[]
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const [desktopCategoriesOpen, setDesktopCategoriesOpen] = useState(false)
   const desktopCloseTimeout = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 8)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   useEffect(() => {
     return () => {
@@ -125,19 +139,23 @@ export default function Header() {
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
-        className="sticky top-0 z-40 border-b border-fuchsia-700/50 bg-neutral-950/70 backdrop-blur-xl supports-[backdrop-filter]:bg-neutral-950/60"
+        className={`sticky top-0 z-40 border-b border-brand-primary/60 backdrop-blur-xl transition-colors duration-300 ${
+          isScrolled
+            ? 'bg-neutral-950/70 supports-[backdrop-filter]:bg-neutral-950/60'
+            : 'bg-neutral-950 supports-[backdrop-filter]:bg-neutral-950'
+        }`}
       >
         <header className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-3 text-neutral-100 sm:px-4">
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold tracking-tight text-fuchsia-100 transition hover:bg-fuchsia-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/60 md:text-base"
+            className="flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold tracking-tight text-brand-primary transition hover:bg-brand-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60 md:text-base"
           >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-fuchsia-500/90 text-base font-bold uppercase">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-base font-bold uppercase">
               69
             </span>
             <span className="flex flex-col leading-tight">
               <span>SexShop del Perú</span>
-              <span className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-fuchsia-200/80 md:text-xs">
+              <span className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-brand-primary/80 md:text-xs">
                 Placer sin tabúes
               </span>
             </span>
@@ -162,7 +180,7 @@ export default function Header() {
                 aria-expanded={desktopCategoriesOpen}
                 aria-controls={desktopMenuId}
                 onClick={toggleDesktopCategories}
-                className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-fuchsia-100/90 transition hover:bg-fuchsia-500/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/60"
+                className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-brand-primary/90 transition hover:bg-brand-primary/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
               >
                 <Sparkles className="h-4 w-4" aria-hidden />
                 Categorías
@@ -174,7 +192,7 @@ export default function Header() {
 
               <div
                 id={desktopMenuId}
-                className={`absolute left-0 top-full z-10 min-w-[18rem] rounded-2xl border border-fuchsia-500/30 bg-neutral-950/95 p-4 text-sm text-neutral-100 shadow-2xl ring-1 ring-white/5 transition duration-150 ${
+                className={`absolute left-0 top-full z-10 min-w-[18rem] rounded-2xl border border-brand-primary/30 bg-neutral-950/95 p-4 text-sm text-neutral-100 shadow-2xl ring-1 ring-white/5 transition duration-150 ${
                   desktopCategoriesOpen
                     ? 'pointer-events-auto block translate-y-2 opacity-100'
                     : 'pointer-events-none hidden -translate-y-1 opacity-0'
@@ -190,9 +208,9 @@ export default function Header() {
                       <li key={category.slug}>
                         <Link
                           href={`/categoria/${category.slug}`}
-                          className="flex items-start gap-3 rounded-xl border border-transparent bg-white/5 px-3 py-2 transition hover:border-fuchsia-500/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/60"
+                          className="flex items-start gap-3 rounded-xl border border-transparent bg-white/5 px-3 py-2 transition hover:border-brand-primary/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
                         >
-                          <span className="mt-1 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-fuchsia-500/20 text-fuchsia-200">
+                          <span className="mt-1 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary/20 text-brand-primary">
                             <Icon className="h-4 w-4" aria-hidden />
                           </span>
                           <span className="flex flex-col">
@@ -210,7 +228,7 @@ export default function Header() {
                 </ul>
                 <Link
                   href="/categorias"
-                  className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-fuchsia-200/80 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/60"
+                  className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-brand-primary/80 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
                 >
                   Ver todas las categorías
                   <ChevronRight className="h-4 w-4" aria-hidden />
@@ -222,7 +240,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-full px-3 py-2 text-fuchsia-100/90 transition hover:bg-fuchsia-500/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/60"
+                className="rounded-full px-3 py-2 text-brand-primary/90 transition hover:bg-brand-primary/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
               >
                 {link.label}
               </Link>
@@ -233,7 +251,7 @@ export default function Header() {
             <button
               type="button"
               onClick={openSearch}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-fuchsia-100 transition hover:border-fuchsia-400/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70 md:w-auto md:px-3"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-primary transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70 md:w-auto md:px-3"
               aria-label="Abrir buscador"
             >
               <Search className="h-4 w-4" aria-hidden />
@@ -242,7 +260,7 @@ export default function Header() {
 
             <Link
               href="/carrito"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-fuchsia-100 transition hover:border-fuchsia-400/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70 md:w-auto md:px-3"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-primary transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70 md:w-auto md:px-3"
               aria-label="Abrir carrito"
             >
               <ShoppingBag className="h-4 w-4" aria-hidden />
@@ -252,7 +270,7 @@ export default function Header() {
             <button
               type="button"
               onClick={openChat}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-fuchsia-400/40 bg-fuchsia-500/20 px-4 text-sm font-semibold text-fuchsia-100 transition hover:border-fuchsia-300 hover:bg-fuchsia-500/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-200/80"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-brand-primary/40 bg-brand-primary/20 px-4 text-sm font-semibold text-brand-primary transition hover:border-brand-primary/50 hover:bg-brand-primary/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
             >
               <MessageCircle className="h-4 w-4" aria-hidden />
               <span className="hidden md:inline">Asistente</span>
@@ -262,7 +280,7 @@ export default function Header() {
             <button
               type="button"
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-fuchsia-100 transition hover:border-fuchsia-400/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70 md:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-primary transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70 md:hidden"
               onClick={toggleMenu}
             >
               {menuOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
@@ -295,11 +313,11 @@ export default function Header() {
                 className="flex h-full w-[min(20rem,85vw)] flex-col bg-neutral-950/95 text-neutral-100 shadow-2xl"
               >
                 <div className="flex items-center justify-between px-4 pb-2 pt-4">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-fuchsia-200/80">Explorar</p>
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-primary/80">Explorar</p>
                   <button
                     type="button"
                     onClick={toggleMenu}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-fuchsia-100 transition hover:border-fuchsia-400/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-brand-primary transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
                   >
                     <X className="h-4 w-4" aria-hidden />
                     <span className="sr-only">Cerrar menú</span>
@@ -309,19 +327,19 @@ export default function Header() {
                   <div className="h-full overflow-y-auto px-4 pb-10">
                     <nav className="space-y-6">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-wide text-fuchsia-200/80">Categorías</p>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-brand-primary/80">Categorías</p>
                         <ul className="mt-3 space-y-4">
                           {categories.map((category, index) => {
                             const Icon = categoryIcons[index % categoryIcons.length]
                             return (
                               <li key={category.slug}>
-                                <div className="rounded-xl border border-white/5 bg-white/5 px-3 py-3 text-sm transition hover:border-fuchsia-400/40 hover:bg-white/10 focus-within:border-fuchsia-400/40 focus-within:bg-white/10">
+                                <div className="rounded-xl border border-white/5 bg-white/5 px-3 py-3 text-sm transition hover:border-brand-primary/40 hover:bg-white/10 focus-within:border-brand-primary/40 focus-within:bg-white/10">
                                   <Link
                                     href={`/categoria/${category.slug}`}
                                     onClick={() => setMenuOpen(false)}
-                                    className="flex items-center gap-2 font-semibold text-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                                    className="flex items-center gap-2 font-semibold text-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
                                   >
-                                    <Icon className="h-4 w-4 text-fuchsia-200" aria-hidden />
+                                    <Icon className="h-4 w-4 text-brand-primary" aria-hidden />
                                     {category.label}
                                   </Link>
                                   {category.children && category.children.length > 0 && (
@@ -331,10 +349,10 @@ export default function Header() {
                                           <Link
                                             href={`/categoria/${child.slug}`}
                                             onClick={() => setMenuOpen(false)}
-                                            className="flex items-center justify-between rounded-md px-2 py-1 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-fuchsia-300/70"
+                                            className="flex items-center justify-between rounded-md px-2 py-1 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/70"
                                           >
                                             <span>{child.label}</span>
-                                            <ChevronRight className="h-3.5 w-3.5 text-fuchsia-200/70" aria-hidden />
+                                            <ChevronRight className="h-3.5 w-3.5 text-brand-primary/70" aria-hidden />
                                           </Link>
                                         </li>
                                       ))}
@@ -348,13 +366,13 @@ export default function Header() {
                       </div>
 
                       <div className="space-y-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-fuchsia-200/80">Descubre más</p>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-brand-primary/80">Descubre más</p>
                         {primaryLinks.map((link) => (
                           <Link
                             key={link.href}
                             href={link.href}
                             onClick={() => setMenuOpen(false)}
-                            className="block rounded-xl border border-white/5 bg-white/5 px-3 py-2 text-sm transition hover:border-fuchsia-400/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                            className="block rounded-xl border border-white/5 bg-white/5 px-3 py-2 text-sm transition hover:border-brand-primary/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
                           >
                             {link.label}
                           </Link>
@@ -375,7 +393,7 @@ export default function Header() {
                       openChat()
                       setMenuOpen(false)
                     }}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-fuchsia-500/90 px-4 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-200/80"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
                   >
                     <MessageCircle className="h-4 w-4" aria-hidden />
                     Abrir asistente
