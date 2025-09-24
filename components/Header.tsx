@@ -16,6 +16,7 @@ import {
 
 import SearchOverlay from './header/SearchOverlay'
 import categoriesData from '@/data/categories.json'
+import { openChatAssistant } from '@/lib/chat-assistant'
 
 const MotionWrapper: any = motion.div
 
@@ -50,9 +51,7 @@ export default function Header() {
   }
 
   const openChat = () => {
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('sexshop:chat-open'))
-    }
+    openChatAssistant()
   }
 
   const desktopCategories = categories.slice(0, 6)
