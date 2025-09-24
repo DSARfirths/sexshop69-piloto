@@ -17,9 +17,6 @@ type FeaturedProductsProps = {
   headingId?: string
 }
 
-const MotionDiv: typeof motion.div = motion.div
-const MotionArticle: typeof motion.article = motion.article
-
 const containerVariants = {
   hidden: { opacity: 0, y: 32 },
   visible: { opacity: 1, y: 0 }
@@ -100,7 +97,6 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
                 </div>
               </div>
               <div className="pointer-events-none absolute inset-0 border border-white/20 mix-blend-overlay" aria-hidden />
-            </MotionArticle>
               <div className="pointer-events-none absolute inset-0 border border-night-border-strong/60 mix-blend-screen" aria-hidden />
             </MotionArticle>
           )
