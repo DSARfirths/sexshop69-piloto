@@ -45,15 +45,26 @@ const MotionArticle = motion.article as ComponentType<MotionElementProps<'articl
 export type CategoryCardProps = {
   category: CategoryItem & { description: string; subtitle: string }
   href?: string
+  variant?: 'dark' | 'white'
 }
 
-export function CategoryCard({ category, href = `/categoria/${category.slug}` }: CategoryCardProps) {
+export function CategoryCard({
+  category,
+  href = `/categoria/${category.slug}`,
+  variant = 'dark'
+}: CategoryCardProps) {
+  const cardVariantClassName =
+    variant === 'white'
+      ? 'border border-neutral-200 bg-white text-neutral-900 shadow'
+      : 'border border-night-border bg-night-surface/95 text-night-foreground shadow-neon-sm'
+  const titleColorClassName = variant === 'white' ? 'text-neutral-900' : 'text-white'
+
   return (
     <Link href={href} className="group block h-full">
       <MotionArticle
         whileHover={{ y: -6, boxShadow: '0 22px 38px -18px rgba(236,72,153,0.45)' }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-        className="flex h-full min-h-[320px] w-full flex-col overflow-hidden rounded-2xl border border-night-border bg-night-surface/95 text-left text-night-foreground shadow-neon-sm"
+        className={`flex h-full min-h-[280px] w-full flex-col overflow-hidden rounded-2xl text-left ${cardVariantClassName}`}
       >
         {category.image ? (
           <div className="relative aspect-[3/4] w-full overflow-hidden bg-night-surface-strong/80">
@@ -75,9 +86,9 @@ export function CategoryCard({ category, href = `/categoria/${category.slug}` }:
           </div>
         )}
         <div className="flex flex-1 flex-col gap-1 px-5 pb-6 pt-4">
-          <h3 className="text-lg font-extrabold uppercase text-white">{category.label}</h3>
-          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-night-muted">{category.subtitle}</p>
-          <p className="text-sm font-semibold uppercase text-night-subtle">{category.description}</p>
+          <h3 className={`text-lg font-extrabold uppercase ${titleColorClassName}`}>{category.label}</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500 truncate">{category.subtitle}</p>
+          <p className="text-xs font-semibold uppercase text-neutral-500 truncate">{category.description}</p>
         </div>
       </MotionArticle>
     </Link>
@@ -149,12 +160,12 @@ export default function CategoryCarousel({ title, subtitle, headingId, categorie
               initial="hidden"
               animate="visible"
               variants={cardVariants}
-              className="min-w-[200px] max-w-[220px] snap-start"
+              className="min-w-[160px] max-w-[180px] snap-start xs:min-w-[180px] xs:max-w-[200px]"
             >
               <CategoryCard category={category} />
             </MotionCard>
           ))}
-          <MotionCard className="min-w-[200px] max-w-[220px] snap-start">
+          <MotionCard className="min-w-[160px] max-w-[180px] snap-start xs:min-w-[180px] xs:max-w-[200px]">
             <Link href="/categoria" className="block h-full">
               <MotionArticle
                 whileHover={{ y: -6, boxShadow: '0 22px 38px -18px rgba(236,72,153,0.45)' }}
