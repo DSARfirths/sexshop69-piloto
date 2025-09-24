@@ -13,32 +13,32 @@ export default {
       },
       colors: {
         brand: {
-          primary: '#0A1F44',
-          accent: '#9B51E0',
-          warn: '#FFD600',
-          electric: '#00AEEF',
+          primary: '#4C0A3D',
+          accent: '#FF3FA4',
+          warn: '#FF87D0',
+          electric: '#FF5CC2',
         },
         night: {
-          background: '#05000f',
-          foreground: '#f7f2ff',
-          muted: '#cbbdf5',
-          subtle: '#a99eda',
-          surface: '#1a062b',
-          'surface-strong': '#170629',
-          border: 'rgba(219, 196, 255, 0.25)',
-          'border-strong': 'rgba(236, 208, 255, 0.45)'
+          background: '#180013',
+          foreground: '#ffeafd',
+          muted: '#f3b5e6',
+          subtle: '#e38ad1',
+          surface: '#320427',
+          'surface-strong': '#2a031f',
+          border: 'rgba(255, 143, 214, 0.35)',
+          'border-strong': 'rgba(255, 123, 209, 0.55)'
         }
       },
       backgroundImage: {
         'night-radial':
-          'radial-gradient(circle at 15% 15%, rgba(236,72,153,0.28), transparent 55%), radial-gradient(circle at 85% 20%, rgba(56,189,248,0.18), transparent 50%), linear-gradient(135deg, #05000f 0%, #0d0121 45%, #1a0235 100%)'
+          'radial-gradient(circle at 15% 15%, rgba(255,64,160,0.4), transparent 55%), radial-gradient(circle at 85% 20%, rgba(255,92,194,0.25), transparent 50%), linear-gradient(135deg, #180013 0%, #2a0323 45%, #3c0534 100%)'
       },
       boxShadow: {
-        'neon-sm': '0 18px 35px -16px rgba(236,72,153,0.45), 0 8px 24px -12px rgba(59,130,246,0.35)',
-        neon: '0 35px 60px -25px rgba(168,85,247,0.55), 0 0 45px rgba(236,72,153,0.35)'
+        'neon-sm': '0 18px 35px -16px rgba(255,99,199,0.5), 0 8px 24px -12px rgba(255,135,208,0.35)',
+        neon: '0 35px 60px -25px rgba(255,90,190,0.6), 0 0 45px rgba(255,64,160,0.4)'
       },
       dropShadow: {
-        neon: '0 0 12px rgba(236,72,153,0.55)'
+        neon: '0 0 12px rgba(255,64,160,0.6)'
       },
       borderRadius: {
         xl2: '1.25rem'
