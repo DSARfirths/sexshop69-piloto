@@ -79,40 +79,20 @@ export default function Page() {
     <>
       <Hero />
       <div className="mt-8 space-y-8 sm:mt-12 sm:space-y-12 lg:space-y-20">
-        <section className="relative overflow-hidden rounded-[3rem] border border-night-border/70 bg-night-radial px-6 py-12 sm:px-10 lg:px-16">
-          <div
-            className="pointer-events-none absolute -left-28 bottom-[-5rem] hidden h-72 w-72 rounded-full bg-fuchsia-500/25 blur-3xl md:block"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -right-40 top-[-3rem] hidden h-[360px] w-[360px] rotate-[10deg] bg-gradient-to-br from-fuchsia-500/25 via-transparent to-transparent blur-2xl lg:block"
-            aria-hidden
-          />
+        <section className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-gradient-to-b from-neutral-50 to-white px-4 py-10 sm:px-6 lg:px-8">
           <div className="relative z-10 space-y-10">
             <TrustBadgesStrip badges={TRUST_BADGES} />
-            <HeroCarousel className="h-full border border-night-border/60 bg-black/40 px-4 py-6 shadow-neon-sm backdrop-blur" />
+            <HeroCarousel className="h-full rounded-2xl border border-neutral-200 bg-white px-4 py-6 shadow-sm" />
           </div>
         </section>
 
-        <div className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-gradient-to-br from-[#09000a] via-[#230017] to-[#340126] px-6 py-12 sm:px-10 lg:px-16">
-          <div
-            className="pointer-events-none absolute -left-32 top-[-8rem] hidden h-80 w-80 rounded-full bg-fuchsia-500/30 blur-3xl md:block"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute inset-y-0 right-[-15%] hidden w-[55%] bg-[radial-gradient(circle_at_center,_rgba(249,168,212,0.35),_transparent_60%)] blur-3xl md:block"
-            aria-hidden
-          />
+        <div className="relative rounded-3xl border border-neutral-200 bg-white px-4 py-10 sm:px-6 lg:px-8">
           <div className="relative z-10">
             <FeaturedProducts products={premiumProducts} headingId="productos-destacados" />
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-[#120015]/90 px-6 py-12 sm:px-10 lg:px-16">
-          <div
-            className="pointer-events-none absolute inset-y-0 right-[-15%] hidden w-[46%] bg-[radial-gradient(circle_at_center,_rgba(244,114,182,0.25),_transparent_65%)] blur-3xl md:block"
-            aria-hidden
-          />
+        <div className="relative rounded-3xl border border-neutral-200 bg-white px-4 py-10 sm:px-6 lg:px-8">
           <div className="relative z-10 space-y-12">
             <BestSellers
               products={bestSellers}
@@ -138,15 +118,7 @@ export default function Page() {
         </div>
 
         {offers.length > 0 && (
-          <div className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-gradient-to-br from-[#150015] via-[#2f0124] to-[#420234] px-6 py-12 sm:px-10 lg:px-16">
-            <div
-              className="pointer-events-none absolute inset-y-0 left-[-18%] hidden w-[48%] bg-[radial-gradient(circle_at_center,_rgba(249,168,212,0.25),_transparent_65%)] blur-3xl md:block"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute -right-24 bottom-[-6rem] hidden h-72 w-72 rounded-full bg-fuchsia-500/30 blur-3xl md:block"
-              aria-hidden
-            />
+          <div className="relative rounded-3xl border border-neutral-200 bg-white px-4 py-10 sm:px-6 lg:px-8">
             <div className="relative z-10">
               <BestSellers
                 products={offers}
@@ -167,22 +139,16 @@ export default function Page() {
         {normalizedOtherCategories.length > 0 && (
           <section
             id="catalogo"
-            className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-gradient-to-br from-[#08000c] via-[#1f0020] to-[#2f0230] px-6 py-12 sm:px-10 lg:px-16"
+            className="relative rounded-3xl border border-neutral-200 bg-neutral-50 px-4 py-10 sm:px-6 lg:px-8"
           >
-            <div
-              className="pointer-events-none absolute inset-y-0 right-[-14%] hidden w-[46%] bg-[radial-gradient(circle_at_center,_rgba(244,114,182,0.25),_transparent_60%)] blur-3xl md:block"
-              aria-hidden
-            />
             <div className="relative z-10 space-y-6">
-              <h2 id="buscas-algo-mas-especifico" className="text-xl font-semibold text-white lg:text-2xl">
+              <h2 id="buscas-algo-mas-especifico" className="text-xl font-semibold text-neutral-900 lg:text-2xl">
                 ¿Buscas algo más específico?
               </h2>
-              <p className="max-w-2xl text-sm text-night-muted">
+              <p className="max-w-2xl text-sm text-neutral-600">
                 Recorre las categorías sensibles y temáticas creadas para diferentes niveles de experiencia.
               </p>
               <div className="relative">
-                <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-16 bg-gradient-to-r from-[#08000c] to-transparent sm:block" aria-hidden />
-                <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-16 bg-gradient-to-l from-[#2f0230] to-transparent sm:block" aria-hidden />
                 <div className="overflow-hidden">
                   <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     {normalizedOtherCategories.map(category => (
@@ -196,7 +162,7 @@ export default function Page() {
                       <div className="min-w-[220px] max-w-[240px] sm:min-w-[240px] sm:max-w-[260px]">
                         <Link
                           href="/categorias"
-                          className="group flex h-full min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-night-border bg-night-surface/90 text-center font-semibold uppercase tracking-[0.08em] text-night-foreground/80 shadow-neon-sm transition hover:-translate-y-1 hover:text-white"
+                          className="group flex h-full min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-white text-center font-semibold uppercase tracking-[0.08em] text-neutral-500 shadow-sm transition hover:-translate-y-1 hover:text-neutral-800"
                         >
                           Ver todas las categorías
                         </Link>
