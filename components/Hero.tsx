@@ -32,7 +32,7 @@ const slides: Slide[] = [
       'Un mix de juguetes premium, lubricantes iluminados y playlists pensadas para jugar sin tabúes.',
     media: {
       type: 'image',
-      src: '/landing/chica-con-vibrador.webp',
+      src: '/landing/hero/chica-con-vibrador.webp',
       alt: 'Persona recostada sosteniendo un vibrador rosa sobre fondo negro con luces fucsias'
     }
   },
@@ -44,7 +44,7 @@ const slides: Slide[] = [
       'Anillos vibradores, aceites sensoriales y dinámicas guiadas para sincronizar cada experiencia.',
     media: {
       type: 'image',
-      src: '/landing/chico-mirando-anillo.webp',
+      src: '/landing/hero/chico-mirando-anillo.webp',
       alt: 'Persona observando un anillo vibrador morado con fondo en tonos lilas'
     }
   },
@@ -56,7 +56,7 @@ const slides: Slide[] = [
       'Arneses versátiles, masturbadores envolventes y coaching personalizado para ir más allá.',
     media: {
       type: 'image',
-      src: '/landing/arnes-funda.webp',
+      src: '/landing/hero/redescubre.webp',
       alt: 'Vista cenital de un arnés y funda de juguete sexual sobre fondo oscuro'
     }
   }
