@@ -91,10 +91,10 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
   ].filter(point => point.value && point.value !== 'undefined')
 
   return (
-    <div>
+    <div className="rounded-3xl bg-white p-4 text-neutral-900 shadow-sm sm:p-6 md:p-8">
       <Breadcrumbs items={[{ href: '/', label: 'Inicio' }, { href: `/categoria/${product.category}`, label: product.category }, { label: product.name }]} />
 
-      <div className="grid md:grid-cols-2 gap-6 md:gap-8 mt-3">
+      <div className="mt-4 grid gap-6 md:mt-6 md:grid-cols-2 md:gap-8">
         <ProductGallery
           slug={product.slug}
           name={product.name}
