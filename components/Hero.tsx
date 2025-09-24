@@ -26,14 +26,14 @@ type Slide = {
 const slides: Slide[] = [
   {
     id: 'rituales-fucsia',
-    tag: 'Heroína 69',
+    tag: 'Rituales de placer',
     title: 'Rituales que encienden tu noche',
     description:
-      'Un mix de juguetes premium, lubricantes iluminados y playlists pensadas para jugar sin tabúes.',
+      'Rituales sensoriales con juguetes, velas y aceites para transformar tu rutina en un escape de placer personal.',
     media: {
       type: 'image',
       src: '/landing/hero/chica-con-vibrador.webp',
-      alt: 'Persona recostada sosteniendo un vibrador rosa sobre fondo negro con luces fucsias'
+      alt: 'Chica morena recostada sosteniendo un vibrador en su mano'
     }
   },
   {
@@ -41,23 +41,23 @@ const slides: Slide[] = [
     tag: 'Parejas curiosas',
     title: 'Conecta con su ritmo favorito',
     description:
-      'Anillos vibradores, aceites sensoriales y dinámicas guiadas para sincronizar cada experiencia.',
+      'Un mix de juguetes premium, lubricantes iluminados y playlists pensadas para jugar sin tabúes.',
     media: {
       type: 'image',
-      src: '/landing/hero/chico-mirando-anillo.webp',
-      alt: 'Persona observando un anillo vibrador morado con fondo en tonos lilas'
+      src: '/landing/hero/vibrador-en-manos-chica.webp',
+      alt: 'Vibrador en manos de chica con traje negro'
     }
   },
   {
     id: 'exploracion-intensa',
     tag: 'Exploración intensa',
-    title: 'Redescubre tu placer con texturas nuevas',
+    title: 'Redescubre tu libido',
     description:
-      'Arneses versátiles, masturbadores envolventes y coaching personalizado para ir más allá.',
+      'Accesorios para juego seguro y consensuado. Productos que cuidan tu cuerpo y energía.',
     media: {
       type: 'image',
-      src: '/landing/hero/redescubre.webp',
-      alt: 'Vista cenital de un arnés y funda de juguete sexual sobre fondo oscuro'
+      src: '/landing/hero/redescubre-pareja.webp',
+      alt: 'Pareja jugando con traje sexual y con un vibrador'
     }
   }
 ]
