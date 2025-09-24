@@ -40,7 +40,7 @@ export const heroCarouselSlides: HeroSlide[] = [
       'Vibradores inteligentes, aceites sensoriales y playlists binaurales listos para elevar tu energía personal.',
     primaryCta: { href: '/categoria/bienestar', label: 'Explorar autocuidado futurista' },
     secondaryCta: { href: '/club-vibes', label: 'Unirme al Club Vibes' },
-    image: '/landing/hero/autocuidado.webp'
+    image: '/landing/autocuidado.webp'
   },
   {
     id: 'juguetes-anales-premium',
