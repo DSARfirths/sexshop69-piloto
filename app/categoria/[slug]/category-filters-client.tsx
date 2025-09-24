@@ -252,7 +252,6 @@ export default function CategoryFiltersClient() {
                 No se encontraron productos con los filtros seleccionados.
               </div>
             ) : (
-              {/* 2 productos por fila en móviles, 3 en tablet, 5 en escritorio mediano y 6 en escritorio grande */}
               <div className="grid gap-y-6 gap-x-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.slug} p={product} />
