@@ -75,7 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Tracker />
         </Suspense>
         <Header />
-        <main className="max-w-6xl mx-auto px-4 pb-24 pt-2">
+        <main className="mx-auto w-full max-w-7xl px-3 pb-24 pt-2 sm:px-4 lg:px-4">
           {children}
         </main>
         <Footer />

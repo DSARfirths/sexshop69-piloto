@@ -78,7 +78,7 @@ export default function Page() {
   return (
     <>
       <Hero />
-      <div className="mt-8 space-y-8 sm:mt-12 sm:space-y-12 lg:space-y-20">
+      <div className="mt-8 space-y-8 sm:mt-12 sm:space-y-10 lg:space-y-16">
         <section className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-gradient-to-b from-neutral-50 to-white px-4 py-10 sm:px-6 lg:px-8">
           <div className="relative z-10 space-y-10">
             <TrustBadgesStrip badges={TRUST_BADGES} />

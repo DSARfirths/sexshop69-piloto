@@ -76,7 +76,7 @@ export default function Header() {
         transition={{ duration: 0.35, ease: 'easeOut' }}
         className="sticky top-0 z-40 border-b border-fuchsia-700/50 bg-neutral-950/70 backdrop-blur-xl supports-[backdrop-filter]:bg-neutral-950/60"
       >
-        <header className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 text-neutral-100">
+        <header className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-3 text-neutral-100 sm:px-4">
           <Link
             href="/"
             className="flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold tracking-tight text-fuchsia-100 transition hover:bg-fuchsia-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/60 md:text-base"
