@@ -132,7 +132,7 @@ export default function BestSellers({
             {displayedProducts.map((product, index) => (
               <MotionDiv
                 key={product.slug}
-                className="min-w-[240px] max-w-[320px] basis-[80%] snap-start flex-shrink-0 sm:basis-[45%] lg:basis-[28%] xl:basis-[22%]"
+                className="min-w-[220px] max-w-[280px] basis-[70%] snap-start flex-shrink-0 sm:basis-[40%] lg:basis-[25%] xl:basis-[20%]"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -148,30 +148,32 @@ export default function BestSellers({
               </MotionDiv>
             ))}
           </div>
-          <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-between px-1">
-            <button
-              type="button"
-              onClick={() => scrollBy('left')}
-              disabled={!canScrollLeft}
-              aria-label="Ver productos anteriores"
-              className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
-                canScrollLeft ? 'hover:border-night-border-strong hover:text-white' : 'cursor-not-allowed opacity-40'
-              }`}
-            >
-              <ChevronLeft className="h-4 w-4" aria-hidden />
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollBy('right')}
-              disabled={!canScrollRight}
-              aria-label="Ver productos siguientes"
-              className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
-                canScrollRight ? 'hover:border-night-border-strong hover:text-white' : 'cursor-not-allowed opacity-40'
-              }`}
-            >
-              <ChevronRight className="h-4 w-4" aria-hidden />
-            </button>
-          </div>
+          {displayedProducts.length > 3 && (
+            <div className="pointer-events-none absolute inset-x-0 top-1/2 hidden -translate-y-1/2 justify-between px-1 md:flex">
+              <button
+                type="button"
+                onClick={() => scrollBy('left')}
+                disabled={!canScrollLeft}
+                aria-label="Ver productos anteriores"
+                className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
+                  canScrollLeft ? 'hover:border-night-border-strong hover:text-white' : 'cursor-not-allowed opacity-40'
+                }`}
+              >
+                <ChevronLeft className="h-4 w-4" aria-hidden />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollBy('right')}
+                disabled={!canScrollRight}
+                aria-label="Ver productos siguientes"
+                className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
+                  canScrollRight ? 'hover:border-night-border-strong hover:text-white' : 'cursor-not-allowed opacity-40'
+                }`}
+              >
+                <ChevronRight className="h-4 w-4" aria-hidden />
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
