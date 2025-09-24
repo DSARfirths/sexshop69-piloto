@@ -92,48 +92,42 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="relative rounded-3xl border border-neutral-200 bg-white px-4 py-10 sm:px-6 lg:px-8">
-          <div className="relative z-10 space-y-12">
+        <div className="space-y-8">
+          <BestSellers
+            products={bestSellers}
+            headingId="mas-vendidos"
+            layout="carousel"
+            maxVisible={6}
+          />
+          {newArrivals.length > 0 && (
             <BestSellers
-              products={bestSellers}
-              headingId="mas-vendidos"
+              products={newArrivals}
+              headingId="nuevos-ingresos"
+              title="Novedades destacadas"
+              description="Lo último en llegar a nuestro catálogo, con lanzamientos recientes y reposiciones esperadas."
+              ctaHref="/categoria/novedades"
+              ctaLabel="Ver novedades"
+              highlightBadges={newArrivalHighlightBadges}
+              showBestSellerHighlight={false}
               layout="carousel"
               maxVisible={6}
             />
-            {newArrivals.length > 0 && (
-              <BestSellers
-                products={newArrivals}
-                headingId="nuevos-ingresos"
-                title="Novedades destacadas"
-                description="Lo último en llegar a nuestro catálogo, con lanzamientos recientes y reposiciones esperadas."
-                ctaHref="/categoria/novedades"
-                ctaLabel="Ver novedades"
-                highlightBadges={newArrivalHighlightBadges}
-                showBestSellerHighlight={false}
-                layout="carousel"
-                maxVisible={6}
-              />
-            )}
-          </div>
+          )}
         </div>
 
         {offers.length > 0 && (
-          <div className="relative rounded-3xl border border-neutral-200 bg-white px-4 py-10 sm:px-6 lg:px-8">
-            <div className="relative z-10">
-              <BestSellers
-                products={offers}
-                headingId="ofertas-exclusivas"
-                title="Ofertas exclusivas"
-                description="Productos con precios especiales por tiempo limitado: aprovecha descuentos y packs promocionales."
-                ctaHref="/categoria/ofertas"
-                ctaLabel="Ver ofertas"
-                highlightBadges={offerHighlightBadges}
-                showBestSellerHighlight={false}
-                layout="carousel"
-                maxVisible={6}
-              />
-            </div>
-          </div>
+          <BestSellers
+            products={offers}
+            headingId="ofertas-exclusivas"
+            title="Ofertas exclusivas"
+            description="Productos con precios especiales por tiempo limitado: aprovecha descuentos y packs promocionales."
+            ctaHref="/categoria/ofertas"
+            ctaLabel="Ver ofertas"
+            highlightBadges={offerHighlightBadges}
+            showBestSellerHighlight={false}
+            layout="carousel"
+            maxVisible={6}
+          />
         )}
 
         {normalizedOtherCategories.length > 0 && (

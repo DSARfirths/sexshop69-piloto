@@ -87,7 +87,10 @@ export default function BestSellers({
   }
 
   return (
-    <section className="space-y-6" aria-labelledby={headingId ?? undefined}>
+    <section
+      className="relative space-y-6 overflow-hidden rounded-3xl border border-neutral-200 bg-white px-4 py-8 shadow-sm sm:px-6 lg:px-8"
+      aria-labelledby={headingId ?? undefined}
+    >
       <MotionDiv
         initial="hidden"
         whileInView="visible"
@@ -97,16 +100,16 @@ export default function BestSellers({
       >
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 id={headingId} className="text-2xl font-semibold text-white">
+            <h2 id={headingId} className="text-2xl font-semibold text-fuchsia-700">
               {title}
             </h2>
-            <p className="text-sm text-night-muted">{description}</p>
+            <p className="text-sm text-neutral-600">{description}</p>
           </div>
           {ctaHref && (
             <Link
               href={ctaHref}
               role="button"
-              className="group inline-flex items-center gap-2 self-start text-sm font-semibold text-fuchsia-200 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+              className="group inline-flex items-center gap-2 self-start text-sm font-semibold text-fuchsia-600 transition-colors hover:text-fuchsia-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             >
               {ctaLabel}
               <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
@@ -117,11 +120,11 @@ export default function BestSellers({
       {layout === 'carousel' ? (
         <div className="relative">
           <div
-            className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-night-surface via-night-surface/80 to-transparent"
+            className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white via-white/80 to-transparent"
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-night-surface via-night-surface/80 to-transparent"
+            className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white via-white/80 to-transparent"
             aria-hidden
           />
           <div
@@ -132,7 +135,7 @@ export default function BestSellers({
             {displayedProducts.map((product, index) => (
               <MotionDiv
                 key={product.slug}
-                className="min-w-[220px] max-w-[280px] basis-[70%] snap-start flex-shrink-0 sm:basis-[40%] lg:basis-[25%] xl:basis-[20%]"
+                className="min-w-[220px] max-w-[280px] basis-[70%] snap-start flex-shrink-0 sm:basis-[40%] lg:basis-[22%] xl:basis-[20%]"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -155,8 +158,8 @@ export default function BestSellers({
                 onClick={() => scrollBy('left')}
                 disabled={!canScrollLeft}
                 aria-label="Ver productos anteriores"
-                className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
-                  canScrollLeft ? 'hover:border-night-border-strong hover:text-white' : 'cursor-not-allowed opacity-40'
+                className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-neutral-300 bg-white text-fuchsia-600 shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
+                  canScrollLeft ? 'hover:border-neutral-400 hover:text-fuchsia-700' : 'cursor-not-allowed opacity-40'
                 }`}
               >
                 <ChevronLeft className="h-4 w-4" aria-hidden />
@@ -166,8 +169,8 @@ export default function BestSellers({
                 onClick={() => scrollBy('right')}
                 disabled={!canScrollRight}
                 aria-label="Ver productos siguientes"
-                className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
-                  canScrollRight ? 'hover:border-night-border-strong hover:text-white' : 'cursor-not-allowed opacity-40'
+                className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-neutral-300 bg-white text-fuchsia-600 shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
+                  canScrollRight ? 'hover:border-neutral-400 hover:text-fuchsia-700' : 'cursor-not-allowed opacity-40'
                 }`}
               >
                 <ChevronRight className="h-4 w-4" aria-hidden />
