@@ -37,10 +37,10 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
   return (
     <section className="space-y-8" aria-labelledby={headingId}>
       <div className="space-y-2">
-        <h2 id={headingId} className="text-3xl font-semibold text-neutral-900">
+        <h2 id={headingId} className="text-3xl font-semibold text-white">
           Productos destacados
         </h2>
-        <p className="max-w-2xl text-sm text-neutral-600">
+        <p className="max-w-2xl text-sm text-night-muted">
           Piezas de lujo seleccionadas para experiencias intensas, con materiales premium, embalaje discreto y soporte experto.
         </p>
       </div>
@@ -62,14 +62,14 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
           return (
             <MotionArticle
               key={product.slug}
-              className="group relative overflow-hidden rounded-[2rem] border border-neutral-200 bg-gradient-to-br from-white via-white to-neutral-50 shadow-xl"
+              className="group relative overflow-hidden rounded-[2rem] border border-night-border bg-gradient-to-br from-[#3b0a5a]/40 via-night-surface to-[#12002e]/90 text-night-foreground shadow-neon"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: index * 0.05, duration: 0.45, ease: 'easeOut' }}
             >
               <div className="relative h-72 overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(126,34,206,0.15),_transparent_60%)] opacity-0 transition group-hover:opacity-100" aria-hidden />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(236,72,153,0.25),_transparent_65%)] opacity-0 transition group-hover:opacity-100" aria-hidden />
                 <Image
                   src={imageSrc}
                   alt={product.name}
@@ -80,17 +80,17 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
               </div>
               <div className="relative space-y-4 p-8">
                 <div className="space-y-2">
-                  <span className="inline-flex items-center rounded-full bg-neutral-900/90 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-white">Premium</span>
-                  <h3 className="text-2xl font-semibold text-neutral-900">{product.name}</h3>
+                  <span className="inline-flex items-center rounded-full bg-fuchsia-500/90 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-white shadow-neon-sm">Premium</span>
+                  <h3 className="text-2xl font-semibold text-white">{product.name}</h3>
                   {product.shortDescription && (
-                    <p className="text-sm leading-relaxed text-neutral-600">{product.shortDescription}</p>
+                    <p className="text-sm leading-relaxed text-night-muted">{product.shortDescription}</p>
                   )}
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-4">
-                  <span className="text-lg font-semibold text-brand-primary">S/ {price}</span>
+                  <span className="text-lg font-semibold text-fuchsia-200 drop-shadow-neon">S/ {price}</span>
                   <Link
                     href={`/producto/${product.slug}`}
-                    className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-neutral-900/40 transition hover:bg-neutral-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-500 px-6 py-2.5 text-sm font-semibold text-white shadow-neon transition hover:from-fuchsia-400 hover:to-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
                   >
                     Comprar ahora
                   </Link>
@@ -98,6 +98,8 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
               </div>
               <div className="pointer-events-none absolute inset-0 border border-white/20 mix-blend-overlay" aria-hidden />
             </MotionArticle>
+              <div className="pointer-events-none absolute inset-0 border border-night-border-strong/60 mix-blend-screen" aria-hidden />
+            </motion.article>
           )
         })}
       </MotionDiv>

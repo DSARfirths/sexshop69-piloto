@@ -97,16 +97,16 @@ export default function BestSellers({
       >
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 id={headingId} className="text-2xl font-semibold text-neutral-900">
+            <h2 id={headingId} className="text-2xl font-semibold text-white">
               {title}
             </h2>
-            <p className="text-sm text-neutral-600">{description}</p>
+            <p className="text-sm text-night-muted">{description}</p>
           </div>
           {ctaHref && (
             <Link
               href={ctaHref}
               role="button"
-              className="group inline-flex items-center gap-2 self-start text-sm font-semibold text-brand-primary transition-colors hover:text-brand-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className="group inline-flex items-center gap-2 self-start text-sm font-semibold text-fuchsia-200 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
             >
               {ctaLabel}
               <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
@@ -117,11 +117,11 @@ export default function BestSellers({
       {layout === 'carousel' ? (
         <div className="relative">
           <div
-            className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white via-white/60 to-transparent"
+            className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-night-surface via-night-surface/80 to-transparent"
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white via-white/60 to-transparent"
+            className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-night-surface via-night-surface/80 to-transparent"
             aria-hidden
           />
           <div
@@ -154,8 +154,8 @@ export default function BestSellers({
               onClick={() => scrollBy('left')}
               disabled={!canScrollLeft}
               aria-label="Ver productos anteriores"
-              className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-900 shadow-lg transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 ${
-                canScrollLeft ? 'hover:bg-white' : 'cursor-not-allowed opacity-50'
+              className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
+                canScrollLeft ? 'hover:border-night-border-strong hover:text-white' : 'cursor-not-allowed opacity-40'
               }`}
             >
               <ChevronLeft className="h-4 w-4" aria-hidden />
@@ -165,8 +165,8 @@ export default function BestSellers({
               onClick={() => scrollBy('right')}
               disabled={!canScrollRight}
               aria-label="Ver productos siguientes"
-              className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-900 shadow-lg transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 ${
-                canScrollRight ? 'hover:bg-white' : 'cursor-not-allowed opacity-50'
+              className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
+                canScrollRight ? 'hover:border-night-border-strong hover:text-white' : 'cursor-not-allowed opacity-40'
               }`}
             >
               <ChevronRight className="h-4 w-4" aria-hidden />

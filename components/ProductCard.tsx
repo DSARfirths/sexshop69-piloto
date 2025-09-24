@@ -116,7 +116,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
         <motion.a
           {...({
             href: `/producto/${p.slug}`,
-            className: 'group block overflow-hidden rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm',
+            className: 'group block overflow-hidden rounded-2xl border border-night-border bg-night-surface/95 p-4 text-night-foreground shadow-neon-sm transition-shadow hover:shadow-neon',
             whileHover: { y: -4 },
             whileTap: { scale: 0.98 },
             transition: { type: 'spring', stiffness: 300, damping: 20, mass: 0.6 },
@@ -126,14 +126,14 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
             onTouchMove: handleTouchMove
           } as unknown as HTMLMotionProps<'a'>)}
         >
-          <div className="relative aspect-[4/3] rounded-2xl border border-neutral-200 bg-neutral-100 p-4">
+          <div className="relative aspect-[4/3] rounded-2xl border border-night-border bg-night-surface-strong/80 p-4">
             <div className="relative h-full w-full overflow-hidden rounded-xl">
               <div
-                className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 via-transparent to-brand-accent/20 opacity-0 transition group-hover:opacity-100"
+                className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(236,72,153,0.25),_transparent_65%)] opacity-0 transition group-hover:opacity-100"
                 aria-hidden
               />
               {displayBadge && (
-                <div className="absolute left-2.5 top-2.5 inline-flex items-center rounded-full bg-neutral-900/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-lg">
+                <div className="absolute left-2.5 top-2.5 inline-flex items-center rounded-full bg-fuchsia-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-neon-sm">
                   {displayBadge}
                 </div>
               )}
@@ -152,14 +152,14 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
             </div>
           </div>
           <div className="mt-3 space-y-1">
-            <div className="line-clamp-2 font-medium text-neutral-900">{p.name}</div>
+            <div className="line-clamp-2 font-medium text-night-foreground">{p.name}</div>
             <div className="flex items-baseline gap-2">
-              <span className="font-semibold text-brand-primary">S/ {displayPrice}</span>
+              <span className="font-semibold text-fuchsia-200 drop-shadow-neon">S/ {displayPrice}</span>
               {hasSalePrice && (
-                <span className="text-sm font-medium text-neutral-400 line-through">S/ {regularPrice}</span>
+                <span className="text-sm font-medium text-night-muted line-through">S/ {regularPrice}</span>
               )}
             </div>
-            {p.brand && <div className="text-xs uppercase tracking-wide text-neutral-500">{p.brand}</div>}
+            {p.brand && <div className="text-xs uppercase tracking-wide text-night-subtle">{p.brand}</div>}
           </div>
         </motion.a>
       </Link>
@@ -167,7 +167,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
       <div className="pointer-events-none absolute inset-x-6 bottom-6 flex justify-center">
         <button
           type="button"
-          className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-neutral-900/90 px-4 py-2 text-sm font-medium text-white shadow-lg transition hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-night-border-strong bg-night-surface-strong/90 px-4 py-2 text-sm font-medium text-white shadow-neon-sm transition hover:border-fuchsia-400/60 hover:text-fuchsia-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           onClick={() => setIsQuickViewOpen(true)}
         >
           Vista rápida
