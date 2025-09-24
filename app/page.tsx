@@ -5,7 +5,11 @@ import CategoryCarousel, { CategoryCard } from '@/components/home/CategoryCarous
 import BestSellers from '@/components/home/BestSellers'
 import TrustBadgesStrip from '@/components/home/TrustBadgesStrip'
 import HeroCarousel from '@/components/home/HeroCarousel'
+import FeaturedProducts from '@/components/home/FeaturedProducts'
+import InspirationalBanner from '@/components/home/InspirationalBanner'
 import categoriesData from '@/data/categories.json'
+
+type AvailableProduct = ReturnType<typeof allProducts>[number]
 
 const featuredCategories = ['bienestar', 'lenceria', 'kits'] as const
 
@@ -36,6 +40,14 @@ const TRUST_BADGES = [
   }
 ]
 
+const PREMIUM_PRODUCT_SLUGS = [
+  'ultimate-fantasy-dolls-mandy-copia',
+  'bathmate-hydromax7-x30-britanico-original',
+  'xtreme-x30-britanico-original'
+] as const
+
+const HIGHLIGHTED_CATEGORY_LIMIT = 8
+
 export default function Page() {
   const products = allProducts()
   const bestSellers = getBestSellers()
@@ -60,6 +72,15 @@ export default function Page() {
   const featured = availableCategories.filter(category =>
     (featuredCategories as readonly string[]).includes(category.slug)
   )
+
+  const carouselSource = featured.length > 0 ? featured : availableCategories
+  const highlightedCategories = carouselSource.slice(0, HIGHLIGHTED_CATEGORY_LIMIT)
+  const hasMoreCategories = availableCategories.length > highlightedCategories.length
+
+  const premiumProducts = PREMIUM_PRODUCT_SLUGS.map(slug =>
+    products.find(product => product.slug === slug)
+  ).filter((product): product is AvailableProduct => Boolean(product))
+
   const otherCategories = availableCategories.filter(
     category => !featured.some(featuredCategory => featuredCategory.slug === category.slug)
   )
@@ -70,23 +91,49 @@ export default function Page() {
   }))
   const carouselCategories = featured.length > 0 ? featured : availableCategories
 
+
   return (
     <>
       <Hero />
-      <div className="mt-8">
-        <HeroCarousel />
+      <div className="mt-8 lg:hidden">
+        <HeroCarousel className="bg-white/70" />
       </div>
-      <div className="mt-6 space-y-6">
+      <div className="mt-10 space-y-12">
         <TrustBadgesStrip badges={TRUST_BADGES} />
-        <CategoryCarousel
-          title="Explora por categoría"
-          subtitle="Mobile-first con desliz lateral — arrastra para descubrir más."
-          headingId="explora-por-categoria"
-          categories={carouselCategories}
+        <section className="space-y-6" id="catalogo">
+          <CategoryCarousel
+            title="Explora por categoría"
+            subtitle="Mobile-first con desliz lateral — arrastra para descubrir más."
+            headingId="explora-por-categoria"
+            categories={highlightedCategories}
+          />
+          {hasMoreCategories && (
+            <div className="flex justify-end">
+              <Link
+                href="/categorias"
+                className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-5 py-2 text-sm font-semibold text-neutral-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+              >
+                Ver más categorías
+              </Link>
+            </div>
+          )}
+        </section>
+        <FeaturedProducts products={premiumProducts} headingId="productos-destacados" />
+        <InspirationalBanner
+          eyebrow="Editorial 69"
+          title="Sensualidad consciente"
+          description="Eleva tus rituales íntimos con materiales hipoalergénicos, cosmética vegana y guías diseñadas por terapeutas certificados."
+          image="/hero/juguetes-anales-premium.svg"
+          imageAlt="Ilustración de juguetes premium en tonos metálicos"
+          ctaHref="/colecciones/wellness"
+          ctaLabel="Explorar rituales"
         />
-      </div>
-      <div className="mt-12 space-y-12">
-        <BestSellers products={bestSellers} headingId="mas-vendidos" />
+        <BestSellers
+          products={bestSellers}
+          headingId="mas-vendidos"
+          layout="carousel"
+          maxVisible={6}
+        />
         {newArrivals.length > 0 && (
           <BestSellers
             products={newArrivals}
@@ -97,8 +144,20 @@ export default function Page() {
             ctaLabel="Ver novedades"
             highlightBadges={newArrivalHighlightBadges}
             showBestSellerHighlight={false}
+            layout="carousel"
+            maxVisible={6}
           />
         )}
+        <InspirationalBanner
+          align="right"
+          eyebrow="Historias reales"
+          title="Parejas que experimentan"
+          description="Descubre testimonios curados y sesiones guiadas para sincronizar ritmos, explorar comunicación íntima y potenciar el deseo mutuo."
+          image="/hero/parejas-curiosas-neon.svg"
+          imageAlt="Ilustración futurista de pareja conectada"
+          ctaHref="/blog/parejas"
+          ctaLabel="Leer historias"
+        />
         {offers.length > 0 && (
           <BestSellers
             products={offers}
@@ -109,6 +168,8 @@ export default function Page() {
             ctaLabel="Ver ofertas"
             highlightBadges={offerHighlightBadges}
             showBestSellerHighlight={false}
+            layout="carousel"
+            maxVisible={6}
           />
         )}
         {normalizedOtherCategories.length > 0 && (
@@ -126,6 +187,7 @@ export default function Page() {
             </div>
           </section>
         )}
+
       </div>
     </>
   )
