@@ -216,7 +216,7 @@ export default function CategoryFiltersClient() {
     <CategoryFiltersProvider value={contextValue}>
       <div className="mt-6 space-y-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-1 items-center gap-3">
+          <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
             <input
               value={filters.query}
               onChange={(event) => onQueryChange(event.target.value)}
@@ -224,41 +224,43 @@ export default function CategoryFiltersClient() {
               aria-label="Buscar"
               className="flex-1 rounded-xl border border-neutral-200 px-4 py-2 text-sm shadow-sm focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
             />
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-brand-primary/60 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary md:hidden"
-              onClick={() => setIsSheetOpen(true)}
-            >
-              Filtros
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                aria-expanded={isSheetOpen}
+                aria-haspopup="dialog"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-brand-primary/60 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary sm:w-auto"
+                onClick={() => setIsSheetOpen((prev) => !prev)}
+              >
+                Filtros
+              </button>
+              <FilterSheet
+                open={isSheetOpen}
+                onOpenChange={setIsSheetOpen}
+                filters={filters}
+                options={options}
+                onToggleBrand={(value) => toggleValue('brands', value)}
+                onToggleMaterial={(value) => toggleValue('materials', value)}
+                onSelectLongitud={(value) => setDimension('longitud', value)}
+                onSelectDiametro={(value) => setDimension('diametro', value)}
+                onReset={resetFilters}
+              />
+            </div>
           </div>
           <p className="text-sm text-neutral-500">{filteredProducts.length} productos</p>
         </div>
-        <div className="grid gap-6 md:grid-cols-[280px,1fr] md:items-start">
-          <FilterSheet
-            open={isSheetOpen}
-            onOpenChange={setIsSheetOpen}
-            filters={filters}
-            options={options}
-            onToggleBrand={(value) => toggleValue('brands', value)}
-            onToggleMaterial={(value) => toggleValue('materials', value)}
-            onSelectLongitud={(value) => setDimension('longitud', value)}
-            onSelectDiametro={(value) => setDimension('diametro', value)}
-            onReset={resetFilters}
-          />
-          <div className="space-y-4">
-            {filteredProducts.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-neutral-200 bg-white p-8 text-center text-sm text-neutral-500">
-                No se encontraron productos con los filtros seleccionados.
-              </div>
-            ) : (
-              <div className="grid gap-y-6 gap-x-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.slug} p={product} />
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="space-y-4">
+          {filteredProducts.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-neutral-200 bg-white p-8 text-center text-sm text-neutral-500">
+              No se encontraron productos con los filtros seleccionados.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.slug} p={product} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </CategoryFiltersProvider>
