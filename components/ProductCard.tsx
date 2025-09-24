@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, type HTMLMotionProps } from 'framer-motion'
+import { Eye } from 'lucide-react'
 import QuickViewDialog from '@/components/product/QuickViewDialog'
 import { useCategoryFilters } from '@/components/category/filters-context'
 import { type Product } from '@/lib/products'
@@ -116,7 +117,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
         <motion.a
           {...({
             href: `/producto/${p.slug}`,
-            className: 'group block overflow-hidden rounded-2xl border border-night-border bg-night-surface/95 p-4 text-night-foreground shadow-neon-sm transition-shadow hover:shadow-neon',
+            className: 'group block overflow-hidden rounded-xl border border-neutral-200 bg-white p-4 text-neutral-900 shadow transition-shadow hover:shadow-lg',
             whileHover: { y: -4 },
             whileTap: { scale: 0.98 },
             transition: { type: 'spring', stiffness: 300, damping: 20, mass: 0.6 },
@@ -126,14 +127,10 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
             onTouchMove: handleTouchMove
           } as unknown as HTMLMotionProps<'a'>)}
         >
-          <div className="relative aspect-[4/3] rounded-2xl border border-night-border bg-night-surface-strong/80 p-4">
-            <div className="relative h-full w-full overflow-hidden rounded-xl">
-              <div
-                className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(236,72,153,0.25),_transparent_65%)] opacity-0 transition group-hover:opacity-100"
-                aria-hidden
-              />
+          <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100 p-0 sm:p-4">
+            <div className="relative h-full w-full overflow-hidden rounded-lg">
               {displayBadge && (
-                <div className="absolute left-2.5 top-2.5 inline-flex items-center rounded-full bg-fuchsia-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-neon-sm">
+                <div className="absolute left-3 top-3 inline-flex items-center rounded-full bg-fuchsia-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow">
                   {displayBadge}
                 </div>
               )}
@@ -143,7 +140,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
                 fill
                 priority={shouldPriorityLoad}
                 sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 90vw"
-                className="h-full w-full object-contain transition duration-500"
+                className="h-full w-full object-cover transition duration-500"
                 onError={() => {
                   if (!hasGallery) return
                   setImageFailed(true)
@@ -151,28 +148,25 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
               />
             </div>
           </div>
-          <div className="mt-3 space-y-1">
-            <div className="line-clamp-2 font-medium text-night-foreground">{p.name}</div>
-            <div className="flex items-baseline gap-2">
-              <span className="font-semibold text-fuchsia-200 drop-shadow-neon">S/ {displayPrice}</span>
+          <div className="mt-3 space-y-2">
+            <div className="line-clamp-2 font-medium text-neutral-900">{p.name}</div>
+            <div className="flex items-baseline gap-2 text-neutral-900">
+              <span className="font-semibold">S/ {displayPrice}</span>
               {hasSalePrice && (
-                <span className="text-sm font-medium text-night-muted line-through">S/ {regularPrice}</span>
+                <span className="text-sm font-medium text-neutral-500 line-through">S/ {regularPrice}</span>
               )}
             </div>
-            {p.brand && <div className="text-xs uppercase tracking-wide text-night-subtle">{p.brand}</div>}
           </div>
         </motion.a>
       </Link>
-
-      <div className="pointer-events-none absolute inset-x-6 bottom-6 flex justify-center">
-        <button
-          type="button"
-          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-night-border-strong bg-night-surface-strong/90 px-4 py-2 text-sm font-medium text-white shadow-neon-sm transition hover:border-fuchsia-400/60 hover:text-fuchsia-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
-          onClick={() => setIsQuickViewOpen(true)}
-        >
-          Vista rápida
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={() => setIsQuickViewOpen(true)}
+        aria-label="Vista rápida"
+        className="absolute right-3 top-3 z-10 rounded-full bg-fuchsia-500/10 p-1 text-fuchsia-600 transition hover:bg-fuchsia-500/20"
+      >
+        <Eye className="h-5 w-5" />
+      </button>
 
       <QuickViewDialog product={p} open={isQuickViewOpen} onOpenChange={setIsQuickViewOpen} />
     </div>
