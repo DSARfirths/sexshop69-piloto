@@ -1,7 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { ComponentType, FocusEvent, PropsWithChildren, useState } from 'react'
+import {
+  ComponentType,
+  FocusEvent,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 import {
   ChevronDown,
@@ -48,6 +55,15 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [desktopCategoriesOpen, setDesktopCategoriesOpen] = useState(false)
+  const desktopCloseTimeout = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (desktopCloseTimeout.current) {
+        clearTimeout(desktopCloseTimeout.current)
+      }
+    }
+  }, [])
 
   const toggleMenu = () => setMenuOpen((prev) => !prev)
   const openSearch = () => {
@@ -62,10 +78,45 @@ export default function Header() {
   const desktopCategories = categories.slice(0, 6)
   const desktopMenuId = 'desktop-categories-menu'
 
+  const handleMouseEnter = () => {
+    if (desktopCloseTimeout.current) {
+      clearTimeout(desktopCloseTimeout.current)
+      desktopCloseTimeout.current = null
+    }
+    setDesktopCategoriesOpen(true)
+  }
+
+  const handleMouseLeave = () => {
+    if (desktopCloseTimeout.current) {
+      clearTimeout(desktopCloseTimeout.current)
+      desktopCloseTimeout.current = null
+    }
+    desktopCloseTimeout.current = setTimeout(() => {
+      setDesktopCategoriesOpen(false)
+      desktopCloseTimeout.current = null
+    }, 300)
+  }
+
+  const closeDesktopCategories = () => {
+    if (desktopCloseTimeout.current) {
+      clearTimeout(desktopCloseTimeout.current)
+      desktopCloseTimeout.current = null
+    }
+    setDesktopCategoriesOpen(false)
+  }
+
   const handleDesktopBlur = (event: FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-      setDesktopCategoriesOpen(false)
+      closeDesktopCategories()
     }
+  }
+
+  const toggleDesktopCategories = () => {
+    if (desktopCloseTimeout.current) {
+      clearTimeout(desktopCloseTimeout.current)
+      desktopCloseTimeout.current = null
+    }
+    setDesktopCategoriesOpen((prev) => !prev)
   }
 
   return (
@@ -95,13 +146,13 @@ export default function Header() {
           <nav className="hidden items-center gap-2 text-sm font-medium md:flex">
             <div
               className="relative"
-              onMouseEnter={() => setDesktopCategoriesOpen(true)}
-              onMouseLeave={() => setDesktopCategoriesOpen(false)}
-              onFocus={() => setDesktopCategoriesOpen(true)}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              onFocus={handleMouseEnter}
               onBlur={handleDesktopBlur}
               onKeyDown={(event) => {
                 if (event.key === 'Escape') {
-                  setDesktopCategoriesOpen(false)
+                  closeDesktopCategories()
                 }
               }}
             >
@@ -110,7 +161,7 @@ export default function Header() {
                 aria-haspopup="true"
                 aria-expanded={desktopCategoriesOpen}
                 aria-controls={desktopMenuId}
-                onClick={() => setDesktopCategoriesOpen((prev) => !prev)}
+                onClick={toggleDesktopCategories}
                 className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-fuchsia-100/90 transition hover:bg-fuchsia-500/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/60"
               >
                 <Sparkles className="h-4 w-4" aria-hidden />
@@ -254,61 +305,67 @@ export default function Header() {
                     <span className="sr-only">Cerrar menú</span>
                   </button>
                 </div>
-                <div className="flex-1 overflow-y-auto px-4 pb-6">
-                  <nav className="space-y-6">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-fuchsia-200/80">Categorías</p>
-                      <ul className="mt-3 space-y-4">
-                        {categories.map((category, index) => {
-                          const Icon = categoryIcons[index % categoryIcons.length]
-                          return (
-                            <li key={category.slug}>
-                              <div className="rounded-xl border border-white/5 bg-white/5 px-3 py-3 text-sm transition hover:border-fuchsia-400/40 hover:bg-white/10 focus-within:border-fuchsia-400/40 focus-within:bg-white/10">
-                                <Link
-                                  href={`/categoria/${category.slug}`}
-                                  onClick={() => setMenuOpen(false)}
-                                  className="flex items-center gap-2 font-semibold text-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
-                                >
-                                  <Icon className="h-4 w-4 text-fuchsia-200" aria-hidden />
-                                  {category.label}
-                                </Link>
-                                {category.children && category.children.length > 0 && (
-                                  <ul className="mt-2 space-y-1 text-xs text-neutral-200">
-                                    {category.children.map((child) => (
-                                      <li key={child.slug}>
-                                        <Link
-                                          href={`/categoria/${child.slug}`}
-                                          onClick={() => setMenuOpen(false)}
-                                          className="flex items-center justify-between rounded-md px-2 py-1 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-fuchsia-300/70"
-                                        >
-                                          <span>{child.label}</span>
-                                          <ChevronRight className="h-3.5 w-3.5 text-fuchsia-200/70" aria-hidden />
-                                        </Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </div>
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    </div>
+                <div className="relative flex-1 overflow-hidden">
+                  <div className="h-full overflow-y-auto px-4 pb-10">
+                    <nav className="space-y-6">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-fuchsia-200/80">Categorías</p>
+                        <ul className="mt-3 space-y-4">
+                          {categories.map((category, index) => {
+                            const Icon = categoryIcons[index % categoryIcons.length]
+                            return (
+                              <li key={category.slug}>
+                                <div className="rounded-xl border border-white/5 bg-white/5 px-3 py-3 text-sm transition hover:border-fuchsia-400/40 hover:bg-white/10 focus-within:border-fuchsia-400/40 focus-within:bg-white/10">
+                                  <Link
+                                    href={`/categoria/${category.slug}`}
+                                    onClick={() => setMenuOpen(false)}
+                                    className="flex items-center gap-2 font-semibold text-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                                  >
+                                    <Icon className="h-4 w-4 text-fuchsia-200" aria-hidden />
+                                    {category.label}
+                                  </Link>
+                                  {category.children && category.children.length > 0 && (
+                                    <ul className="mt-2 space-y-1 text-xs text-neutral-200">
+                                      {category.children.map((child) => (
+                                        <li key={child.slug}>
+                                          <Link
+                                            href={`/categoria/${child.slug}`}
+                                            onClick={() => setMenuOpen(false)}
+                                            className="flex items-center justify-between rounded-md px-2 py-1 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-fuchsia-300/70"
+                                          >
+                                            <span>{child.label}</span>
+                                            <ChevronRight className="h-3.5 w-3.5 text-fuchsia-200/70" aria-hidden />
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      </div>
 
-                    <div className="space-y-2">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-fuchsia-200/80">Descubre más</p>
-                      {primaryLinks.map((link) => (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          onClick={() => setMenuOpen(false)}
-                          className="block rounded-xl border border-white/5 bg-white/5 px-3 py-2 text-sm transition hover:border-fuchsia-400/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </nav>
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-fuchsia-200/80">Descubre más</p>
+                        {primaryLinks.map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={() => setMenuOpen(false)}
+                            className="block rounded-xl border border-white/5 bg-white/5 px-3 py-2 text-sm transition hover:border-fuchsia-400/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </nav>
+                  </div>
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black via-black/70 to-transparent"
+                    aria-hidden="true"
+                  />
                 </div>
 
                 <div className="border-t border-white/10 p-4">
