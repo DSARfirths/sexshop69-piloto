@@ -117,7 +117,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
         <motion.a
           {...({
             href: `/producto/${p.slug}`,
-            className: 'group block overflow-hidden rounded-xl border border-neutral-200 bg-white p-4 text-neutral-900 shadow transition-shadow hover:shadow-lg',
+            className: 'group block overflow-hidden rounded-xl border border-neutral-200 bg-white p-2 text-neutral-900 shadow transition-shadow hover:shadow-lg',
             whileHover: { y: -4 },
             whileTap: { scale: 0.98 },
             transition: { type: 'spring', stiffness: 300, damping: 20, mass: 0.6 },
