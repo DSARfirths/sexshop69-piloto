@@ -1,8 +1,7 @@
-import Link from 'next/link'
 import { PackageCheck, ShieldCheck, LockKeyhole } from 'lucide-react'
 import Hero from '@/components/Hero'
 import { allProducts, getBestSellers, getNewArrivals, getOffers } from '@/lib/products'
-import CategoryCarousel from '@/components/home/CategoryCarousel'
+import CategoryCarousel, { CategoryCard } from '@/components/home/CategoryCarousel'
 import BestSellers from '@/components/home/BestSellers'
 import TrustBadgesStrip from '@/components/home/TrustBadgesStrip'
 import HeroCarousel from '@/components/home/HeroCarousel'
@@ -73,6 +72,7 @@ export default function Page() {
   const featured = availableCategories.filter(category =>
     (featuredCategories as readonly string[]).includes(category.slug)
   )
+
   const carouselSource = featured.length > 0 ? featured : availableCategories
   const highlightedCategories = carouselSource.slice(0, HIGHLIGHTED_CATEGORY_LIMIT)
   const hasMoreCategories = availableCategories.length > highlightedCategories.length
@@ -80,6 +80,17 @@ export default function Page() {
   const premiumProducts = PREMIUM_PRODUCT_SLUGS.map(slug =>
     products.find(product => product.slug === slug)
   ).filter((product): product is AvailableProduct => Boolean(product))
+
+  const otherCategories = availableCategories.filter(
+    category => !featured.some(featuredCategory => featuredCategory.slug === category.slug)
+  )
+  const normalizedOtherCategories = otherCategories.map(category => ({
+    ...category,
+    description: category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad',
+    subtitle: category.isSensitive ? 'Contenido adulto' : 'Bienestar y cuidado'
+  }))
+  const carouselCategories = featured.length > 0 ? featured : availableCategories
+
 
   return (
     <>
@@ -161,6 +172,22 @@ export default function Page() {
             maxVisible={6}
           />
         )}
+        {normalizedOtherCategories.length > 0 && (
+          <section className="space-y-4">
+            <h2 id="buscas-algo-mas-especifico" className="text-xl font-semibold text-neutral-900">
+              ¿Buscas algo más específico?
+            </h2>
+            <p className="text-sm text-neutral-600">
+              Recorre las categorías sensibles y temáticas creadas para diferentes niveles de experiencia.
+            </p>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {normalizedOtherCategories.map(category => (
+                <CategoryCard key={category.slug} category={category} />
+              ))}
+            </div>
+          </section>
+        )}
+
       </div>
     </>
   )
