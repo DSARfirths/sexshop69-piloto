@@ -49,8 +49,8 @@ export default function InspirationalBanner({
 
   const sectionToneClassName =
     tone === 'fuchsia'
-      ? 'bg-gradient-to-br from-[#2f001f]/95 via-[#3f0234]/90 to-[#160012]/95'
-      : 'bg-night-surface'
+      ? 'bg-gradient-to-br from-fuchsia-50 via-rose-50 to-white'
+      : 'bg-neutral-50'
 
   const imageElement = (
     <div className={`relative h-64 overflow-hidden rounded-[2.25rem] ${aspectClassName} lg:h-full lg:aspect-auto`}>
@@ -70,11 +70,11 @@ export default function InspirationalBanner({
   )
 
   const contentElement = (
-    <div className="flex flex-col justify-center gap-6 px-8 py-10 text-night-foreground">
-      {eyebrow && <span className="text-xs font-semibold uppercase tracking-[0.35em] text-night-muted">{eyebrow}</span>}
+    <div className="flex flex-col justify-center gap-6 px-8 py-10 text-neutral-900">
+      {eyebrow && <span className="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-600">{eyebrow}</span>}
       <div className="space-y-4">
-        <h3 className="text-3xl font-semibold text-white">{title}</h3>
-        <p className="text-base leading-relaxed text-night-muted">{description}</p>
+        <h3 className="text-3xl font-semibold text-neutral-900">{title}</h3>
+        <p className="text-base leading-relaxed text-neutral-600">{description}</p>
       </div>
       {ctaHref && ctaLabel && (
         <div>
@@ -95,7 +95,7 @@ export default function InspirationalBanner({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`relative overflow-hidden rounded-[2.25rem] border border-night-border text-night-foreground shadow-neon ${sectionToneClassName} ${className ?? ''}`}
+      className={`relative overflow-hidden rounded-[2.25rem] border border-neutral-200 text-neutral-900 shadow-md ${sectionToneClassName} ${className ?? ''}`}
     >
       <div className="grid gap-8 lg:grid-cols-2">
         {align === 'left' ? (

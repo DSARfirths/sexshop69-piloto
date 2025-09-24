@@ -76,7 +76,7 @@ const baseButtonClasses =
 const primaryButtonClasses =
   `${baseButtonClasses} bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white shadow-neon hover:from-fuchsia-400 hover:to-purple-400`
 const secondaryButtonClasses =
-  `${baseButtonClasses} border border-night-border bg-transparent text-night-foreground/80 hover:border-night-border-strong hover:text-white`
+  `${baseButtonClasses} border border-neutral-300 bg-transparent text-neutral-700 hover:border-neutral-400 hover:text-neutral-900`
 type SlideMotionProps = HTMLMotionProps<'div'> & { className?: string }
 
 const SlideMotion = forwardRef<HTMLDivElement, SlideMotionProps>((props, ref) => <motion.div ref={ref} {...props} />)
@@ -133,7 +133,7 @@ export default function HeroCarousel({
   const activeSlide = slides[activeIndex]
 
   const containerClasses = [
-    'relative overflow-hidden rounded-3xl border border-night-border bg-night-surface p-6 text-night-foreground shadow-neon-sm backdrop-blur lg:p-10',
+    'relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-6 text-neutral-900 shadow-md backdrop-blur lg:p-10',
     className
   ]
     .filter(Boolean)
@@ -155,13 +155,13 @@ export default function HeroCarousel({
       onBlurCapture={handleBlurCapture}
     >
       <div className="flex items-center justify-between">
-        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-night-muted">{activeSlide.tag}</div>
+        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-600">{activeSlide.tag}</div>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={handlePrevious}
             aria-label="Ver destacado anterior"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition hover:border-night-border-strong hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden />
           </button>
@@ -169,7 +169,7 @@ export default function HeroCarousel({
             type="button"
             onClick={handleNext}
             aria-label="Ver siguiente destacado"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-night-border bg-night-surface-strong/80 text-night-foreground shadow-neon-sm transition hover:border-night-border-strong hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
             <ChevronRight className="h-4 w-4" aria-hidden />
           </button>
@@ -189,10 +189,10 @@ export default function HeroCarousel({
             <div aria-live="polite" className="contents">
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <h2 className="text-2xl font-semibold text-white sm:text-3xl lg:text-[2.4rem] lg:leading-[1.05]">
+                  <h2 className="text-2xl font-semibold text-neutral-900 sm:text-3xl lg:text-[2.4rem] lg:leading-[1.05]">
                     {activeSlide.title}
                   </h2>
-                  <p className="text-sm leading-relaxed text-night-muted sm:text-base">{activeSlide.description}</p>
+                  <p className="text-sm leading-relaxed text-neutral-600 sm:text-base">{activeSlide.description}</p>
                 </div>
 
                 <div className="flex flex-wrap gap-3">
@@ -205,7 +205,7 @@ export default function HeroCarousel({
                 </div>
               </div>
 
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-night-border bg-gradient-to-br from-[#7f00ff]/25 via-transparent to-[#ff6f91]/25">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-neutral-200 bg-gradient-to-br from-fuchsia-100/40 via-transparent to-purple-100/40">
                 <Image
                   src={activeSlide.image}
                   alt={activeSlide.title}
@@ -221,7 +221,7 @@ export default function HeroCarousel({
         </AnimatePresence>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-night-muted">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-neutral-600">
         <div className="flex items-center gap-2">
           {slides.map((slide, index) => {
             const isActive = index === activeIndex
@@ -230,7 +230,7 @@ export default function HeroCarousel({
                 key={slide.id}
                 type="button"
                 onClick={() => goTo(index)}
-                className={`h-2.5 rounded-full transition ${isActive ? 'w-7 bg-fuchsia-400' : 'w-2.5 bg-night-subtle/50 hover:bg-night-subtle'}`}
+                className={`h-2.5 rounded-full transition ${isActive ? 'w-7 bg-fuchsia-500' : 'w-2.5 bg-neutral-200 hover:bg-neutral-300'}`}
                 aria-label={`Ir a la diapositiva: ${slide.title}`}
                 aria-current={isActive ? 'true' : 'false'}
               />

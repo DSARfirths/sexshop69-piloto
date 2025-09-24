@@ -70,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="preconnect" href="https://plausible.io" />
         )}
       </head>
-      <body className="min-h-screen bg-night-radial text-night-foreground antialiased">
+      <body className="min-h-screen bg-white text-neutral-900 antialiased">
         <Suspense fallback={null}>
           <Tracker />
         </Suspense>

@@ -26,14 +26,14 @@ export default function TrustBadgesStrip({ badges }: TrustBadgesStripProps) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.08, duration: 0.35, ease: 'easeOut' }}
-          className="flex items-center gap-3 rounded-2xl border border-night-border bg-night-surface/95 px-4 py-3 shadow-neon-sm backdrop-blur"
+          className="flex items-center gap-3 rounded-2xl border border-neutral-200 bg-white px-4 py-3 shadow-sm backdrop-blur"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-fuchsia-500/20 text-fuchsia-200">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-fuchsia-100 text-fuchsia-600">
             {badge.icon}
           </div>
           <div>
-            <div className="text-sm font-semibold text-white">{badge.label}</div>
-            {badge.description && <p className="text-xs text-night-muted">{badge.description}</p>}
+            <div className="text-sm font-semibold text-neutral-900">{badge.label}</div>
+            {badge.description && <p className="text-xs text-neutral-600">{badge.description}</p>}
           </div>
         </MotionBadge>
       ))}
