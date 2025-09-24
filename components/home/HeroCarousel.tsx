@@ -30,7 +30,7 @@ export const heroCarouselSlides: HeroSlide[] = [
       'Accesorios conectados y aromas inmersivos que encienden el juego previo y amplifican el placer compartido.',
     primaryCta: { href: '/categoria/pareja', label: 'Ver sets para parejas' },
     secondaryCta: { href: '/experiencias/guiadas', label: 'Descubrir experiencias guiadas' },
-    image: '/landing/parejas-curiosas-neon.webp'
+    image: '/landing/parejas-curiosas-neon.jpg'
   },
   {
     id: 'autocuidado-vibrante',
