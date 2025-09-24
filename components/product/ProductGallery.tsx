@@ -148,7 +148,9 @@ export default function ProductGallery({ slug, name, imageCount, imageFilenames,
                 >
                   {unlocked ? (
                     <div className="h-full w-full">
-                      <Zoom>
+                      <Zoom
+                        className="block h-full w-full [&_[data-rmiz-content]]:block [&_[data-rmiz-content]]:h-full [&_[data-rmiz-content]]:w-full [&_[data-rmiz-content]_*]:h-full [&_[data-rmiz-content]_*]:w-full [&_[data-rmiz-content]_*]:max-w-full"
+                      >
                         <GalleryAsset
                           src={imageSources[activeIndex]}
                           alt={`${name} — vista ${activeIndex + 1}`}
