@@ -13,9 +13,7 @@ const baseButtonClasses =
 const primaryButtonClasses = `${baseButtonClasses} bg-white text-neutral-900 shadow-xl shadow-black/30 hover:bg-neutral-200`
 const secondaryButtonClasses = `${baseButtonClasses} border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20`
 
-type SlideMedia =
-  | { type: 'image'; src: string; alt: string }
-  | { type: 'video'; src: string; poster?: string; alt?: string }
+type SlideMedia = { type: 'image'; src: string; alt: string }
 
 type Slide = {
   id: string
@@ -27,40 +25,39 @@ type Slide = {
 
 const slides: Slide[] = [
   {
-    id: 'neon-seduction',
-    tag: 'Noches eléctricas',
-    title: 'Luces bajas, fantasías altas',
+    id: 'rituales-fucsia',
+    tag: 'Heroína 69',
+    title: 'Rituales que encienden tu noche',
     description:
-      'Escenarios inmersivos con lencería glow-in-the-dark, texturas líquidas y accesorios que responden a cada caricia.',
+      'Un mix de juguetes premium, lubricantes iluminados y playlists pensadas para jugar sin tabúes.',
     media: {
       type: 'image',
-      src: '/hero/noches-electricas.svg',
-      alt: 'Pareja en un ambiente nocturno con luces neón'
+      src: '/landing/chica-con-vibrador.webp',
+      alt: 'Persona recostada sosteniendo un vibrador rosa sobre fondo negro con luces fucsias'
     }
   },
   {
-    id: 'rituales-high-tech',
-    tag: 'Autocuidado vibrante',
-    title: 'Rituales sensoriales high-tech',
-    description:
-      'Dispositivos inteligentes sincronizados con respiraciones, aceites multisensoriales y playlists binaurales a un toque.',
-    media: {
-      type: 'video',
-      src: 'https://cdn.coverr.co/videos/coverr-passing-lights-on-a-night-highway-4105/1080p.mp4',
-      poster: '/hero/autocuidado-vibrante-neon.svg',
-      alt: 'Luces desenfocadas en movimiento evocando una ciudad nocturna'
-    }
-  },
-  {
-    id: 'parejas-sincronizadas',
+    id: 'parejas-curiosas',
     tag: 'Parejas curiosas',
-    title: 'Placer sincronizado sin tabúes',
+    title: 'Conecta con su ritmo favorito',
     description:
-      'Juguetes conectados, aromas envolventes y coaching íntimo para explorar en conjunto a tu ritmo.',
+      'Anillos vibradores, aceites sensoriales y dinámicas guiadas para sincronizar cada experiencia.',
     media: {
       type: 'image',
-      src: '/hero/parejas-curiosas-neon.svg',
-      alt: 'Ilustración de dos siluetas tocándose en ambiente futurista'
+      src: '/landing/chico-mirando-anillo.webp',
+      alt: 'Persona observando un anillo vibrador morado con fondo en tonos lilas'
+    }
+  },
+  {
+    id: 'exploracion-intensa',
+    tag: 'Exploración intensa',
+    title: 'Redescubre tu placer con texturas nuevas',
+    description:
+      'Arneses versátiles, masturbadores envolventes y coaching personalizado para ir más allá.',
+    media: {
+      type: 'image',
+      src: '/landing/arnes-funda.webp',
+      alt: 'Vista cenital de un arnés y funda de juguete sexual sobre fondo oscuro'
     }
   }
 ]
@@ -124,27 +121,14 @@ export default function Hero() {
             transition={{ duration: 0.8, ease: 'easeOut' }}
             aria-hidden
           >
-            {activeSlide.media.type === 'image' ? (
-              <Image
-                src={activeSlide.media.src}
-                alt={activeSlide.media.alt}
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover object-center"
-              />
-            ) : (
-              <video
-                className="h-full w-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                poster={activeSlide.media.poster}
-              >
-                <source src={activeSlide.media.src} type="video/mp4" />
-              </video>
-            )}
+            <Image
+              src={activeSlide.media.src}
+              alt={activeSlide.media.alt}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
             <div className="absolute inset-0 bg-gradient-to-br from-neutral-950/85 via-neutral-950/45 to-transparent" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(126,34,206,0.35),_transparent_60%)]" />
           </MotionSlide>
@@ -206,26 +190,13 @@ export default function Hero() {
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                   aria-hidden
                 >
-                  {activeSlide.media.type === 'image' ? (
-                    <Image
-                      src={activeSlide.media.src}
-                      alt={activeSlide.media.alt}
-                      fill
-                      sizes="40vw"
-                      className="object-cover object-center"
-                    />
-                  ) : (
-                    <video
-                      className="h-full w-full object-cover"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      poster={activeSlide.media.poster}
-                    >
-                      <source src={activeSlide.media.src} type="video/mp4" />
-                    </video>
-                  )}
+                  <Image
+                    src={activeSlide.media.src}
+                    alt={activeSlide.media.alt}
+                    fill
+                    sizes="40vw"
+                    className="object-cover object-center"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/30 via-transparent to-brand-accent/30 mix-blend-screen" />
                 </MotionContent>
               </AnimatePresence>
