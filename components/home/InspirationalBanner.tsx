@@ -80,7 +80,7 @@ export default function InspirationalBanner({
         <div>
           <Link
             href={ctaHref}
-            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-500 px-6 py-3 text-sm font-semibold text-white shadow-neon transition hover:from-fuchsia-400 hover:to-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+            className="inline-flex items-center justify-center rounded-full bg-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-neon transition hover:bg-fuchsia-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
             {ctaLabel}
           </Link>

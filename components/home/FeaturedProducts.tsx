@@ -90,7 +90,7 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
                   <span className="text-lg font-semibold text-fuchsia-600">S/ {price}</span>
                   <Link
                     href={`/producto/${product.slug}`}
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-500 px-6 py-2.5 text-sm font-semibold text-white shadow-neon transition hover:from-fuchsia-400 hover:to-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+                    className="inline-flex items-center justify-center rounded-full bg-fuchsia-600 px-6 py-2.5 text-sm font-semibold text-white shadow-neon transition hover:bg-fuchsia-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
                   >
                     Comprar ahora
                   </Link>
