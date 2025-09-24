@@ -97,7 +97,7 @@ export default function Page() {
     <>
       <Hero />
       <div className="mt-8 lg:hidden">
-        <HeroCarousel className="bg-white/70" />
+        <HeroCarousel className="shadow-neon" />
       </div>
       <div className="mt-10 space-y-12">
         <TrustBadgesStrip badges={TRUST_BADGES} />
@@ -112,7 +112,7 @@ export default function Page() {
             <div className="flex justify-end">
               <Link
                 href="/categorias"
-                className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-5 py-2 text-sm font-semibold text-neutral-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+                className="inline-flex items-center rounded-full border border-night-border bg-night-surface px-5 py-2 text-sm font-semibold text-night-foreground shadow-neon-sm transition hover:-translate-y-0.5 hover:shadow-neon focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
               >
                 Ver más categorías
               </Link>
@@ -175,10 +175,10 @@ export default function Page() {
         )}
         {normalizedOtherCategories.length > 0 && (
           <section className="space-y-4">
-            <h2 id="buscas-algo-mas-especifico" className="text-xl font-semibold text-neutral-900">
+            <h2 id="buscas-algo-mas-especifico" className="text-xl font-semibold text-white">
               ¿Buscas algo más específico?
             </h2>
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-night-muted">
               Recorre las categorías sensibles y temáticas creadas para diferentes niveles de experiencia.
             </p>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">

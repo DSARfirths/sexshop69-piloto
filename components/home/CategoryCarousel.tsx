@@ -46,12 +46,12 @@ export function CategoryCard({ category, href = `/categoria/${category.slug}` }:
   return (
     <Link href={href} className="group block h-full">
       <MotionArticle
-        whileHover={{ y: -6, boxShadow: '0 18px 30px -16px rgba(15,23,42,0.35)' }}
+        whileHover={{ y: -6, boxShadow: '0 22px 38px -18px rgba(236,72,153,0.45)' }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-        className="flex h-full min-h-[280px] w-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white text-left shadow-lg"
+        className="flex h-full min-h-[280px] w-full flex-col overflow-hidden rounded-2xl border border-night-border bg-night-surface/95 text-left text-night-foreground shadow-neon-sm"
       >
         {category.image ? (
-          <div className="relative h-40 w-full overflow-hidden rounded-t-2xl bg-neutral-100">
+          <div className="relative h-40 w-full overflow-hidden rounded-t-2xl bg-night-surface-strong/80">
             <Image
               src={category.image}
               alt={`${category.label} — miniatura de categoría`}
@@ -61,14 +61,14 @@ export function CategoryCard({ category, href = `/categoria/${category.slug}` }:
             />
           </div>
         ) : (
-          <div className="flex h-40 w-full items-center justify-center rounded-t-2xl bg-neutral-100 text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">
+          <div className="flex h-40 w-full items-center justify-center rounded-t-2xl bg-night-surface-strong/80 text-xs font-semibold uppercase tracking-[0.08em] text-night-muted">
             Explorar categoría
           </div>
         )}
         <div className="flex flex-1 flex-col gap-1 px-5 pb-6 pt-4">
-          <h3 className="text-lg font-extrabold uppercase text-neutral-900">{category.label}</h3>
-          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">{category.subtitle}</p>
-          <p className="text-sm font-semibold uppercase text-neutral-600">{category.description}</p>
+          <h3 className="text-lg font-extrabold uppercase text-white">{category.label}</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-night-muted">{category.subtitle}</p>
+          <p className="text-sm font-semibold uppercase text-night-subtle">{category.description}</p>
         </div>
       </MotionArticle>
     </Link>
@@ -116,10 +116,10 @@ export default function CategoryCarousel({ title, subtitle, headingId, categorie
     <section className="space-y-4" id="catalogo">
       {title && (
         <div className="space-y-1">
-          <h2 id={headingId} className="text-xl font-semibold text-neutral-900">
+          <h2 id={headingId} className="text-xl font-semibold text-white">
             {title}
           </h2>
-          {subtitle && <p className="text-sm text-neutral-600">{subtitle}</p>}
+          {subtitle && <p className="text-sm text-night-muted">{subtitle}</p>}
         </div>
       )}
       <div
@@ -148,9 +148,9 @@ export default function CategoryCarousel({ title, subtitle, headingId, categorie
           <MotionCard className="min-w-[200px] max-w-[220px] snap-start">
             <Link href="/categoria" className="block h-full">
               <MotionArticle
-                whileHover={{ y: -6, boxShadow: '0 18px 30px -16px rgba(15,23,42,0.35)' }}
+                whileHover={{ y: -6, boxShadow: '0 22px 38px -18px rgba(236,72,153,0.45)' }}
                 transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                className="flex h-full min-h-[280px] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-white text-center font-semibold uppercase text-neutral-700 shadow-lg"
+                className="flex h-full min-h-[280px] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-night-border bg-night-surface/90 text-center font-semibold uppercase text-night-foreground/80 shadow-neon-sm"
               >
                 Ver todas
               </MotionArticle>
@@ -165,9 +165,9 @@ export default function CategoryCarousel({ title, subtitle, headingId, categorie
         {remainingCategories.length > 0 && (
           <Link href="/categoria" className="block h-full">
             <MotionArticle
-              whileHover={{ y: -6, boxShadow: '0 18px 30px -16px rgba(15,23,42,0.35)' }}
+              whileHover={{ y: -6, boxShadow: '0 22px 38px -18px rgba(236,72,153,0.45)' }}
               transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-              className="flex h-full min-h-[280px] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-white text-center font-semibold uppercase text-neutral-700 shadow-lg"
+              className="flex h-full min-h-[280px] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-night-border bg-night-surface/90 text-center font-semibold uppercase text-night-foreground/80 shadow-neon-sm"
             >
               Ver más categorías
             </MotionArticle>
