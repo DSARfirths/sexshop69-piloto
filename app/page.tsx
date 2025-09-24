@@ -1,4 +1,5 @@
 import { PackageCheck, ShieldCheck, LockKeyhole } from 'lucide-react'
+import Link from 'next/link'
 import Hero from '@/components/Hero'
 import { allProducts, getBestSellers, getNewArrivals, getOffers } from '@/lib/products'
 import CategoryCarousel, { CategoryCard } from '@/components/home/CategoryCarousel'
