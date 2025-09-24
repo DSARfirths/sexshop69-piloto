@@ -27,10 +27,10 @@ export const heroCarouselSlides: HeroSlide[] = [
     tag: 'Parejas curiosas',
     title: 'Exploraciones sensuales sincronizadas',
     description:
-      'Accesorios conectados y aromas inmersivos que encienden el juego previo con destellos neón y complicidad absoluta.',
-    primaryCta: { href: '/categoria/parejas', label: 'Ver sets para parejas' },
+      'Accesorios conectados y aromas inmersivos que encienden el juego previo y amplifican el placer compartido.',
+    primaryCta: { href: '/categoria/pareja', label: 'Ver sets para parejas' },
     secondaryCta: { href: '/experiencias/guiadas', label: 'Descubrir experiencias guiadas' },
-    image: '/hero/parejas-curiosas-neon.svg'
+    image: '/hero/parejas-curiosas-neon.webp'
   },
   {
     id: 'autocuidado-vibrante',
@@ -38,9 +38,9 @@ export const heroCarouselSlides: HeroSlide[] = [
     title: 'Rituales de placer high-tech',
     description:
       'Vibradores inteligentes, aceites sensoriales y playlists binaurales listos para elevar tu energía personal.',
-    primaryCta: { href: '/categoria/autocuidado', label: 'Explorar autocuidado futurista' },
+    primaryCta: { href: '/categoria/bienestar', label: 'Explorar autocuidado futurista' },
     secondaryCta: { href: '/club-vibes', label: 'Unirme al Club Vibes' },
-    image: '/hero/autocuidado-vibrante-neon.svg'
+    image: 'public/hero/autocuidado.webp'
   },
   {
     id: 'juguetes-anales-premium',
@@ -48,9 +48,9 @@ export const heroCarouselSlides: HeroSlide[] = [
     title: 'Sensaciones profundas con precisión',
     description:
       'Diseños ergonómicos en silicona médica y acabados cromados para explorar con seguridad, lujo y control total.',
-    primaryCta: { href: '/categoria/juguetes-anales', label: 'Ver selección premium' },
+    primaryCta: { href: '/categoria/accesorios', label: 'Ver selección premium' },
     secondaryCta: { href: '/blog/guia-anal', label: 'Leer guía de uso experto' },
-    image: '/hero/juguetes-anales-premium.svg'
+    image: 'public/hero/juguetes-anales.webp'
   },
   {
     id: 'noches-electricas',
@@ -58,9 +58,9 @@ export const heroCarouselSlides: HeroSlide[] = [
     title: 'Lencería y bondage glow',
     description:
       'Atuendos lumínicos, cueros suaves y accesorios modulables para construir fantasías futuristas que brillan en la oscuridad.',
-    primaryCta: { href: '/categoria/lenceria', label: 'Descubrir lencería glow' },
+    primaryCta: { href: '/categoria/fetish', label: 'Descubrir lencería glow' },
     secondaryCta: { href: '/rituales/nocturnos', label: 'Diseñar mi ritual nocturno' },
-    image: '/hero/noches-electricas.svg'
+    image: 'public/hero/noches-electricas.webp'
   }
 ]
 
@@ -160,7 +160,7 @@ export default function HeroCarousel({
           <button
             type="button"
             onClick={handlePrevious}
-            aria-label="Ver destacado anterior"
+            aria-label="Ver anterior"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden />
@@ -168,7 +168,7 @@ export default function HeroCarousel({
           <button
             type="button"
             onClick={handleNext}
-            aria-label="Ver siguiente destacado"
+            aria-label="Ver siguiente"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
             <ChevronRight className="h-4 w-4" aria-hidden />
