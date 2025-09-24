@@ -16,6 +16,9 @@ type FeaturedProductsProps = {
   headingId?: string
 }
 
+const MotionDiv: typeof motion.div = motion.div
+const MotionArticle: typeof motion.article = motion.article
+
 const containerVariants = {
   hidden: { opacity: 0, y: 32 },
   visible: { opacity: 1, y: 0 }
@@ -37,7 +40,7 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
         </p>
       </div>
 
-      <motion.div
+      <MotionDiv
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -52,7 +55,7 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
           const price = (product.salePrice ?? product.regularPrice).toFixed(2)
 
           return (
-            <motion.article
+            <MotionArticle
               key={product.slug}
               className="group relative overflow-hidden rounded-[2rem] border border-night-border bg-gradient-to-br from-[#3b0a5a]/40 via-night-surface to-[#12002e]/90 text-night-foreground shadow-neon"
               initial={{ opacity: 0, y: 20 }}
@@ -89,10 +92,10 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
                 </div>
               </div>
               <div className="pointer-events-none absolute inset-0 border border-night-border-strong/60 mix-blend-screen" aria-hidden />
-            </motion.article>
+            </MotionArticle>
           )
         })}
-      </motion.div>
+      </MotionDiv>
     </section>
   )
 }
