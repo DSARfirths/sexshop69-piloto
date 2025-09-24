@@ -53,24 +53,20 @@ export function CategoryCard({ category, href = `/categoria/${category.slug}` }:
       <MotionArticle
         whileHover={{ y: -6, boxShadow: '0 22px 38px -18px rgba(236,72,153,0.45)' }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-        className="flex h-full min-h-[288px] w-full flex-col overflow-hidden rounded-2xl border border-night-border bg-night-surface/95 text-left text-night-foreground shadow-neon-sm"
+        className="flex h-full min-h-[280px] w-full flex-col overflow-hidden rounded-2xl border border-night-border bg-night-surface/95 text-left text-night-foreground shadow-neon-sm"
       >
         {category.image ? (
-          <div className="relative aspect-[4/3] w-full overflow-hidden bg-night-surface-strong/80">
+          <div className="relative h-40 w-full overflow-hidden rounded-t-2xl bg-night-surface-strong/80">
             <Image
               src={category.image}
               alt={`${category.label} — miniatura de categoría`}
               fill
               sizes="(max-width: 768px) 220px, 280px"
-              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.05]"
-            />
-            <div
-              className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,63,164,0.28),_transparent_68%)]"
-              aria-hidden
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
             />
           </div>
         ) : (
-          <div className="flex aspect-[4/3] w-full items-center justify-center bg-night-surface-strong/80 text-xs font-semibold uppercase tracking-[0.08em] text-night-muted">
+          <div className="flex h-40 w-full items-center justify-center rounded-t-2xl bg-night-surface-strong/80 text-xs font-semibold uppercase tracking-[0.08em] text-night-muted">
             Explorar categoría
           </div>
         )}
