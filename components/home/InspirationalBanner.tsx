@@ -14,10 +14,6 @@ type InspirationalBannerProps = {
   align?: 'left' | 'right'
   ctaHref?: string
   ctaLabel?: string
-  tone?: 'night' | 'fuchsia'
-  imageAspect?: 'landscape' | 'portrait' | 'square'
-  imagePriority?: boolean
-  className?: string
 }
 
 type MotionElementProps<T extends keyof HTMLElementTagNameMap> = PropsWithChildren<
@@ -34,34 +30,11 @@ export default function InspirationalBanner({
   eyebrow,
   align = 'left',
   ctaHref,
-  ctaLabel,
-  tone = 'night',
-  imageAspect = 'landscape',
-  imagePriority = false,
-  className
+  ctaLabel
 }: InspirationalBannerProps) {
-  const aspectClassName =
-    imageAspect === 'portrait'
-      ? 'aspect-[3/4]'
-      : imageAspect === 'square'
-        ? 'aspect-square'
-        : 'aspect-[16/10]'
-
-  const sectionToneClassName =
-    tone === 'fuchsia'
-      ? 'bg-gradient-to-br from-[#2f001f]/95 via-[#3f0234]/90 to-[#160012]/95'
-      : 'bg-night-surface'
-
   const imageElement = (
-    <div className={`relative h-64 overflow-hidden rounded-[2.25rem] ${aspectClassName} lg:h-full lg:aspect-auto`}>
-      <Image
-        src={image}
-        alt={imageAlt}
-        fill
-        priority={imagePriority}
-        className="object-cover object-center"
-        sizes="(min-width: 1024px) 50vw, 100vw"
-      />
+    <div className="relative h-64 overflow-hidden rounded-[2.25rem] lg:h-full">
+      <Image src={image} alt={imageAlt} fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
       <div
         className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(236,72,153,0.25),_transparent_70%)] mix-blend-screen"
         aria-hidden
@@ -95,7 +68,7 @@ export default function InspirationalBanner({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`relative overflow-hidden rounded-[2.25rem] border border-night-border text-night-foreground shadow-neon ${sectionToneClassName} ${className ?? ''}`}
+      className="relative overflow-hidden rounded-[2.25rem] border border-night-border bg-night-surface text-night-foreground shadow-neon"
     >
       <div className="grid gap-8 lg:grid-cols-2">
         {align === 'left' ? (
