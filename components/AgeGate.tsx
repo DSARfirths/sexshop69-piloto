@@ -15,7 +15,7 @@ export function AgeGate() {
         <div className="mt-5 flex justify-center gap-3">
           <button
             onClick={() => { document.cookie = 'age_ok=1; path=/; max-age=31536000'; setShow(false) }}
-            className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-purple-500 px-5 py-2 text-sm font-semibold text-white shadow-neon transition hover:from-fuchsia-400 hover:to-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+            className="rounded-xl bg-fuchsia-600 px-5 py-2 text-sm font-semibold text-white shadow-neon transition hover:bg-fuchsia-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
             Tengo 18+
           </button>

@@ -74,7 +74,7 @@ type HeroCarouselProps = {
 const baseButtonClasses =
   'inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300'
 const primaryButtonClasses =
-  `${baseButtonClasses} bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white shadow-neon hover:from-fuchsia-400 hover:to-purple-400`
+  `${baseButtonClasses} bg-fuchsia-600 text-white shadow-neon hover:bg-fuchsia-700`
 const secondaryButtonClasses =
   `${baseButtonClasses} border border-neutral-300 bg-transparent text-neutral-700 hover:border-neutral-400 hover:text-neutral-900`
 type SlideMotionProps = HTMLMotionProps<'div'> & { className?: string }
@@ -163,7 +163,7 @@ export default function HeroCarousel({
             aria-label="Ver destacado anterior"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
-            <ChevronLeft className="h-4 w-4" aria-hidden />
+            <ChevronLeft className="h-4 w-4 text-fuchsia-600" aria-hidden />
           </button>
           <button
             type="button"
@@ -171,7 +171,7 @@ export default function HeroCarousel({
             aria-label="Ver siguiente destacado"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
-            <ChevronRight className="h-4 w-4" aria-hidden />
+            <ChevronRight className="h-4 w-4 text-fuchsia-600" aria-hidden />
           </button>
         </div>
       </div>
