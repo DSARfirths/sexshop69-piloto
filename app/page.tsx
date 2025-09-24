@@ -78,10 +78,10 @@ export default function Page() {
   return (
     <>
       <Hero />
-      <div className="mt-12 space-y-16 lg:space-y-20">
+      <div className="mt-8 space-y-8 sm:mt-12 sm:space-y-12 lg:space-y-20">
         <section className="relative overflow-hidden rounded-[3rem] border border-night-border/70 bg-night-radial px-6 py-12 sm:px-10 lg:px-16">
           <div
-            className="pointer-events-none absolute -left-28 bottom-[-5rem] hidden h-72 w-72 rounded-full bg-fuchsia-500/25 blur-3xl sm:block"
+            className="pointer-events-none absolute -left-28 bottom-[-5rem] hidden h-72 w-72 rounded-full bg-fuchsia-500/25 blur-3xl md:block"
             aria-hidden
           />
           <div
@@ -96,11 +96,11 @@ export default function Page() {
 
         <div className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-gradient-to-br from-[#09000a] via-[#230017] to-[#340126] px-6 py-12 sm:px-10 lg:px-16">
           <div
-            className="pointer-events-none absolute -left-32 top-[-8rem] hidden h-80 w-80 rounded-full bg-fuchsia-500/30 blur-3xl sm:block"
+            className="pointer-events-none absolute -left-32 top-[-8rem] hidden h-80 w-80 rounded-full bg-fuchsia-500/30 blur-3xl md:block"
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute inset-y-0 right-[-15%] hidden w-[55%] bg-[radial-gradient(circle_at_center,_rgba(249,168,212,0.35),_transparent_60%)] blur-3xl lg:block"
+            className="pointer-events-none absolute inset-y-0 right-[-15%] hidden w-[55%] bg-[radial-gradient(circle_at_center,_rgba(249,168,212,0.35),_transparent_60%)] blur-3xl md:block"
             aria-hidden
           />
           <div className="relative z-10">
@@ -110,7 +110,7 @@ export default function Page() {
 
         <div className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-[#120015]/90 px-6 py-12 sm:px-10 lg:px-16">
           <div
-            className="pointer-events-none absolute inset-y-0 right-[-15%] hidden w-[46%] bg-[radial-gradient(circle_at_center,_rgba(244,114,182,0.25),_transparent_65%)] blur-3xl lg:block"
+            className="pointer-events-none absolute inset-y-0 right-[-15%] hidden w-[46%] bg-[radial-gradient(circle_at_center,_rgba(244,114,182,0.25),_transparent_65%)] blur-3xl md:block"
             aria-hidden
           />
           <div className="relative z-10 space-y-12">
@@ -140,11 +140,11 @@ export default function Page() {
         {offers.length > 0 && (
           <div className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-gradient-to-br from-[#150015] via-[#2f0124] to-[#420234] px-6 py-12 sm:px-10 lg:px-16">
             <div
-              className="pointer-events-none absolute inset-y-0 left-[-18%] hidden w-[48%] bg-[radial-gradient(circle_at_center,_rgba(249,168,212,0.25),_transparent_65%)] blur-3xl lg:block"
+              className="pointer-events-none absolute inset-y-0 left-[-18%] hidden w-[48%] bg-[radial-gradient(circle_at_center,_rgba(249,168,212,0.25),_transparent_65%)] blur-3xl md:block"
               aria-hidden
             />
             <div
-              className="pointer-events-none absolute -right-24 bottom-[-6rem] hidden h-72 w-72 rounded-full bg-fuchsia-500/30 blur-3xl sm:block"
+              className="pointer-events-none absolute -right-24 bottom-[-6rem] hidden h-72 w-72 rounded-full bg-fuchsia-500/30 blur-3xl md:block"
               aria-hidden
             />
             <div className="relative z-10">
@@ -170,7 +170,7 @@ export default function Page() {
             className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-gradient-to-br from-[#08000c] via-[#1f0020] to-[#2f0230] px-6 py-12 sm:px-10 lg:px-16"
           >
             <div
-              className="pointer-events-none absolute inset-y-0 right-[-14%] hidden w-[46%] bg-[radial-gradient(circle_at_center,_rgba(244,114,182,0.25),_transparent_60%)] blur-3xl lg:block"
+              className="pointer-events-none absolute inset-y-0 right-[-14%] hidden w-[46%] bg-[radial-gradient(circle_at_center,_rgba(244,114,182,0.25),_transparent_60%)] blur-3xl md:block"
               aria-hidden
             />
             <div className="relative z-10 space-y-6">
