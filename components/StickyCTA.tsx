@@ -44,7 +44,7 @@ export default function StickyCTA({ price, regularPrice, checkoutHref, whatsappH
           <div className="mt-3 grid grid-cols-2 gap-2">
             <Link
               href={checkoutHref}
-              className="group inline-flex flex-col items-center justify-center gap-1 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-purple-500 px-4 py-3 text-center text-white shadow-neon transition-all duration-200 hover:-translate-y-0.5 hover:shadow-neon focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+              className="group inline-flex flex-col items-center justify-center gap-1 rounded-2xl bg-fuchsia-600 px-4 py-3 text-center text-white shadow-neon transition-all duration-200 hover:-translate-y-0.5 hover:bg-fuchsia-700 hover:shadow-neon focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
             >
               <span className="text-sm font-semibold">Comprar ahora</span>
               <span className="text-[11px] text-white/80">Pago cifrado y discreto</span>
