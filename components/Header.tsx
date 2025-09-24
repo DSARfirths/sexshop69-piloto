@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { FocusEvent, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { ComponentType, FocusEvent, PropsWithChildren, useState } from 'react'
+import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 import {
   ChevronDown,
   ChevronRight,
@@ -19,6 +19,11 @@ import categoriesData from '@/data/categories.json'
 import { openChatAssistant } from '@/lib/chat-assistant'
 
 const MotionWrapper: any = motion.div
+const MotionMobileOverlay = motion.div as ComponentType<
+  PropsWithChildren<HTMLMotionProps<'div'> & { className?: string }>
+>
+const MotionButton: any = motion.button
+const MotionAside: any = motion.aside
 
 type Category = {
   slug: string
@@ -216,13 +221,13 @@ export default function Header() {
 
         <AnimatePresence>
           {menuOpen && (
-            <motion.div
+            <MotionMobileOverlay
               className="fixed inset-0 z-40 flex md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <motion.button
+              <MotionButton
                 type="button"
                 aria-label="Cerrar menú"
                 className="flex-1 bg-black/40"
@@ -231,7 +236,7 @@ export default function Header() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               />
-              <motion.aside
+              <MotionAside
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
@@ -319,8 +324,8 @@ export default function Header() {
                     Abrir asistente
                   </button>
                 </div>
-              </motion.aside>
-            </motion.div>
+              </MotionAside>
+            </MotionMobileOverlay>
           )}
         </AnimatePresence>
       </MotionWrapper>

@@ -2,7 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, type HTMLMotionProps } from 'framer-motion'
+import { ComponentType, PropsWithChildren } from 'react'
 
 type InspirationalBannerProps = {
   title: string
@@ -14,6 +15,12 @@ type InspirationalBannerProps = {
   ctaHref?: string
   ctaLabel?: string
 }
+
+type MotionElementProps<T extends keyof HTMLElementTagNameMap> = PropsWithChildren<
+  HTMLMotionProps<T> & { className?: string }
+>
+
+const MotionSection = motion.section as ComponentType<MotionElementProps<'section'>>
 
 export default function InspirationalBanner({
   title,
@@ -56,7 +63,7 @@ export default function InspirationalBanner({
   )
 
   return (
-    <motion.section
+    <MotionSection
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
@@ -76,6 +83,6 @@ export default function InspirationalBanner({
           </>
         )}
       </div>
-    </motion.section>
+    </MotionSection>
   )
 }
