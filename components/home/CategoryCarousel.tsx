@@ -45,50 +45,38 @@ const MotionArticle = motion.article as ComponentType<MotionElementProps<'articl
 export type CategoryCardProps = {
   category: CategoryItem & { description: string; subtitle: string }
   href?: string
-  variant?: 'dark' | 'white'
 }
 
 export function CategoryCard({
   category,
-  href = `/categoria/${category.slug}`,
-  variant = 'dark'
+  href = `/categoria/${category.slug}`
 }: CategoryCardProps) {
-  const cardVariantClassName =
-    variant === 'white'
-      ? 'border border-neutral-200 bg-white text-neutral-900 shadow'
-      : 'border border-night-border bg-night-surface/95 text-night-foreground shadow-neon-sm'
-  const titleColorClassName = variant === 'white' ? 'text-neutral-900' : 'text-white'
-
   return (
     <Link href={href} className="group block h-full">
       <MotionArticle
-        whileHover={{ y: -6, boxShadow: '0 22px 38px -18px rgba(236,72,153,0.45)' }}
+        whileHover={{ y: -6, boxShadow: '0 22px 38px -18px rgba(236,72,153,0.25)' }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-        className={`flex h-full min-h-[280px] w-full flex-col overflow-hidden rounded-2xl text-left ${cardVariantClassName}`}
+        className="flex h-full min-h-[280px] w-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white text-left shadow-sm transition"
       >
         {category.image ? (
-          <div className="relative aspect-[3/4] w-full overflow-hidden bg-night-surface-strong/80">
+          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-t-xl bg-neutral-100">
             <Image
               src={category.image}
               alt={`${category.label} — miniatura de categoría`}
               fill
               sizes="(max-width: 768px) 240px, 260px"
-              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.05]"
-            />
-            <div
-              className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,63,164,0.28),_transparent_68%)]"
-              aria-hidden
+              className="object-cover object-center transition-transform duration-500 md:group-hover:scale-105"
             />
           </div>
         ) : (
-          <div className="flex aspect-[3/4] w-full items-center justify-center bg-night-surface-strong/80 text-xs font-semibold uppercase tracking-[0.08em] text-night-muted">
+          <div className="flex aspect-[3/4] w-full items-center justify-center rounded-t-xl bg-neutral-100 text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">
             Explorar categoría
           </div>
         )}
-        <div className="flex flex-1 flex-col gap-1 px-5 pb-6 pt-4">
-          <h3 className={`text-lg font-extrabold uppercase ${titleColorClassName}`}>{category.label}</h3>
-          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500 truncate">{category.subtitle}</p>
-          <p className="text-xs font-semibold uppercase text-neutral-500 truncate">{category.description}</p>
+        <div className="flex flex-1 flex-col gap-1 px-4 pb-6 pt-4">
+          <h3 className="text-lg font-extrabold uppercase text-fuchsia-600">{category.label}</h3>
+          <p className="truncate text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">{category.subtitle}</p>
+          <p className="truncate text-xs font-semibold uppercase text-neutral-400">{category.description}</p>
         </div>
       </MotionArticle>
     </Link>
