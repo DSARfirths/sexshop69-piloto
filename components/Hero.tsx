@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { ComponentType, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 
 const AUTO_PLAY_DELAY = 9000
 
@@ -65,6 +65,15 @@ const slides: Slide[] = [
   }
 ]
 
+type MotionElementProps<T extends keyof HTMLElementTagNameMap> = PropsWithChildren<
+  HTMLMotionProps<T> & { className?: string }
+>
+
+const MotionSlide = motion.div as ComponentType<MotionElementProps<'div'>>
+const MotionHeading = motion.h1 as ComponentType<MotionElementProps<'h1'>>
+const MotionParagraph = motion.p as ComponentType<MotionElementProps<'p'>>
+const MotionContent = motion.div as ComponentType<MotionElementProps<'div'>>
+
 export default function Hero() {
   const preparedSlides = useMemo(() => slides, [])
   const [activeIndex, setActiveIndex] = useState(0)
@@ -106,7 +115,7 @@ export default function Hero() {
     >
       <div className="absolute inset-0">
         <AnimatePresence mode="wait" initial={false}>
-          <motion.div
+          <MotionSlide
             key={activeSlide.id}
             className="absolute inset-0"
             initial={{ opacity: 0, scale: 1.05 }}
@@ -138,7 +147,7 @@ export default function Hero() {
             )}
             <div className="absolute inset-0 bg-gradient-to-br from-neutral-950/85 via-neutral-950/45 to-transparent" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(126,34,206,0.35),_transparent_60%)]" />
-          </motion.div>
+          </MotionSlide>
         </AnimatePresence>
       </div>
 
@@ -152,7 +161,7 @@ export default function Hero() {
 
         <div className="mt-10 grid flex-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.6fr)]">
           <div className="space-y-6">
-            <motion.h1
+            <MotionHeading
               key={activeSlide.title}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -160,8 +169,8 @@ export default function Hero() {
               className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
             >
               {activeSlide.title}
-            </motion.h1>
-            <motion.p
+            </MotionHeading>
+            <MotionParagraph
               key={activeSlide.description}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -169,8 +178,8 @@ export default function Hero() {
               className="max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
             >
               {activeSlide.description}
-            </motion.p>
-            <motion.div
+            </MotionParagraph>
+            <MotionContent
               className="flex flex-wrap gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -182,13 +191,13 @@ export default function Hero() {
               <Link href="/experiencias" className={secondaryButtonClasses}>
                 Descubre el placer
               </Link>
-            </motion.div>
+            </MotionContent>
           </div>
 
           <div className="hidden h-full min-h-[320px] lg:block">
             <div className="relative h-full w-full overflow-hidden rounded-[2rem] border border-white/20 bg-white/5">
               <AnimatePresence mode="wait" initial={false}>
-                <motion.div
+                <MotionContent
                   key={`preview-${activeSlide.id}`}
                   className="absolute inset-0"
                   initial={{ opacity: 0, scale: 1.04 }}
@@ -218,7 +227,7 @@ export default function Hero() {
                     </video>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/30 via-transparent to-brand-accent/30 mix-blend-screen" />
-                </motion.div>
+                </MotionContent>
               </AnimatePresence>
             </div>
           </div>

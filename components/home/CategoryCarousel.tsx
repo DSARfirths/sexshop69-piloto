@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { ComponentType, PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, type Variants } from 'framer-motion'
+import { motion, type Variants, type HTMLMotionProps } from 'framer-motion'
 
 type CategoryItem = {
   slug: string
@@ -35,7 +35,12 @@ const cardVariants: Variants = {
 const MotionTrack = motion.div as any
 
 const MotionCard = motion.div as any
-const MotionArticle = motion.article
+
+type MotionElementProps<T extends keyof HTMLElementTagNameMap> = PropsWithChildren<
+  HTMLMotionProps<T> & { className?: string }
+>
+
+const MotionArticle = motion.article as ComponentType<MotionElementProps<'article'>>
 
 export type CategoryCardProps = {
   category: CategoryItem & { description: string; subtitle: string }

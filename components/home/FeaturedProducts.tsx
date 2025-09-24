@@ -2,7 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, type HTMLMotionProps } from 'framer-motion'
+import { ComponentType, PropsWithChildren } from 'react'
 import type { Product } from '@/lib/products'
 
 const FALLBACK_IMAGE_SRC =
@@ -21,6 +22,13 @@ const containerVariants = {
   visible: { opacity: 1, y: 0 }
 }
 
+type MotionElementProps<T extends keyof HTMLElementTagNameMap> = PropsWithChildren<
+  HTMLMotionProps<T> & { className?: string }
+>
+
+const MotionDiv = motion.div as ComponentType<MotionElementProps<'div'>>
+const MotionArticle = motion.article as ComponentType<MotionElementProps<'article'>>
+
 export default function FeaturedProducts({ products, headingId }: FeaturedProductsProps) {
   if (products.length === 0) return null
 
@@ -37,7 +45,7 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
         </p>
       </div>
 
-      <motion.div
+      <MotionDiv
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -52,7 +60,7 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
           const price = (product.salePrice ?? product.regularPrice).toFixed(2)
 
           return (
-            <motion.article
+            <MotionArticle
               key={product.slug}
               className="group relative overflow-hidden rounded-[2rem] border border-neutral-200 bg-gradient-to-br from-white via-white to-neutral-50 shadow-xl"
               initial={{ opacity: 0, y: 20 }}
@@ -89,10 +97,10 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
                 </div>
               </div>
               <div className="pointer-events-none absolute inset-0 border border-white/20 mix-blend-overlay" aria-hidden />
-            </motion.article>
+            </MotionArticle>
           )
         })}
-      </motion.div>
+      </MotionDiv>
     </section>
   )
 }

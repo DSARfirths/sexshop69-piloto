@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { ComponentType, PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
-import { motion, type Variants } from 'framer-motion'
+import { motion, type Variants, type HTMLMotionProps } from 'framer-motion'
 import type { Product } from '@/lib/products'
 import ProductCard from '@/components/ProductCard'
 
@@ -24,6 +24,12 @@ const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0 }
 }
+
+type MotionElementProps<T extends keyof HTMLElementTagNameMap> = PropsWithChildren<
+  HTMLMotionProps<T> & { className?: string }
+>
+
+const MotionDiv = motion.div as ComponentType<MotionElementProps<'div'>>
 
 export default function BestSellers({
   products,
@@ -82,7 +88,7 @@ export default function BestSellers({
 
   return (
     <section className="space-y-6" aria-labelledby={headingId ?? undefined}>
-      <motion.div
+      <MotionDiv
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -107,7 +113,7 @@ export default function BestSellers({
             </Link>
           )}
         </div>
-      </motion.div>
+      </MotionDiv>
       {layout === 'carousel' ? (
         <div className="relative">
           <div
@@ -124,7 +130,7 @@ export default function BestSellers({
             aria-live="polite"
           >
             {displayedProducts.map((product, index) => (
-              <motion.div
+              <MotionDiv
                 key={product.slug}
                 className="min-w-[240px] max-w-[320px] basis-[80%] snap-start flex-shrink-0 sm:basis-[45%] lg:basis-[28%] xl:basis-[22%]"
                 initial={{ opacity: 0, y: 20 }}
@@ -139,7 +145,7 @@ export default function BestSellers({
                     (showBestSellerHighlight && product.bestSeller ? 'Best Seller' : undefined)
                   }
                 />
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
           <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-between px-1">
@@ -170,7 +176,7 @@ export default function BestSellers({
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {displayedProducts.map((product, index) => (
-            <motion.div
+            <MotionDiv
               key={product.slug}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -184,7 +190,7 @@ export default function BestSellers({
                   (showBestSellerHighlight && product.bestSeller ? 'Best Seller' : undefined)
                 }
               />
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       )}
