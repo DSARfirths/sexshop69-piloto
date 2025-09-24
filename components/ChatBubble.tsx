@@ -62,6 +62,8 @@ function buildSuggestions(ctx: PageContext) {
 export function ChatBubble() {
   const pathname = usePathname()
   const [open, setOpen] = useState(() => getChatAssistantState())
+  const [notificationMessage, setNotificationMessage] = useState<string | null>(null)
+  const [notificationVisible, setNotificationVisible] = useState(false)
 
   useEffect(() => {
     return subscribeToChatAssistant(setOpen)
@@ -69,67 +71,131 @@ export function ChatBubble() {
 
   const ctx = useMemo(() => getCtx(pathname), [pathname])
   const suggestions = useMemo(() => buildSuggestions(ctx), [ctx])
+  const notifications = useMemo(() => {
+    if (ctx.pageType === 'product' && ctx.product) {
+      return [
+        `¡${ctx.product.name} está listo para enviarse!`,
+        'Pregúntame por sensaciones similares para ti.',
+        '¿Quieres que te ayude a armar un pack perfecto?'
+      ]
+    }
+    if (ctx.pageType === 'category' && ctx.category) {
+      return [
+        `Descubre los favoritos de ${ctx.category.replace(/-/g, ' ')}.`,
+        '¿Buscas algo discreto? Te puedo guiar.',
+        'Explora combinaciones irresistibles conmigo.'
+      ]
+    }
+    return [
+      'Te muestro lo más deseado del momento.',
+      'Pídeme ideas para sorprender esta noche.',
+      'Estoy lista para sugerirte algo único.'
+    ]
+  }, [ctx])
+
+  useEffect(() => {
+    if (!notifications.length || open) {
+      setNotificationVisible(false)
+      return
+    }
+
+    let index = 0
+    let hideTimeout: ReturnType<typeof setTimeout> | undefined
+
+    const showNotification = () => {
+      setNotificationMessage(notifications[index])
+      setNotificationVisible(true)
+      hideTimeout = setTimeout(() => {
+        setNotificationVisible(false)
+      }, 4000)
+      index = (index + 1) % notifications.length
+    }
+
+    const initialTimeout = setTimeout(showNotification, 2000)
+    const cycleInterval = setInterval(showNotification, 10000)
+
+    return () => {
+      clearTimeout(initialTimeout)
+      clearInterval(cycleInterval)
+      if (hideTimeout) clearTimeout(hideTimeout)
+    }
+  }, [notifications, open])
 
   return (
     <div className="pointer-events-none fixed right-4 bottom-4 z-[70] flex flex-col items-end gap-3">
-      {open && (
-        <div className="pointer-events-auto w-[min(22rem,calc(100vw-2rem))] rounded-3xl border border-fuchsia-500/40 bg-neutral-950/85 p-5 text-neutral-100 shadow-[0_28px_80px_-20px_rgba(255,0,140,0.6)] backdrop-blur-xl">
-          <div className="flex items-start gap-3">
-            <span className="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-fuchsia-500/20 text-fuchsia-100">
-              <MessageCircle className="h-5 w-5" aria-hidden />
-            </span>
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-white">Asesora virtual SexShop69</p>
-              <p className="mt-1 text-xs leading-relaxed text-neutral-200">
-                Estoy aquí para inspirarte con recomendaciones cuidadosas y sugerentes. Elige una propuesta o cuéntame qué te gustaría explorar.
+      <div className="relative flex flex-col items-end gap-3">
+        {notificationMessage && (
+          <div
+            className={`pointer-events-none absolute right-full mr-3 top-1/2 flex min-w-[12rem] -translate-y-1/2 transform rounded-2xl border border-fuchsia-400/40 bg-neutral-950/95 px-4 py-3 text-sm text-fuchsia-100 shadow-[0_18px_45px_-20px_rgba(255,0,140,0.7)] transition-all duration-700 ${
+              notificationVisible ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-0'
+            }`}
+            aria-live="polite"
+            role="status"
+          >
+            {notificationMessage}
+          </div>
+        )}
+
+        {open && (
+          <div className="pointer-events-auto hidden w-[min(22rem,calc(100vw-2rem))] rounded-3xl border border-fuchsia-500/40 bg-neutral-950/85 p-5 text-neutral-100 shadow-[0_28px_80px_-20px_rgba(255,0,140,0.6)] backdrop-blur-xl md:block">
+            <div className="flex items-start gap-3">
+              <span className="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-fuchsia-500/20 text-fuchsia-100">
+                <MessageCircle className="h-5 w-5" aria-hidden />
+              </span>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-white">Asesora virtual SexShop69</p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-200">
+                  Estoy aquí para inspirarte con recomendaciones cuidadosas y sugerentes. Elige una propuesta o cuéntame qué te gustaría explorar.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={closeChatAssistant}
+                className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-white/10 text-neutral-200 transition hover:border-fuchsia-400/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                aria-label="Cerrar asistente"
+              >
+                <X className="h-4 w-4" aria-hidden />
+              </button>
+            </div>
+
+              <ul className="mt-4 space-y-2">
+                {suggestions.map((s, i) => (
+                  <li key={i}>
+                    <a
+                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition hover:border-fuchsia-400/50 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                      href={s.href}
+                    >
+                      <span className="text-left text-neutral-100">{s.label}</span>
+                      <span className="text-xs font-semibold uppercase tracking-[0.15em] text-fuchsia-200/80">Ir</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="mt-4 text-[0.7rem] text-neutral-400">
+                Respuestas confidenciales, siempre con respeto mutuo.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={closeChatAssistant}
-              className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-white/10 text-neutral-200 transition hover:border-fuchsia-400/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
-              aria-label="Cerrar asistente"
-            >
-              <X className="h-4 w-4" aria-hidden />
-            </button>
-          </div>
+        )}
 
-          <ul className="mt-4 space-y-2">
-            {suggestions.map((s, i) => (
-              <li key={i}>
-                <a
-                  className="flex items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition hover:border-fuchsia-400/50 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
-                  href={s.href}
-                >
-                  <span className="text-left text-neutral-100">{s.label}</span>
-                  <span className="text-xs font-semibold uppercase tracking-[0.15em] text-fuchsia-200/80">Ir</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <p className="mt-4 text-[0.7rem] text-neutral-400">
-            Respuestas confidenciales, siempre con respeto mutuo.
-          </p>
-        </div>
-      )}
-
-      <button
-        type="button"
-        onClick={toggleChatAssistant}
-        aria-expanded={open}
-        className="pointer-events-auto inline-flex items-center gap-3 rounded-2xl border border-fuchsia-400/40 bg-neutral-950/90 px-4 py-3 text-left text-fuchsia-100 shadow-xl transition hover:border-fuchsia-300 hover:bg-neutral-900/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-200/80"
-      >
-        <span className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-fuchsia-500/25 text-fuchsia-100">
-          <MessageCircle className="h-4 w-4" aria-hidden />
-        </span>
-        <span className="flex flex-col leading-tight">
-          <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-fuchsia-200/90">
-            ¿Necesitas ayuda? Chatea conmigo
+        <button
+          type="button"
+          onClick={toggleChatAssistant}
+          aria-expanded={open}
+          aria-label={open ? 'Cerrar asistente virtual' : 'Abrir asistente virtual'}
+          className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-fuchsia-400/40 bg-neutral-950/90 text-fuchsia-100 shadow-xl transition hover:border-fuchsia-300 hover:bg-neutral-900/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-200/80 md:h-auto md:w-auto md:gap-3 md:rounded-2xl md:px-4 md:py-3"
+        >
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-fuchsia-500/25 text-fuchsia-100">
+            <MessageCircle className="h-4 w-4" aria-hidden />
           </span>
-          <span className="text-sm font-semibold text-white">Descubre tu placer ideal</span>
-        </span>
-      </button>
+          <span className="sr-only md:not-sr-only md:flex md:flex-col md:leading-tight">
+            <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-fuchsia-200/90">
+              ¿Necesitas ayuda? Chatea conmigo
+            </span>
+            <span className="text-sm font-semibold text-white">Descubre tu placer ideal</span>
+          </span>
+        </button>
+      </div>
     </div>
   )
 }
