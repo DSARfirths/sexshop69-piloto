@@ -100,7 +100,7 @@ export default function BestSellers({
       >
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 id={headingId} className="text-2xl font-semibold text-fuchsia-700">
+            <h2 id={headingId} className="text-2xl font-semibold text-neutral-900">
               {title}
             </h2>
             <p className="text-sm text-neutral-600">{description}</p>

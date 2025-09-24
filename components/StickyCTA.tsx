@@ -14,7 +14,7 @@ type StickyCTAProps = {
 const MotionContainer = motion<{ className?: string; style?: CSSProperties }>('div')
 
 export default function StickyCTA({ price, regularPrice, checkoutHref, whatsappHref }: StickyCTAProps) {
-  const containerClassName = 'fixed inset-x-0 bottom-0 z-50 bg-gradient-to-t from-[rgba(5,0,15,0.95)] via-[rgba(10,0,30,0.8)] to-transparent pb-4 pt-2 md:hidden'
+  const containerClassName = 'fixed inset-x-0 bottom-0 z-50 bg-gradient-to-t from-white/95 via-white/90 to-transparent pb-4 pt-2 md:hidden'
   const containerStyle: CSSProperties = {
     paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)'
   }
@@ -31,13 +31,13 @@ export default function StickyCTA({ price, regularPrice, checkoutHref, whatsappH
       style={containerStyle}
     >
       <div className="mx-auto mb-4 w-full max-w-md px-4">
-        <div className="rounded-3xl border border-night-border bg-night-surface/95 p-4 text-night-foreground shadow-neon backdrop-blur">
+        <div className="rounded-3xl border border-neutral-200 bg-white p-4 text-neutral-900 shadow-lg backdrop-blur">
           <div className="flex items-baseline justify-between">
-            <span className="text-xs uppercase tracking-wide text-night-muted">Total estimado</span>
-            <span className="flex items-baseline gap-2 text-lg font-semibold text-white">
+            <span className="text-xs uppercase tracking-wide text-neutral-600">Total estimado</span>
+            <span className="flex items-baseline gap-2 text-lg font-semibold text-neutral-900">
               <span>S/ {displayPrice}</span>
               {formattedRegularPrice && (
-                <span className="text-sm font-medium text-night-muted line-through">S/ {formattedRegularPrice}</span>
+                <span className="text-sm font-medium text-neutral-500 line-through">S/ {formattedRegularPrice}</span>
               )}
             </span>
           </div>
@@ -53,10 +53,10 @@ export default function StickyCTA({ price, regularPrice, checkoutHref, whatsappH
               href={whatsappHref}
               target="_blank"
               rel="noreferrer"
-              className="group inline-flex flex-col items-center justify-center gap-1 rounded-2xl border border-night-border bg-night-surface px-4 py-3 text-center text-night-foreground shadow-neon-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-night-border-strong hover:shadow-neon focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+              className="group inline-flex flex-col items-center justify-center gap-1 rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-center text-neutral-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-400 hover:shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
             >
               <span className="text-sm font-semibold">WhatsApp 24/7</span>
-              <span className="text-[11px] text-night-muted">Respuesta inmediata</span>
+              <span className="text-[11px] text-neutral-600">Respuesta inmediata</span>
             </a>
           </div>
         </div>

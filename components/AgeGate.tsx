@@ -8,10 +8,10 @@ export function AgeGate() {
   }, [])
   if (!show) return null
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[color:rgba(3,0,15,0.82)] p-6 backdrop-blur-xl">
-      <div className="max-w-md rounded-2xl border border-night-border bg-night-surface-strong/95 p-6 text-center text-night-foreground shadow-neon">
-        <h2 className="text-xl font-semibold text-white drop-shadow-neon">Contenido para mayores de 18 años</h2>
-        <p className="mt-2 text-sm text-night-muted">Al continuar confirma ser mayor de edad.</p>
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-white/80 p-6 backdrop-blur-xl">
+      <div className="max-w-md rounded-2xl border border-neutral-200 bg-white p-6 text-center text-neutral-900 shadow-xl">
+        <h2 className="text-xl font-semibold text-neutral-900">Contenido para mayores de 18 años</h2>
+        <p className="mt-2 text-sm text-neutral-600">Al continuar confirma ser mayor de edad.</p>
         <div className="mt-5 flex justify-center gap-3">
           <button
             onClick={() => { document.cookie = 'age_ok=1; path=/; max-age=31536000'; setShow(false) }}
@@ -21,12 +21,12 @@ export function AgeGate() {
           </button>
           <a
             href="https://www.google.com"
-            className="rounded-xl border border-night-border px-5 py-2 text-sm font-semibold text-night-foreground/80 transition hover:border-night-border-strong hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+            className="rounded-xl border border-neutral-300 px-5 py-2 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
           >
             Salir
           </a>
         </div>
-        <p className="mt-4 text-[11px] text-night-subtle">El robot de Google puede rastrear el contenido para evaluación de políticas.</p>
+        <p className="mt-4 text-[11px] text-neutral-500">El robot de Google puede rastrear el contenido para evaluación de políticas.</p>
       </div>
     </div>
   )

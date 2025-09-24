@@ -150,8 +150,8 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
           </div>
           <div className="mt-3 space-y-2">
             <div className="line-clamp-2 font-medium text-neutral-900">{p.name}</div>
-            <div className="flex items-baseline gap-2 text-neutral-900">
-              <span className="font-semibold">S/ {displayPrice}</span>
+            <div className="flex items-baseline gap-2">
+              <span className="font-semibold text-fuchsia-600">S/ {displayPrice}</span>
               {hasSalePrice && (
                 <span className="text-sm font-medium text-neutral-500 line-through">S/ {regularPrice}</span>
               )}
