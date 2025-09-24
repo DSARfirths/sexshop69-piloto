@@ -30,7 +30,7 @@ export const heroCarouselSlides: HeroSlide[] = [
       'Accesorios conectados y aromas inmersivos que encienden el juego previo y amplifican el placer compartido.',
     primaryCta: { href: '/categoria/pareja', label: 'Ver sets para parejas' },
     secondaryCta: { href: '/experiencias/guiadas', label: 'Descubrir experiencias guiadas' },
-    image: '/hero/parejas-curiosas-neon.webp'
+    image: 'public/landing/hero/parejas-curiosas-neon.webp'
   },
   {
     id: 'autocuidado-vibrante',
@@ -40,7 +40,7 @@ export const heroCarouselSlides: HeroSlide[] = [
       'Vibradores inteligentes, aceites sensoriales y playlists binaurales listos para elevar tu energía personal.',
     primaryCta: { href: '/categoria/bienestar', label: 'Explorar autocuidado futurista' },
     secondaryCta: { href: '/club-vibes', label: 'Unirme al Club Vibes' },
-    image: 'public/hero/autocuidado.webp'
+    image: 'public/landing/hero/autocuidado.webp'
   },
   {
     id: 'juguetes-anales-premium',
@@ -50,7 +50,7 @@ export const heroCarouselSlides: HeroSlide[] = [
       'Diseños ergonómicos en silicona médica y acabados cromados para explorar con seguridad, lujo y control total.',
     primaryCta: { href: '/categoria/accesorios', label: 'Ver selección premium' },
     secondaryCta: { href: '/blog/guia-anal', label: 'Leer guía de uso experto' },
-    image: 'public/hero/juguetes-anales.webp'
+    image: 'public/landing/hero/juguetes-anales.webp'
   },
   {
     id: 'noches-electricas',
@@ -60,7 +60,7 @@ export const heroCarouselSlides: HeroSlide[] = [
       'Atuendos lumínicos, cueros suaves y accesorios modulables para construir fantasías futuristas que brillan en la oscuridad.',
     primaryCta: { href: '/categoria/fetish', label: 'Descubrir lencería glow' },
     secondaryCta: { href: '/rituales/nocturnos', label: 'Diseñar mi ritual nocturno' },
-    image: 'public/hero/noches-electricas.webp'
+    image: 'public/landing/hero/noches-electricas.webp'
   }
 ]
 

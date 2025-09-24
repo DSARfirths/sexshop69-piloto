@@ -127,7 +127,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
             onTouchMove: handleTouchMove
           } as unknown as HTMLMotionProps<'a'>)}
         >
-          <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100 p-0 sm:p-4">
+          <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100 p-2">
             <div className="relative h-full w-full overflow-hidden rounded-lg">
               {displayBadge && (
                 <div className="absolute left-3 top-3 inline-flex items-center rounded-full bg-fuchsia-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow">
