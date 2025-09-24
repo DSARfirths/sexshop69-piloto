@@ -2,7 +2,7 @@ import { PackageCheck, ShieldCheck, LockKeyhole } from 'lucide-react'
 import Link from 'next/link'
 import Hero from '@/components/Hero'
 import { allProducts, getBestSellers, getNewArrivals, getOffers } from '@/lib/products'
-import CategoryCarousel, { CategoryCard } from '@/components/home/CategoryCarousel'
+import { CategoryCard } from '@/components/home/CategoryCarousel'
 import BestSellers from '@/components/home/BestSellers'
 import TrustBadgesStrip from '@/components/home/TrustBadgesStrip'
 import HeroCarousel from '@/components/home/HeroCarousel'
@@ -11,8 +11,6 @@ import InspirationalBanner from '@/components/home/InspirationalBanner'
 import categoriesData from '@/data/categories.json'
 
 type AvailableProduct = ReturnType<typeof allProducts>[number]
-
-const featuredCategories = ['bienestar', 'lenceria', 'kits'] as const
 
 type CategoryDefinition = {
   slug: string
@@ -47,8 +45,6 @@ const PREMIUM_PRODUCT_SLUGS = [
   'xtreme-x30-britanico-original'
 ] as const
 
-const HIGHLIGHTED_CATEGORY_LIMIT = 8
-
 export default function Page() {
   const products = allProducts()
   const bestSellers = getBestSellers()
@@ -70,22 +66,11 @@ export default function Page() {
       image: category.image ?? CATEGORY_FALLBACK_IMAGE,
       isSensitive: category.isSensitive || nsfwCategories.has(category.slug)
     }))
-  const featured = availableCategories.filter(category =>
-    (featuredCategories as readonly string[]).includes(category.slug)
-  )
-
-  const carouselSource = featured.length > 0 ? featured : availableCategories
-  const highlightedCategories = carouselSource.slice(0, HIGHLIGHTED_CATEGORY_LIMIT)
-  const hasMoreCategories = availableCategories.length > highlightedCategories.length
-
   const premiumProducts = PREMIUM_PRODUCT_SLUGS.map(slug =>
     products.find(product => product.slug === slug)
   ).filter((product): product is AvailableProduct => Boolean(product))
 
-  const otherCategories = availableCategories.filter(
-    category => !featured.some(featuredCategory => featuredCategory.slug === category.slug)
-  )
-  const normalizedOtherCategories = otherCategories.map(category => ({
+  const normalizedOtherCategories = availableCategories.map(category => ({
     ...category,
     description: category.isSensitive ? 'Contenido sensible (18+)' : 'Explorar con seguridad',
     subtitle: category.isSensitive ? 'Contenido adulto' : 'Bienestar y cuidado'
@@ -105,27 +90,7 @@ export default function Page() {
           />
           <div className="relative z-10 space-y-10">
             <TrustBadgesStrip badges={TRUST_BADGES} />
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-              <div className="space-y-6" id="catalogo">
-                <CategoryCarousel
-                  title="Explora por categoría"
-                  subtitle="Mobile-first con desliz lateral — arrastra para descubrir más."
-                  headingId="explora-por-categoria"
-                  categories={highlightedCategories}
-                />
-                {hasMoreCategories && (
-                  <div className="flex justify-end">
-                    <Link
-                      href="/categorias"
-                      className="inline-flex items-center rounded-full border border-fuchsia-500/60 bg-black/60 px-5 py-2 text-sm font-semibold text-white shadow-neon-sm transition hover:-translate-y-0.5 hover:shadow-neon focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
-                    >
-                      Ver más categorías
-                    </Link>
-                  </div>
-                )}
-              </div>
-              <HeroCarousel className="h-full border border-night-border/60 bg-black/40 px-4 py-6 shadow-neon-sm backdrop-blur" />
-            </div>
+            <HeroCarousel className="h-full border border-night-border/60 bg-black/40 px-4 py-6 shadow-neon-sm backdrop-blur" />
           </div>
         </section>
 
@@ -141,33 +106,6 @@ export default function Page() {
           <div className="relative z-10">
             <FeaturedProducts products={premiumProducts} headingId="productos-destacados" />
           </div>
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-2">
-          <InspirationalBanner
-            eyebrow="Editorial 69"
-            title="Sensualidad consciente"
-            description="Eleva tus rituales íntimos con materiales hipoalergénicos, cosmética vegana y guías diseñadas por terapeutas certificados."
-            image="/landing/vibrador-fondo-negro.webp"
-            imageAlt="Juguetes íntimos sobre fondo negro con destellos fucsias"
-            ctaHref="/colecciones/wellness"
-            ctaLabel="Explorar rituales"
-            tone="fuchsia"
-            imageAspect="portrait"
-            imagePriority
-          />
-          <InspirationalBanner
-            align="right"
-            eyebrow="Historias reales"
-            title="Parejas que experimentan"
-            description="Descubre testimonios curados y sesiones guiadas para sincronizar ritmos, explorar comunicación íntima y potenciar el deseo mutuo."
-            image="/landing/chico-mirando-anillo.webp"
-            imageAlt="Persona admirando un anillo vibrador en tonos morados"
-            ctaHref="/blog/parejas"
-            ctaLabel="Leer historias"
-            tone="night"
-            imageAspect="landscape"
-          />
         </div>
 
         <div className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-[#120015]/90 px-6 py-12 sm:px-10 lg:px-16">
@@ -227,7 +165,10 @@ export default function Page() {
         )}
 
         {normalizedOtherCategories.length > 0 && (
-          <section className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-gradient-to-br from-[#08000c] via-[#1f0020] to-[#2f0230] px-6 py-12 sm:px-10 lg:px-16">
+          <section
+            id="catalogo"
+            className="relative overflow-hidden rounded-[3rem] border border-night-border/60 bg-gradient-to-br from-[#08000c] via-[#1f0020] to-[#2f0230] px-6 py-12 sm:px-10 lg:px-16"
+          >
             <div
               className="pointer-events-none absolute inset-y-0 right-[-14%] hidden w-[46%] bg-[radial-gradient(circle_at_center,_rgba(244,114,182,0.25),_transparent_60%)] blur-3xl lg:block"
               aria-hidden
@@ -239,14 +180,61 @@ export default function Page() {
               <p className="max-w-2xl text-sm text-night-muted">
                 Recorre las categorías sensibles y temáticas creadas para diferentes niveles de experiencia.
               </p>
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {normalizedOtherCategories.map(category => (
-                  <CategoryCard key={category.slug} category={category} />
-                ))}
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-16 bg-gradient-to-r from-[#08000c] to-transparent sm:block" aria-hidden />
+                <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-16 bg-gradient-to-l from-[#2f0230] to-transparent sm:block" aria-hidden />
+                <div className="overflow-hidden">
+                  <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {normalizedOtherCategories.map(category => (
+                      <div key={category.slug} className="snap-start">
+                        <div className="min-w-[220px] max-w-[240px] sm:min-w-[240px] sm:max-w-[260px]">
+                          <CategoryCard category={category} />
+                        </div>
+                      </div>
+                    ))}
+                    <div className="snap-start">
+                      <div className="min-w-[220px] max-w-[240px] sm:min-w-[240px] sm:max-w-[260px]">
+                        <Link
+                          href="/categorias"
+                          className="group flex h-full min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-night-border bg-night-surface/90 text-center font-semibold uppercase tracking-[0.08em] text-night-foreground/80 shadow-neon-sm transition hover:-translate-y-1 hover:text-white"
+                        >
+                          Ver todas las categorías
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
         )}
+
+        <div className="grid gap-8 lg:grid-cols-2">
+          <InspirationalBanner
+            eyebrow="Editorial 69"
+            title="Sensualidad consciente"
+            description="Eleva tus rituales íntimos con materiales hipoalergénicos, cosmética vegana y guías diseñadas por terapeutas certificados."
+            image="/landing/vibrador-fondo-negro.webp"
+            imageAlt="Juguetes íntimos sobre fondo negro con destellos fucsias"
+            ctaHref="/colecciones/wellness"
+            ctaLabel="Explorar rituales"
+            tone="fuchsia"
+            imageAspect="portrait"
+            imagePriority
+          />
+          <InspirationalBanner
+            align="right"
+            eyebrow="Historias reales"
+            title="Parejas que experimentan"
+            description="Descubre testimonios curados y sesiones guiadas para sincronizar ritmos, explorar comunicación íntima y potenciar el deseo mutuo."
+            image="/landing/chico-mirando-anillo.webp"
+            imageAlt="Persona admirando un anillo vibrador en tonos morados"
+            ctaHref="/blog/parejas"
+            ctaLabel="Leer historias"
+            tone="night"
+            imageAspect="landscape"
+          />
+        </div>
       </div>
     </>
   )
