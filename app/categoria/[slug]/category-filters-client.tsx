@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import FilterSheet from '@/components/category/FilterSheet'
 import ProductCard from '@/components/ProductCard'
@@ -24,6 +24,8 @@ const FACET_CONFIG: readonly FacetConfig[] = [
   { type: 'feature', param: 'tag_feature' },
   { type: 'material', param: 'tag_material' }
 ]
+
+const FACET_TYPE_SET = new Set<TagType>(FACET_CONFIG.map(({ type }) => type))
 
 function parseFacetSearchParams(params: URLSearchParams): Filter {
   const facets: Filter = {}
@@ -61,6 +63,30 @@ export default function CategoryFiltersClient() {
 
   const products = useMemo(() => byCategory(slug), [slug])
   const options = useMemo(() => collectCatalogOptions(products), [products])
+  const facetOptions = useMemo(() => {
+    const sets = new Map<TagType, Set<string>>()
+    products.forEach(product => {
+      (product.tags ?? []).forEach(tag => {
+        if (!FACET_TYPE_SET.has(tag.type)) return
+        const existing = sets.get(tag.type)
+        if (existing) {
+          existing.add(tag.value)
+        } else {
+          sets.set(tag.type, new Set([tag.value]))
+        }
+      })
+    })
+
+    const sortFn = (a: string, b: string) => a.localeCompare(b, 'es')
+    const facets: Filter = {}
+    FACET_CONFIG.forEach(({ type }) => {
+      const values = sets.get(type)
+      if (values && values.size > 0) {
+        facets[type] = Array.from(values).sort(sortFn)
+      }
+    })
+    return facets
+  }, [products])
 
   const [filters, setFilters] = useState<CategoryFilterState>(() =>
     parseCatalogSearchParams(new URLSearchParams(searchParams))
@@ -68,6 +94,7 @@ export default function CategoryFiltersClient() {
   const [selectedFacets, setSelectedFacets] = useState<Filter>(() =>
     parseFacetSearchParams(new URLSearchParams(searchParams))
   )
+  const facetAnalyticsSignature = useRef<string | null>(null)
 
   useEffect(() => {
     setFilters(parseCatalogSearchParams(new URLSearchParams(searchParams)))
@@ -85,6 +112,35 @@ export default function CategoryFiltersClient() {
     if (next === current) return
     router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false })
   }, [filters, pathname, router, searchParams, selectedFacets])
+
+  useEffect(() => {
+    if (!slug) return
+    const normalizedFacets = FACET_CONFIG.reduce((acc, { type }) => {
+      const values = selectedFacets[type]
+      if (values && values.length > 0) {
+        acc[type] = [...values].sort((a, b) => a.localeCompare(b, 'es'))
+      }
+      return acc
+    }, {} as Filter)
+    const signature = JSON.stringify(normalizedFacets)
+    if (signature === facetAnalyticsSignature.current) return
+    facetAnalyticsSignature.current = signature
+    const activeEntries = Object.entries(normalizedFacets)
+    if (activeEntries.length === 0) return
+    if (typeof window === 'undefined') return
+    const gtag = window.gtag
+    if (typeof gtag !== 'function') return
+    const totalSelected = activeEntries.reduce((total, [, values]) => total + values.length, 0)
+    gtag('event', 'filter_applied', {
+      category_slug: slug,
+      filter_persona: normalizedFacets.persona?.join('|'),
+      filter_uso: normalizedFacets.uso?.join('|'),
+      filter_feature: normalizedFacets.feature?.join('|'),
+      filter_material: normalizedFacets.material?.join('|'),
+      filter_total_selected: totalSelected,
+      filter_facets: JSON.stringify(normalizedFacets)
+    })
+  }, [selectedFacets, slug])
 
   const filteredProducts = useMemo(() => {
     const legacyFiltered = filterCatalogProducts(products, filters)
@@ -115,6 +171,22 @@ export default function CategoryFiltersClient() {
     },
     []
   )
+
+  const toggleFacetValue = useCallback((type: TagType, value: string) => {
+    setSelectedFacets(prev => {
+      const current = prev[type] ?? []
+      const exists = current.includes(value)
+      if (exists) {
+        const nextValues = current.filter(item => item !== value)
+        if (nextValues.length > 0) {
+          return { ...prev, [type]: nextValues }
+        }
+        const { [type]: _removed, ...rest } = prev
+        return rest
+      }
+      return { ...prev, [type]: [...current, value] }
+    })
+  }, [])
 
   const setDimension = useCallback((key: 'longitud' | 'diametro', value: string | null) => {
     setFilters((prev) => ({ ...prev, [key]: value }))
@@ -178,6 +250,9 @@ export default function CategoryFiltersClient() {
                 onSelectLongitud={(value) => setDimension('longitud', value)}
                 onSelectDiametro={(value) => setDimension('diametro', value)}
                 onReset={resetFilters}
+                facetOptions={facetOptions}
+                selectedFacets={selectedFacets}
+                onToggleFacet={toggleFacetValue}
               />
             </div>
           </div>
