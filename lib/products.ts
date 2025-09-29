@@ -2,7 +2,7 @@ import sanitizeHtml from 'sanitize-html'
 
 import productsData from '@/data/products.json'
 import categoriesData from '@/data/categories.json'
-import { enrichTags, parseTagStrings, type Tag } from './tagging'
+import { enrichTags, parseTagStrings, type Tag, type TagType } from './tagging'
 export type { Tag } from './tagging'
 
 export type Specs = Record<string, string | number | boolean>
@@ -359,4 +359,37 @@ export function getNewArrivals(withinDays = 30): Product[] {
 
 export function getBestSellers(): Product[] {
   return catalog.filter(product => Boolean(product.bestSeller))
+}
+
+export type Filter = Partial<Record<TagType, readonly string[]>>
+
+export function hasAny<T>(
+  source: readonly T[] | null | undefined,
+  candidates: readonly T[] | null | undefined
+): boolean {
+  if (!source || source.length === 0) return false
+  if (!candidates || candidates.length === 0) return false
+  const candidateSet = new Set(candidates)
+  return source.some(value => candidateSet.has(value))
+}
+
+export function filterProducts(products: readonly Product[], filters: Filter): Product[] {
+  const activeFilters = (Object.entries(filters) as Array<[TagType, readonly string[]]>).filter(
+    ([, values]) => Array.isArray(values) && values.length > 0
+  )
+
+  if (activeFilters.length === 0) {
+    return [...products]
+  }
+
+  return products.filter(product => {
+    const tagsByType = (product.tags ?? []).reduce((acc, tag) => {
+      const next = acc[tag.type] ?? []
+      next.push(tag.value)
+      acc[tag.type] = next
+      return acc
+    }, {} as Record<TagType, string[]>)
+
+    return activeFilters.every(([type, values]) => hasAny(tagsByType[type] ?? [], values))
+  })
 }

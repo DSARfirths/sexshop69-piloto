@@ -13,7 +13,44 @@ import {
   parseCatalogSearchParams,
   type CatalogFilterOptions
 } from '@/lib/catalog-filters'
-import { byCategory } from '@/lib/products'
+import { byCategory, filterProducts, type Filter } from '@/lib/products'
+import type { TagType } from '@/lib/tagging'
+
+type FacetConfig = { type: TagType; param: string }
+
+const FACET_CONFIG: readonly FacetConfig[] = [
+  { type: 'persona', param: 'tag_persona' },
+  { type: 'uso', param: 'tag_uso' },
+  { type: 'feature', param: 'tag_feature' },
+  { type: 'material', param: 'tag_material' }
+]
+
+function parseFacetSearchParams(params: URLSearchParams): Filter {
+  const facets: Filter = {}
+  FACET_CONFIG.forEach(({ type, param }) => {
+    const values = params.getAll(param).map(value => value.trim()).filter(Boolean)
+    if (values.length > 0) {
+      facets[type] = Array.from(new Set(values))
+    }
+  })
+  return facets
+}
+
+function appendFacetsToSearchParams(params: URLSearchParams, facets: Filter): URLSearchParams {
+  const next = new URLSearchParams(params)
+  FACET_CONFIG.forEach(({ type, param }) => {
+    next.delete(param)
+    const values = facets[type]
+    if (!values || values.length === 0) return
+    const uniqueValues = Array.from(new Set(values)).sort((a, b) => a.localeCompare(b, 'es'))
+    uniqueValues.forEach(value => {
+      if (value) {
+        next.append(param, value)
+      }
+    })
+  })
+  return next
+}
 
 export default function CategoryFiltersClient() {
   const { slug } = useParams<{ slug: string }>()
@@ -28,20 +65,31 @@ export default function CategoryFiltersClient() {
   const [filters, setFilters] = useState<CategoryFilterState>(() =>
     parseCatalogSearchParams(new URLSearchParams(searchParams))
   )
+  const [selectedFacets, setSelectedFacets] = useState<Filter>(() =>
+    parseFacetSearchParams(new URLSearchParams(searchParams))
+  )
 
   useEffect(() => {
     setFilters(parseCatalogSearchParams(new URLSearchParams(searchParams)))
   }, [searchParams])
 
   useEffect(() => {
+    setSelectedFacets(parseFacetSearchParams(new URLSearchParams(searchParams)))
+  }, [searchParams])
+
+  useEffect(() => {
     const params = buildCatalogSearchParams(filters)
-    const next = params.toString()
+    const paramsWithFacets = appendFacetsToSearchParams(params, selectedFacets)
+    const next = paramsWithFacets.toString()
     const current = searchParams.toString()
     if (next === current) return
     router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false })
-  }, [filters, pathname, router, searchParams])
+  }, [filters, pathname, router, searchParams, selectedFacets])
 
-  const filteredProducts = useMemo(() => filterCatalogProducts(products, filters), [products, filters])
+  const filteredProducts = useMemo(() => {
+    const legacyFiltered = filterCatalogProducts(products, filters)
+    return filterProducts(legacyFiltered, selectedFacets)
+  }, [filters, products, selectedFacets])
 
   useEffect(() => {
     if (!slug) return
@@ -74,6 +122,7 @@ export default function CategoryFiltersClient() {
 
   const resetFilters = useCallback(() => {
     setFilters({ query: '', brands: [], materials: [], longitud: null, diametro: null })
+    setSelectedFacets({})
   }, [])
 
   const onQueryChange = useCallback((value: string) => {
