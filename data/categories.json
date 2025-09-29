@@ -8,6 +8,10 @@
     "isSensitive": true,
     "children": [
       {
+        "slug": "clasicos",
+        "label": "Clásicos"
+      },
+      {
         "slug": "clitorales",
         "label": "Clitorales"
       },
@@ -16,28 +20,16 @@
         "label": "Rabbits"
       },
       {
-        "slug": "punto-g",
-        "label": "Punto G"
+        "slug": "anales",
+        "label": "Anales"
       },
       {
-        "slug": "inalambricos",
-        "label": "Inalámbricos"
-      },
-      {
-        "slug": "jelly",
-        "label": "Jelly"
-      },
-      {
-        "slug": "cyberskin",
-        "label": "Cyberskin"
+        "slug": "gelatinosos",
+        "label": "Gelatinosos"
       },
       {
         "slug": "extremo",
         "label": "Extremo"
-      },
-      {
-        "slug": "piel",
-        "label": "Piel"
       }
     ]
   },
@@ -50,12 +42,16 @@
     "isSensitive": true,
     "children": [
       {
+        "slug": "clasicos",
+        "label": "Clásicos"
+      },
+      {
         "slug": "dobles",
         "label": "Dobles"
       },
       {
-        "slug": "realistas-extremos",
-        "label": "Realistas/Extremos"
+        "slug": "extremos",
+        "label": "Extremos"
       }
     ]
   },
@@ -68,28 +64,22 @@
     "isSensitive": true,
     "children": [
       {
-        "slug": "masculinos",
-        "label": "Masculinos"
-      },
-      {
         "slug": "fleshlight",
         "label": "Fleshlight"
+      },
+      {
+        "slug": "mega",
+        "label": "Mega"
       }
     ]
   },
   {
-    "slug": "arneses",
+    "slug": "arneses-protesis",
     "label": "Arneses y Prótesis",
     "image": "/landing/categories/arneses.webp",
     "tagline": "Contenido sensible 18+",
     "subtitle": "Versatilidad y soporte para cada fantasía.",
-    "isSensitive": true,
-    "children": [
-      {
-        "slug": "protesis",
-        "label": "Prótesis"
-      }
-    ]
+    "isSensitive": true
   },
   {
     "slug": "muñecas",
@@ -104,123 +94,99 @@
         "label": "Inflables"
       },
       {
-        "slug": "ultimate-fantasy",
-        "label": "Ultimate Fantasy"
+        "slug": "humanas",
+        "label": "Humanas (Realistas)"
       }
     ]
   },
   {
-    "slug": "fetish",
-    "label": "Fetish & Bondage",
+    "slug": "sadobondage-fetiches",
+    "label": "Fetiches y Sado Bondage",
     "image": "/landing/categories/fetish-and-bondage.webp",
     "tagline": "Contenido sensible 18+",
     "subtitle": "Accesorios para juego seguro y consensuado.",
     "isSensitive": true,
     "children": [
       {
-        "slug": "bondage",
-        "label": "Bondage"
+        "slug": "sadobondage",
+        "label": "Sado Bondage"
+      },
+      {
+        "slug": "fetiches",
+        "label": "Fetiches"
       }
     ]
   },
   {
-    "slug": "pareja",
-    "label": "Para Pareja",
-    "image": "/landing/categories/pareja.webp",
+    "slug": "fundas",
+    "label": "Fundas para Pene",
+    "image": "/landing/categories/fundas.webp",
     "tagline": "Contenido sensible 18+",
-    "subtitle": "Compartan nuevas experiencias juntxs.",
-    "isSensitive": true,
-    "children": [
-      {
-        "slug": "anillos",
-        "label": "Anillos"
-      }
-    ]
+    "subtitle": "Aumenta el placer y la duración de tus encuentros íntimos.",
+    "isSensitive": true
   },
   {
     "slug": "lubricantes",
     "label": "Lubricantes y Aceites",
-    "image": "/landing/categories/feromonas.webp",
+    "image": "/landing/categories/lubricantes.webp",
     "tagline": "Explorar con seguridad",
     "subtitle": "Texturas cuidadosas para acompañar cada encuentro.",
-    "isSensitive": false,
-    "children": [
-      {
-        "slug": "sabores",
-        "label": "Sabores"
-      },
-      {
-        "slug": "aceites",
-        "label": "Aceites/masajes"
-      }
-    ]
+    "isSensitive": true
   },
   {
-    "slug": "bienestar",
-    "label": "Bienestar / Salud sexual",
-    "image": "/landing/categories/bienestar.webp",
+    "slug": "anillos",
+    "label": "Anillos",
+    "image": "/landing/categories/anillos.webp",
+    "tagline": "Vibración para firmeza y resistencia",
+    "subtitle": "Llega a la profundidad del orgasmo con nuestros anillos.",
+    "isSensitive": true
+  },
+  {
+    "slug": "plugs",
+    "label": "Plugs Anales",
+    "image": "/landing/categories/plugs.webp",
+    "tagline": "Nuevas sensaciones y exploración",
+    "subtitle": "Descubre el placer anal con seguridad y comodidad.",
+    "isSensitive": true
+  },
+  {
+    "slug": "bombas-succionadoras",
+    "label": "Bombas de Succión",
+    "image": "/landing/categories/bombas.webp",
+    "tagline": "Bombas de Succión",
+    "subtitle": "Ejercita y aumenta la firmeza de tu pene.",
+    "isSensitive": true
+  },
+  {
+    "slug": "bolaschinas",
+    "label": "Bolas Chinas",
+    "image": "/landing/categories/bolasanales.webp",
     "tagline": "Explorar con seguridad",
-    "subtitle": "Productos que cuidan tu cuerpo y energía.",
-    "isSensitive": false,
-    "children": [
-      {
-        "slug": "afrodisiacos",
-        "label": "Afrodisíacos"
-      },
-      {
-        "slug": "potenciadores",
-        "label": "Potenciadores"
-      },
-      {
-        "slug": "bombas",
-        "label": "Bombas de succión"
-      },
-      {
-        "slug": "higiene-intima",
-        "label": "Higiene íntima"
-      },
-      {
-        "slug": "suplementos",
-        "label": "Suplementos"
-      }
-    ]
-  },
-  {
-    "slug": "accesorios",
-    "label": "Accesorios",
-    "image": "/landing/categories/accesorios.webp",
-    "tagline": "Contenido sensible 18+",
-    "subtitle": "Complementos creativos para tu colección.",
-    "isSensitive": true,
-    "children": [
-      {
-        "slug": "fundas-penianas",
-        "label": "Fundas penianas"
-      },
-      {
-        "slug": "bolas-chinas",
-        "label": "Bolas chinas/Geisha"
-      },
-      {
-        "slug": "varios",
-        "label": "Varios"
-      }
-    ]
+    "subtitle": "Formas y texturas para explorar sin límites.",
+    "isSensitive": true
   },
   {
     "slug": "feromonas",
-    "label": "Feromonas",
+    "label": "Feromonas Excitantes",
     "image": "/landing/categories/feromonas.webp",
-    "tagline": "Explorar con seguridad",
+    "tagline": "Ve al siguiente nivel de excitación y sensualidad.",
     "subtitle": "Aromas y concentrados para despertar sentidos.",
-    "isSensitive": false
+    "isSensitive": true
   },
   {
-    "slug": "ofertas",
-    "label": "Ofertas",
-    "image": "/landing/categories/ofertas.webp",
-    "tagline": "Explorar con seguridad",
-    "subtitle": "Descuentos exclusivos para animarte a probar.",
-    "isSensitive": false
+    "slug": "desarrolladores",
+    "label": "Desarrolladores",
+    "image": "/landing/categories/desarrolladores.webp",
+    "tagline": " Potencia y confianza en cada experiencia.",
+    "subtitle": "Para una mayor firmeza y tamaño.",
+    "isSensitive": true
+  },
+  {
+    "slug": "retardantes",
+    "label": "Retardantes",
+    "image": "/landing/categories/retardantes.webp",
+    "tagline": " Disfruta más tiempo de placer.",
+    "subtitle": "Gana resistencia y controla el momento cumbre.",
+    "isSensitive": true
   }
 ]
