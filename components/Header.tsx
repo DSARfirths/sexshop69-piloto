@@ -3,26 +3,15 @@
 import Link from 'next/link'
 import {
   ComponentType,
-  FocusEvent,
   PropsWithChildren,
   useEffect,
-  useRef,
   useState,
 } from 'react'
 import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
-import {
-  ChevronDown,
-  ChevronRight,
-  Menu,
-  MessageCircle,
-  Search,
-  ShoppingBag,
-  Sparkles,
-  X,
-} from 'lucide-react'
+import { Menu, MessageCircle, Search, ShoppingBag, X } from 'lucide-react'
 
 import SearchOverlay from './header/SearchOverlay'
-import categoriesData from '@/data/categories.json'
+import MegaMenu from './nav/MegaMenu'
 import { openChatAssistant } from '@/lib/chat-assistant'
 
 const MotionWrapper: any = motion.div
@@ -32,31 +21,16 @@ const MotionMobileOverlay = motion.div as ComponentType<
 const MotionButton: any = motion.button
 const MotionAside: any = motion.aside
 
-type Category = {
-  slug: string
-  label: string
-  children?: {
-    slug: string
-    label: string
-  }[]
-}
-
 const primaryLinks = [
   { href: '/novedades', label: 'Novedades' },
   { href: '/ofertas', label: 'Ofertas' },
   { href: '/blog', label: 'Blog/Guías' },
 ]
 
-const categoryIcons = [Sparkles, ShoppingBag, MessageCircle]
-
-const categories = categoriesData as Category[]
-
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [desktopCategoriesOpen, setDesktopCategoriesOpen] = useState(false)
-  const desktopCloseTimeout = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,14 +45,6 @@ export default function Header() {
     }
   }, [])
 
-  useEffect(() => {
-    return () => {
-      if (desktopCloseTimeout.current) {
-        clearTimeout(desktopCloseTimeout.current)
-      }
-    }
-  }, [])
-
   const toggleMenu = () => setMenuOpen((prev) => !prev)
   const openSearch = () => {
     setSearchOpen(true)
@@ -87,50 +53,6 @@ export default function Header() {
 
   const openChat = () => {
     openChatAssistant()
-  }
-
-  const desktopCategories = categories.slice(0, 6)
-  const desktopMenuId = 'desktop-categories-menu'
-
-  const handleMouseEnter = () => {
-    if (desktopCloseTimeout.current) {
-      clearTimeout(desktopCloseTimeout.current)
-      desktopCloseTimeout.current = null
-    }
-    setDesktopCategoriesOpen(true)
-  }
-
-  const handleMouseLeave = () => {
-    if (desktopCloseTimeout.current) {
-      clearTimeout(desktopCloseTimeout.current)
-      desktopCloseTimeout.current = null
-    }
-    desktopCloseTimeout.current = setTimeout(() => {
-      setDesktopCategoriesOpen(false)
-      desktopCloseTimeout.current = null
-    }, 300)
-  }
-
-  const closeDesktopCategories = () => {
-    if (desktopCloseTimeout.current) {
-      clearTimeout(desktopCloseTimeout.current)
-      desktopCloseTimeout.current = null
-    }
-    setDesktopCategoriesOpen(false)
-  }
-
-  const handleDesktopBlur = (event: FocusEvent<HTMLDivElement>) => {
-    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-      closeDesktopCategories()
-    }
-  }
-
-  const toggleDesktopCategories = () => {
-    if (desktopCloseTimeout.current) {
-      clearTimeout(desktopCloseTimeout.current)
-      desktopCloseTimeout.current = null
-    }
-    setDesktopCategoriesOpen((prev) => !prev)
   }
 
   return (
@@ -162,80 +84,7 @@ export default function Header() {
           </Link>
 
           <nav className="hidden items-center gap-2 text-sm font-medium md:flex">
-            <div
-              className="relative"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onFocus={handleMouseEnter}
-              onBlur={handleDesktopBlur}
-              onKeyDown={(event) => {
-                if (event.key === 'Escape') {
-                  closeDesktopCategories()
-                }
-              }}
-            >
-              <button
-                type="button"
-                aria-haspopup="true"
-                aria-expanded={desktopCategoriesOpen}
-                aria-controls={desktopMenuId}
-                onClick={toggleDesktopCategories}
-                className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-brand-primary/90 transition hover:bg-brand-primary/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
-              >
-                <Sparkles className="h-4 w-4" aria-hidden />
-                Categorías
-                <ChevronDown
-                  className={`h-4 w-4 transition ${desktopCategoriesOpen ? 'rotate-180' : ''}`}
-                  aria-hidden
-                />
-              </button>
-
-              <div
-                id={desktopMenuId}
-                className={`absolute left-0 top-full z-10 min-w-[18rem] rounded-2xl border border-brand-primary/30 bg-neutral-950/95 p-4 text-sm text-neutral-100 shadow-2xl ring-1 ring-white/5 transition duration-150 ${
-                  desktopCategoriesOpen
-                    ? 'pointer-events-auto block translate-y-2 opacity-100'
-                    : 'pointer-events-none hidden -translate-y-1 opacity-0'
-                }`}
-              >
-                <ul className="grid grid-cols-1 gap-3">
-                  {desktopCategories.map((category, index) => {
-                    const Icon = categoryIcons[index % categoryIcons.length]
-                    const previewChildren = category.children
-                      ?.slice(0, 2)
-                      .map((child) => child.label)
-                    return (
-                      <li key={category.slug}>
-                        <Link
-                          href={`/categoria/${category.slug}`}
-                          className="flex items-start gap-3 rounded-xl border border-transparent bg-white/5 px-3 py-2 transition hover:border-brand-primary/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
-                        >
-                          <span className="mt-1 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary/20 text-brand-primary">
-                            <Icon className="h-4 w-4" aria-hidden />
-                          </span>
-                          <span className="flex flex-col">
-                            <span className="font-semibold">{category.label}</span>
-                            <span className="text-xs text-neutral-300">
-                              {previewChildren?.length
-                                ? previewChildren.join(' · ')
-                                : 'Explora las subcategorías'}
-                            </span>
-                          </span>
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-                <Link
-                  href="/categorias"
-                  className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-brand-primary/80 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
-                >
-                  Ver todas las categorías
-                  <ChevronRight className="h-4 w-4" aria-hidden />
-                </Link>
-              </div>
-            </div>
-
+            <MegaMenu />
             {primaryLinks.map((link) => (
               <Link
                 key={link.href}
@@ -326,45 +175,7 @@ export default function Header() {
                 <div className="relative flex-1 overflow-hidden">
                   <div className="h-full overflow-y-auto px-4 pb-10">
                     <nav className="space-y-6">
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-wide text-brand-primary/80">Categorías</p>
-                        <ul className="mt-3 space-y-4">
-                          {categories.map((category, index) => {
-                            const Icon = categoryIcons[index % categoryIcons.length]
-                            return (
-                              <li key={category.slug}>
-                                <div className="rounded-xl border border-white/5 bg-white/5 px-3 py-3 text-sm transition hover:border-brand-primary/40 hover:bg-white/10 focus-within:border-brand-primary/40 focus-within:bg-white/10">
-                                  <Link
-                                    href={`/categoria/${category.slug}`}
-                                    onClick={() => setMenuOpen(false)}
-                                    className="flex items-center gap-2 font-semibold text-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
-                                  >
-                                    <Icon className="h-4 w-4 text-brand-primary" aria-hidden />
-                                    {category.label}
-                                  </Link>
-                                  {category.children && category.children.length > 0 && (
-                                    <ul className="mt-2 space-y-1 text-xs text-neutral-200">
-                                      {category.children.map((child) => (
-                                        <li key={child.slug}>
-                                          <Link
-                                            href={`/categoria/${child.slug}`}
-                                            onClick={() => setMenuOpen(false)}
-                                            className="flex items-center justify-between rounded-md px-2 py-1 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/70"
-                                          >
-                                            <span>{child.label}</span>
-                                            <ChevronRight className="h-3.5 w-3.5 text-brand-primary/70" aria-hidden />
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  )}
-                                </div>
-                              </li>
-                            )
-                          })}
-                        </ul>
-                      </div>
-
+                      <MegaMenu variant="mobile" onNavigate={() => setMenuOpen(false)} />
                       <div className="space-y-2">
                         <p className="text-xs font-semibold uppercase tracking-wide text-brand-primary/80">Descubre más</p>
                         {primaryLinks.map((link) => (

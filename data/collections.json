@@ -1,5 +1,50 @@
 [
   {
+    "slug": "para-ella",
+    "name": "Para ella",
+    "headline": "Sensaciones centradas en tu anatomía",
+    "description": "Vibradores, succionadores y accesorios pensados para el placer vulva-clitoral y una exploración segura.",
+    "rule": {
+      "anyOf": {
+        "tags": ["persona:her"]
+      }
+    },
+    "seo": {
+      "title": "Colección para ella — SexShop del Perú 69",
+      "description": "Elige vibradores, succionadores y complementos creados para acompañar tu ritmo y explorar nuevas sensaciones."
+    }
+  },
+  {
+    "slug": "para-el",
+    "name": "Para él",
+    "headline": "Controla el ritmo y potencia la intensidad",
+    "description": "Mangas, anillos y accesorios que potencian la estimulación peneana, con opciones para entrenar resistencia.",
+    "rule": {
+      "anyOf": {
+        "tags": ["persona:him", "uso:pene"]
+      }
+    },
+    "seo": {
+      "title": "Colección para él — SexShop del Perú 69",
+      "description": "Descubre masturbadores realistas, anillos y herramientas para estimular y entrenar el placer masculino."
+    }
+  },
+  {
+    "slug": "para-parejas",
+    "name": "Para parejas",
+    "headline": "Sincroniza el placer y compartan sensaciones",
+    "description": "Juguetes diseñados para disfrutarse en conjunto, con vibraciones, straps y accesorios que despiertan la complicidad.",
+    "rule": {
+      "anyOf": {
+        "tags": ["persona:couples"]
+      }
+    },
+    "seo": {
+      "title": "Colección para parejas — SexShop del Perú 69",
+      "description": "Explora vibradores, arneses y accesorios que se adaptan a juegos en pareja y expanden las posibilidades."
+    }
+  },
+  {
     "slug": "juegos-en-pareja",
     "name": "Juegos en pareja",
     "headline": "Vibraciones para disfrutar juntos",
