@@ -7,6 +7,14 @@ export type Specs = Record<string, string | number | boolean>
 export type ProductAttributeValue = string | number | boolean | null
 export type ProductAttributes = Record<string, ProductAttributeValue>
 
+type TagType = 'persona' | 'uso' | 'feature' | 'material'
+
+export type Tag =
+  | { type: 'persona'; value: string }
+  | { type: 'uso'; value: string }
+  | { type: 'feature'; value: string }
+  | { type: 'material'; value: string }
+
 const PRODUCT_DESCRIPTION_ALLOWED_TAGS = [
   'a',
   'abbr',
@@ -101,7 +109,7 @@ type RawProduct = (typeof productsData)[number] & {
   care?: string[]
   specs?: Specs
   related?: string[]
-  tags?: string[]
+  tags?: ReadonlyArray<string | null | undefined>
   badge?: string | null
   bestSeller?: boolean
   nsfw?: boolean
@@ -120,6 +128,59 @@ type RawProduct = (typeof productsData)[number] & {
 }
 type RawCategory = (typeof categoriesData)[number]
 
+const TAG_SEPARATOR = ':'
+const TAG_TYPES: readonly TagType[] = ['persona', 'uso', 'feature', 'material']
+const TAG_TYPE_SET = new Set<TagType>(TAG_TYPES)
+
+function normalizeTagValue(value: string | null | undefined): string | null {
+  if (!value) return null
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? trimmed : null
+}
+
+function parseRawTag(rawTag: string | null | undefined): Tag | null {
+  const normalized = normalizeTagValue(rawTag)
+  if (!normalized) return null
+
+  const separatorIndex = normalized.indexOf(TAG_SEPARATOR)
+  if (separatorIndex <= 0) {
+    return { type: 'feature', value: normalized }
+  }
+
+  const possibleType = normalized.slice(0, separatorIndex) as TagType
+  const rawValue = normalizeTagValue(normalized.slice(separatorIndex + TAG_SEPARATOR.length))
+
+  if (!rawValue) return null
+
+  if (TAG_TYPE_SET.has(possibleType)) {
+    return { type: possibleType, value: rawValue }
+  }
+
+  return { type: 'feature', value: normalized }
+}
+
+export function enrichTags(rawTags?: RawProduct['tags']): Tag[] | undefined {
+  if (!rawTags || rawTags.length === 0) return undefined
+
+  const parsed = rawTags
+    .map(tag => parseRawTag(tag))
+    .filter((tag): tag is Tag => Boolean(tag))
+
+  if (parsed.length === 0) return undefined
+
+  const seen = new Set<string>()
+  const deduped: Tag[] = []
+
+  parsed.forEach(tag => {
+    const key = `${tag.type}:${tag.value.toLowerCase()}`
+    if (seen.has(key)) return
+    seen.add(key)
+    deduped.push(tag)
+  })
+
+  return deduped.length > 0 ? deduped : undefined
+}
+
 export type Product = {
   id: number
   slug: string
@@ -132,7 +193,7 @@ export type Product = {
   sku: string
   category: string
   subCategory?: string | null
-  tags: string[]
+  tags?: Tag[]
   nsfw?: boolean
   bestSeller?: boolean
   badge?: ProductBadge | string | null
@@ -211,6 +272,8 @@ const catalog: Product[] = (productsData as RawProduct[]).map(product => {
   const brand = typeof brandValue === 'string' && brandValue.trim().length > 0 ? brandValue : null
   const descriptionHtml = sanitizeDescriptionHtml(product.descriptionHtml)
 
+  const tags = enrichTags(product.tags) ?? []
+
   return {
     id: product.id,
     slug: product.slug,
@@ -223,7 +286,7 @@ const catalog: Product[] = (productsData as RawProduct[]).map(product => {
     sku: product.sku ?? product.slug,
     category: product.category,
     subCategory: product.subCategory ?? null,
-    tags: product.tags ?? [],
+    ...(tags.length > 0 ? { tags } : {}),
     nsfw: product.nsfw ?? false,
     bestSeller: product.bestSeller ?? false,
     badge: product.badge ?? null,
