@@ -3,6 +3,8 @@
 import { Fragment, useEffect, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import type { CategoryFilterState } from './filters-context'
+import type { Filter } from '@/lib/products'
+import type { TagType } from '@/lib/tagging'
 
 type CategoryFilterOptions = {
   brands: string[]
@@ -10,6 +12,8 @@ type CategoryFilterOptions = {
   longitudes: string[]
   diametros: string[]
 }
+
+type FacetOptions = Partial<Record<TagType, readonly string[]>>
 
 type FilterSheetProps = {
   open: boolean
@@ -21,6 +25,9 @@ type FilterSheetProps = {
   onSelectLongitud: (value: string | null) => void
   onSelectDiametro: (value: string | null) => void
   onReset: () => void
+  facetOptions?: FacetOptions
+  selectedFacets?: Filter
+  onToggleFacet?: (type: TagType, value: string) => void
 }
 
 const sectionClass = 'space-y-2'
@@ -30,6 +37,60 @@ const toggleClassBase =
   'rounded-full border px-3 py-1 text-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
 const toggleActiveClass = 'border-brand-primary bg-brand-primary text-white shadow-sm'
 const toggleInactiveClass = 'border-neutral-200 bg-white text-neutral-700 hover:border-brand-primary/60'
+
+const FACET_LABELS: Record<TagType, string> = {
+  persona: 'Colección',
+  uso: 'Uso',
+  feature: 'Feature',
+  material: 'Material'
+}
+
+const FACET_ORDER: readonly TagType[] = ['persona', 'uso', 'feature', 'material']
+
+function FacetCheckboxGroup({
+  type,
+  label,
+  values,
+  selected,
+  onToggle
+}: {
+  type: TagType
+  label: string
+  values: readonly string[]
+  selected: readonly string[]
+  onToggle: (value: string) => void
+}) {
+  if (!values.length) return null
+
+  return (
+    <div className={sectionClass}>
+      <p className={sectionTitleClass}>{label}</p>
+      <div className="space-y-2">
+        {values.map((value, index) => {
+          const inputIdBase = `${type}-${value}`.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()
+          const safeId = `${inputIdBase}-${index}`
+          const isChecked = selected.includes(value)
+          return (
+            <label
+              key={value}
+              htmlFor={safeId}
+              className="flex items-center gap-2 rounded-lg border border-transparent px-2 py-1 text-sm text-neutral-700 transition hover:border-brand-primary/40 hover:bg-brand-primary/5"
+            >
+              <input
+                id={safeId}
+                type="checkbox"
+                className="h-4 w-4 rounded border-neutral-300 text-brand-primary focus:ring-brand-primary"
+                checked={isChecked}
+                onChange={() => onToggle(value)}
+              />
+              <span>{value}</span>
+            </label>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 function ToggleGroup({
   label,
@@ -113,8 +174,29 @@ function FilterContent({
   onToggleMaterial,
   onSelectLongitud,
   onSelectDiametro,
-  onReset
+  onReset,
+  facetOptions,
+  selectedFacets,
+  onToggleFacet
 }: Omit<FilterSheetProps, 'open' | 'onOpenChange'>) {
+  const facetSections: JSX.Element[] = []
+  if (facetOptions && selectedFacets && onToggleFacet) {
+    FACET_ORDER.forEach((type) => {
+      const facetValues = facetOptions[type] ?? []
+      if (!facetValues.length) return
+      facetSections.push(
+        <FacetCheckboxGroup
+          key={type}
+          type={type}
+          label={FACET_LABELS[type]}
+          values={facetValues}
+          selected={selectedFacets[type] ?? []}
+          onToggle={(value) => onToggleFacet(type, value)}
+        />
+      )
+    })
+  }
+
   return (
     <div className="flex h-full flex-col gap-6 overflow-y-auto p-6">
       <div className="flex items-center justify-between">
@@ -128,6 +210,7 @@ function FilterContent({
         </button>
       </div>
       <div className="space-y-6">
+        {facetSections.length > 0 ? <div className="space-y-6">{facetSections}</div> : null}
         <ToggleGroup
           label="Marca"
           values={options.brands}
@@ -168,7 +251,10 @@ export default function FilterSheet({
   onToggleMaterial,
   onSelectLongitud,
   onSelectDiametro,
-  onReset
+  onReset,
+  facetOptions,
+  selectedFacets,
+  onToggleFacet
 }: FilterSheetProps) {
   const panelRef = useRef<HTMLDivElement>(null)
 
@@ -222,6 +308,9 @@ export default function FilterSheet({
               onSelectLongitud={onSelectLongitud}
               onSelectDiametro={onSelectDiametro}
               onReset={onReset}
+              facetOptions={facetOptions}
+              selectedFacets={selectedFacets}
+              onToggleFacet={onToggleFacet}
             />
           </div>
         </Transition>
@@ -259,6 +348,9 @@ export default function FilterSheet({
                   onSelectLongitud={onSelectLongitud}
                   onSelectDiametro={onSelectDiametro}
                   onReset={onReset}
+                  facetOptions={facetOptions}
+                  selectedFacets={selectedFacets}
+                  onToggleFacet={onToggleFacet}
                 />
               </div>
             </Transition.Child>
