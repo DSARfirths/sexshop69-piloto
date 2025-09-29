@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef, type ReactElement } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import type { CategoryFilterState } from './filters-context'
 import type { Filter } from '@/lib/products'
@@ -179,7 +179,7 @@ function FilterContent({
   selectedFacets,
   onToggleFacet
 }: Omit<FilterSheetProps, 'open' | 'onOpenChange'>) {
-  const facetSections: JSX.Element[] = []
+  const facetSections: ReactElement[] = []
   if (facetOptions && selectedFacets && onToggleFacet) {
     FACET_ORDER.forEach((type) => {
       const facetValues = facetOptions[type] ?? []
