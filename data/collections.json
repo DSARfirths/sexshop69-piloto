@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "juegos-en-pareja",
+    "name": "Juegos en pareja",
+    "headline": "Vibraciones para disfrutar juntos",
+    "description": "Selección de juguetes pensados para sincronizar el placer y explorar nuevas sensaciones en pareja.",
+    "rule": {
+      "anyOf": {
+        "categories": ["pareja", "vibradores"],
+        "tags": ["uso:Estimulación vibratoria", "feature:Estimulación dual"]
+      }
+    },
+    "seo": {
+      "title": "Colección de juguetes para parejas — SexShop del Perú 69",
+      "description": "Encuentra vibradores y accesorios diseñados para parejas que buscan compartir momentos intensos con total confianza."
+    }
+  },
+  {
+    "slug": "exploracion-anal-suave",
+    "name": "Exploración anal suave",
+    "headline": "Comodidad y control en cada paso",
+    "description": "Productos con formas amigables, texturas progresivas y materiales suaves para descubrir el placer anal a tu ritmo.",
+    "rule": {
+      "anyOf": {
+        "categories": ["consoladores"],
+        "tags": ["uso:Estimulación anal"]
+      }
+    },
+    "seo": {
+      "title": "Colección para exploración anal suave — SexShop del Perú 69",
+      "description": "Descubre plugs y consoladores que priorizan la comodidad y el cuidado para tu primera o próxima experiencia anal."
+    }
+  },
+  {
+    "slug": "aromas-y-feromonas",
+    "name": "Aromas y feromonas",
+    "headline": "Activa los sentidos",
+    "description": "Perfumes y aceites con feromonas para despertar la atracción y crear momentos cargados de sensualidad.",
+    "rule": {
+      "anyOf": {
+        "categories": ["feromonas", "bienestar"],
+        "tags": ["feature:Feromonas"]
+      }
+    },
+    "seo": {
+      "title": "Colección de aromas y feromonas — SexShop del Perú 69",
+      "description": "Perfumes afrodisíacos y mezclas con feromonas listas para acompañarte con discreción y un toque irresistible."
+    }
+  }
+]

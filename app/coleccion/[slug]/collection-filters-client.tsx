@@ -1,33 +1,37 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import FilterSheet from '@/components/category/FilterSheet'
 import ProductCard from '@/components/ProductCard'
 import { CategoryFiltersProvider, type CategoryFilterState } from '@/components/category/filters-context'
 import {
   buildCatalogSearchParams,
-  collectCatalogOptions,
   filterCatalogProducts,
   normalizeCatalogText,
   parseCatalogSearchParams,
   type CatalogFilterOptions
 } from '@/lib/catalog-filters'
-import { byCategory } from '@/lib/products'
+import type { Product } from '@/lib/products'
 
-export default function CategoryFiltersClient() {
-  const { slug } = useParams<{ slug: string }>()
+type CollectionFiltersClientProps = {
+  slug: string
+  products: Product[]
+  options: CatalogFilterOptions
+  initialFilters: CategoryFilterState
+}
+
+export default function CollectionFiltersClient({
+  slug,
+  products,
+  options,
+  initialFilters
+}: CollectionFiltersClientProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-
-  const products = useMemo(() => byCategory(slug), [slug])
-  const options = useMemo(() => collectCatalogOptions(products), [products])
-
-  const [filters, setFilters] = useState<CategoryFilterState>(() =>
-    parseCatalogSearchParams(new URLSearchParams(searchParams))
-  )
+  const [filters, setFilters] = useState<CategoryFilterState>(initialFilters)
 
   useEffect(() => {
     setFilters(parseCatalogSearchParams(new URLSearchParams(searchParams)))
@@ -47,21 +51,19 @@ export default function CategoryFiltersClient() {
     if (!slug) return
     if (products.length > 0) {
       console.info(
-        `[CategoryFiltersClient] ${products.length} productos disponibles para la categoría o subcategoría "${slug}".`
+        `[CollectionFiltersClient] ${products.length} productos disponibles para la colección "${slug}".`
       )
     } else {
-      console.warn(
-        `[CategoryFiltersClient] No se encontraron productos para la categoría o subcategoría "${slug}".`
-      )
+      console.warn(`[CollectionFiltersClient] No se encontraron productos para la colección "${slug}".`)
     }
   }, [slug, products.length])
 
   const toggleValue = useCallback(
     (key: 'brands' | 'materials', value: string) => {
-      setFilters((prev) => {
+      setFilters(prev => {
         const current = prev[key]
         const exists = current.includes(value)
-        const nextValues = exists ? current.filter((item) => item !== value) : [...current, value]
+        const nextValues = exists ? current.filter(item => item !== value) : [...current, value]
         return { ...prev, [key]: nextValues }
       })
     },
@@ -69,7 +71,7 @@ export default function CategoryFiltersClient() {
   )
 
   const setDimension = useCallback((key: 'longitud' | 'diametro', value: string | null) => {
-    setFilters((prev) => ({ ...prev, [key]: value }))
+    setFilters(prev => ({ ...prev, [key]: value }))
   }, [])
 
   const resetFilters = useCallback(() => {
@@ -77,7 +79,7 @@ export default function CategoryFiltersClient() {
   }, [])
 
   const onQueryChange = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, query: value }))
+    setFilters(prev => ({ ...prev, query: value }))
   }, [])
 
   const contextValue = useMemo(
@@ -85,12 +87,12 @@ export default function CategoryFiltersClient() {
       filters,
       isBrandSelected: (brand?: string | null) => {
         if (!brand) return false
-        return filters.brands.some((value) => normalizeCatalogText(value) === normalizeCatalogText(brand))
+        return filters.brands.some(value => normalizeCatalogText(value) === normalizeCatalogText(brand))
       },
       isMaterialSelected: (material?: string | null) => {
         if (!material) return false
         return filters.materials.some(
-          (value) => normalizeCatalogText(value) === normalizeCatalogText(material)
+          value => normalizeCatalogText(value) === normalizeCatalogText(material)
         )
       }
     }),
@@ -104,8 +106,8 @@ export default function CategoryFiltersClient() {
           <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
             <input
               value={filters.query}
-              onChange={(event) => onQueryChange(event.target.value)}
-              placeholder="Buscar en la categoría"
+              onChange={event => onQueryChange(event.target.value)}
+              placeholder="Buscar en la colección"
               aria-label="Buscar"
               className="flex-1 rounded-xl border border-neutral-200 px-4 py-2 text-sm shadow-sm focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
             />
@@ -115,7 +117,7 @@ export default function CategoryFiltersClient() {
                 aria-expanded={isSheetOpen}
                 aria-haspopup="dialog"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-brand-primary/60 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary sm:w-auto"
-                onClick={() => setIsSheetOpen((prev) => !prev)}
+                onClick={() => setIsSheetOpen(prev => !prev)}
               >
                 Filtros
               </button>
@@ -124,10 +126,10 @@ export default function CategoryFiltersClient() {
                 onOpenChange={setIsSheetOpen}
                 filters={filters}
                 options={options}
-                onToggleBrand={(value) => toggleValue('brands', value)}
-                onToggleMaterial={(value) => toggleValue('materials', value)}
-                onSelectLongitud={(value) => setDimension('longitud', value)}
-                onSelectDiametro={(value) => setDimension('diametro', value)}
+                onToggleBrand={value => toggleValue('brands', value)}
+                onToggleMaterial={value => toggleValue('materials', value)}
+                onSelectLongitud={value => setDimension('longitud', value)}
+                onSelectDiametro={value => setDimension('diametro', value)}
                 onReset={resetFilters}
               />
             </div>
@@ -141,7 +143,7 @@ export default function CategoryFiltersClient() {
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
-              {filteredProducts.map((product) => (
+              {filteredProducts.map(product => (
                 <ProductCard key={product.slug} p={product} />
               ))}
             </div>

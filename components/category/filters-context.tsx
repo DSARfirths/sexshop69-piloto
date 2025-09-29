@@ -1,14 +1,9 @@
 'use client'
 
 import { createContext, useContext, type ReactNode } from 'react'
+import type { CatalogFilters } from '@/lib/catalog-filters'
 
-export type CategoryFilterState = {
-  query: string
-  brands: string[]
-  materials: string[]
-  longitud: string | null
-  diametro: string | null
-}
+export type CategoryFilterState = CatalogFilters
 
 export type CategoryFiltersContextValue = {
   filters: CategoryFilterState
