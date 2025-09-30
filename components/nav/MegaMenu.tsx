@@ -55,6 +55,7 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const menuRef = useRef<HTMLDivElement | null>(null)
   const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [panelTop, setPanelTop] = useState(0)
 
   const activeTab = useMemo(() => {
     if (!tabs.length) return undefined
@@ -104,11 +105,46 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
     setOpen(false)
   }, [clearScheduledClose])
 
+  const updatePanelPosition = useCallback(() => {
+    const header = containerRef.current?.closest('header')
+    if (header) {
+      const rect = header.getBoundingClientRect()
+      setPanelTop(rect.bottom)
+      return
+    }
+
+    const triggerRect = triggerRef.current?.getBoundingClientRect()
+    if (triggerRect) {
+      setPanelTop(triggerRect.bottom)
+      return
+    }
+
+    setPanelTop(0)
+  }, [])
+
   useEffect(() => {
     return () => {
       clearScheduledClose()
     }
   }, [clearScheduledClose])
+
+  useEffect(() => {
+    if (!open) return
+
+    updatePanelPosition()
+
+    const handleResize = () => {
+      updatePanelPosition()
+    }
+
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('scroll', handleResize, true)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('scroll', handleResize, true)
+    }
+  }, [open, updatePanelPosition])
 
   useEffect(() => {
     if (!open) return
@@ -185,151 +221,173 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
         <span className="relative z-10">{buttonLabel}</span>
       </button>
 
-      <div
-        ref={menuRef}
-        id="mega-menu-panel"
-        aria-hidden={!open}
-        className={`absolute left-0 right-0 top-full z-30 mx-auto w-full max-w-7xl px-4 pt-3 transition duration-150 ease-out ${
-          open
-            ? 'pointer-events-auto translate-y-2 opacity-100'
-            : 'pointer-events-none translate-y-1 opacity-0'
-        }`}
-      >
-        <div className="mx-auto w-full rounded-3xl bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10">
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-5">
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-pink/80">
-                  {activeTab.tagline}
-                </span>
-                <p className="text-base font-semibold text-neutral-50">{activeTab.label}</p>
-                <p className="text-sm text-neutral-300">{activeTab.description}</p>
-              </div>
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            key="mega-menu-layer"
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="fixed inset-x-0 bottom-0 z-30 flex flex-col bg-black"
+            style={{ top: panelTop }}
+          >
+            <motion.div
+              aria-hidden="true"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.8 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'linear' }}
+              className="absolute inset-0 bg-black/80"
+              onClick={handleClose}
+            />
+            <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-6 pb-10">
+              <div
+                ref={menuRef}
+                id="mega-menu-panel"
+                aria-hidden={!open}
+                className="w-full rounded-3xl bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10"
+              >
+                <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-pink/80">
+                        {activeTab.tagline}
+                      </span>
+                      <p className="text-base font-semibold text-neutral-50">{activeTab.label}</p>
+                      <p className="text-sm text-neutral-300">{activeTab.description}</p>
+                    </div>
 
-              {tabs.length > 1 ? (
-                <div role="tablist" aria-label="Personas">
-                  <ul className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-[0.2em]">
-                    {tabs.map((tab) => {
-                      const isActive = tab.id === activeTab.id
-                      return (
-                        <li key={tab.id}>
-                          <button
-                            type="button"
-                            role="tab"
-                            id={`mega-tab-${tab.id}`}
-                            aria-selected={isActive}
-                            aria-controls={`mega-panel-${tab.id}`}
-                            className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
-                              isActive
-                                ? 'text-brand-pink'
-                                : 'text-neutral-300 hover:text-brand-pink'
-                            }`}
-                            onMouseEnter={() => setActiveTabId(tab.id)}
-                            onFocus={() => setActiveTabId(tab.id)}
-                            onClick={() => setActiveTabId(tab.id)}
+                    {tabs.length > 1 ? (
+                      <div role="tablist" aria-label="Personas">
+                        <ul className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-[0.2em]">
+                          {tabs.map((tab) => {
+                            const isActive = tab.id === activeTab.id
+                            return (
+                              <li key={tab.id}>
+                                <button
+                                  type="button"
+                                  role="tab"
+                                  id={`mega-tab-${tab.id}`}
+                                  aria-selected={isActive}
+                                  aria-controls={`mega-panel-${tab.id}`}
+                                  className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
+                                    isActive
+                                      ? 'text-brand-pink'
+                                      : 'text-neutral-300 hover:text-brand-pink'
+                                  }`}
+                                  onMouseEnter={() => setActiveTabId(tab.id)}
+                                  onFocus={() => setActiveTabId(tab.id)}
+                                  onClick={() => setActiveTabId(tab.id)}
+                                >
+                                  {tab.label}
+                                </button>
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                    ) : null}
+
+                    <ul className="flex flex-wrap gap-x-8 gap-y-3 text-xs font-medium text-neutral-200">
+                      {activeTab.quickLinks.map((link) => (
+                        <li key={`${activeTab.id}-${link.href}`}>
+                          <Link
+                            href={link.href}
+                            className="inline-flex items-center gap-1 transition hover:text-brand-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
+                            onClick={() => {
+                              trackMegaMenuInteraction({
+                                tab: activeTab,
+                                linkLabel: link.label,
+                                href: link.href,
+                                context: 'quick-link'
+                              })
+                              onNavigate?.()
+                              handleClose()
+                            }}
                           >
-                            {tab.label}
-                          </button>
+                            <span>{link.label}</span>
+                            <ChevronRight className="h-3 w-3 text-brand-pink/70" aria-hidden />
+                          </Link>
                         </li>
-                      )
-                    })}
-                  </ul>
-                </div>
-              ) : null}
+                      ))}
+                    </ul>
+                  </div>
 
-              <ul className="flex flex-wrap gap-x-8 gap-y-3 text-xs font-medium text-neutral-200">
-                {activeTab.quickLinks.map((link) => (
-                  <li key={`${activeTab.id}-${link.href}`}>
+                  <div
+                    id={`mega-panel-${activeTab.id}`}
+                    role="tabpanel"
+                    aria-labelledby={`mega-tab-${activeTab.id}`}
+                    className="grid gap-8 md:grid-cols-4 xl:grid-cols-5"
+                  >
+                    {activeTab.columns.map((column) => (
+                      <div key={`${activeTab.id}-${column.title}`} className="space-y-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/70">
+                          {column.title}
+                        </p>
+                        <ul className="space-y-2">
+                          {column.links.map((link: MegaMenuLink) => (
+                            <li key={`${column.title}-${link.href}`}>
+                              <Link
+                                href={link.href}
+                                className="group block px-1 py-1 text-sm text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
+                                onClick={() => {
+                                  trackMegaMenuInteraction({
+                                    tab: activeTab,
+                                    linkLabel: link.label,
+                                    href: link.href,
+                                    context: 'column',
+                                    columnTitle: column.title
+                                  })
+                                  onNavigate?.()
+                                  handleClose()
+                                }}
+                              >
+                                <div className="flex items-start justify-between gap-3">
+                                  <div>
+                                    <p className="font-semibold text-white">{link.label}</p>
+                                    {link.description && (
+                                      <p className="mt-0.5 text-xs text-white/70">{link.description}</p>
+                                    )}
+                                  </div>
+                                  <ChevronRight
+                                    className="mt-1 h-4 w-4 flex-shrink-0 text-brand-pink/70 transition group-hover:translate-x-0.5"
+                                    aria-hidden
+                                  />
+                                </div>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-end">
                     <Link
-                      href={link.href}
-                      className="inline-flex items-center gap-1 transition hover:text-brand-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
+                      href={`/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`}
+                      className="btn-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm"
                       onClick={() => {
                         trackMegaMenuInteraction({
                           tab: activeTab,
-                          linkLabel: link.label,
-                          href: link.href,
-                          context: 'quick-link'
+                          linkLabel: activeTab.ctaLabel,
+                          href: `/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`,
+                          context: 'cta'
                         })
                         onNavigate?.()
                         handleClose()
                       }}
                     >
-                      <span>{link.label}</span>
-                      <ChevronRight className="h-3 w-3 text-brand-pink/70" aria-hidden />
+                      {activeTab.ctaLabel}
+                      <ChevronRight className="h-4 w-4" aria-hidden />
                     </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div
-              id={`mega-panel-${activeTab.id}`}
-              role="tabpanel"
-              aria-labelledby={`mega-tab-${activeTab.id}`}
-              className="grid gap-8 md:grid-cols-4 xl:grid-cols-5"
-            >
-              {activeTab.columns.map((column) => (
-                <div key={`${activeTab.id}-${column.title}`} className="space-y-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/70">
-                    {column.title}
-                  </p>
-                  <ul className="space-y-2">
-                    {column.links.map((link: MegaMenuLink) => (
-                      <li key={`${column.title}-${link.href}`}>
-                        <Link
-                          href={link.href}
-                          className="group block px-1 py-1 text-sm text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
-                          onClick={() => {
-                            trackMegaMenuInteraction({
-                              tab: activeTab,
-                              linkLabel: link.label,
-                              href: link.href,
-                              context: 'column',
-                              columnTitle: column.title
-                            })
-                            onNavigate?.()
-                            handleClose()
-                          }}
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <p className="font-semibold text-white">{link.label}</p>
-                              {link.description && (
-                                <p className="mt-0.5 text-xs text-white/70">{link.description}</p>
-                              )}
-                            </div>
-                            <ChevronRight className="mt-1 h-4 w-4 flex-shrink-0 text-brand-pink/70 transition group-hover:translate-x-0.5" aria-hidden />
-                          </div>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  </div>
                 </div>
-              ))}
-            </div>
-
-              <div className="flex justify-end">
-                <Link
-                  href={`/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`}
-                  className="btn-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm"
-                  onClick={() => {
-                    trackMegaMenuInteraction({
-                      tab: activeTab,
-                      linkLabel: activeTab.ctaLabel,
-                      href: `/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`,
-                      context: 'cta'
-                    })
-                    onNavigate?.()
-                    handleClose()
-                  }}
-                >
-                  {activeTab.ctaLabel}
-                  <ChevronRight className="h-4 w-4" aria-hidden />
-                </Link>
               </div>
-          </div>
-        </div>
-      </div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   )
 }
