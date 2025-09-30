@@ -17,9 +17,9 @@ const MotionButton: any = motion.button
 const MotionAside: any = motion.aside
 
 const primaryLinks = [
-  { href: '/novedades', label: 'Novedades' },
-  { href: '/ofertas', label: 'Ofertas' },
-  { href: '/blog', label: 'Blog/Guías' },
+  { href: '/coleccion/para-el?persona=him', label: 'Él' },
+  { href: '/coleccion/para-ella?persona=her', label: 'Ella' },
+  { href: '/coleccion/para-parejas?persona=couples', label: 'Parejas' },
 ]
 
 const promoBanner = {
