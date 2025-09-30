@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { ComponentType, PropsWithChildren, useState } from 'react'
 import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
@@ -63,33 +64,29 @@ export default function Header() {
         transition={{ duration: 0.35, ease: 'easeOut' }}
         className="sticky top-0 z-40 border-b border-brand-pink/60 bg-black"
       >
-        <header className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-3 text-neutral-100 sm:px-4">
+        <header className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 text-neutral-100 sm:px-6">
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold tracking-tight text-brand-pink transition hover:bg-brand-pink/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60 md:text-base"
-          >            <span className="logo-69 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-base font-bold uppercase">
-              69
-            </span>
-            <span className="flex flex-col leading-tight">
-              <span className="font-heading text-[0.95rem] font-bold uppercase tracking-[0.02em] md:text-lg">
-                Sex Shop
-              </span>
-              <span className="font-heading text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-brand-pink/80 md:text-[0.65rem]">
-                Del Perú
-              </span>
-              <span className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-brand-pink/80 md:text-xs">
-                Placer sin tabúes
-              </span>
-            </span>
+            aria-label="Inicio de Sex Shop del Perú"
+            className="flex h-full items-center rounded-full px-3 transition hover:bg-brand-pink/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
+          >
+            <Image
+              src="/logo-moderno-para-fondos-oscuros.png"
+              alt="Logotipo de Sex Shop del Perú con isotipo y tagline"
+              width={176}
+              height={56}
+              className="h-14 w-auto"
+              priority
+            />
           </Link>
 
-          <nav className="hidden items-center gap-2 text-sm font-medium md:flex">
+          <nav className="hidden h-full items-center gap-3 text-sm font-medium md:flex">
             <PersonaMegaMenu personaFacet="him" />
             <PersonaMegaMenu personaFacet="her" />
             <PersonaMegaMenu personaFacet="couples" />
           </nav>
 
-          <div className="flex items-center gap-1 md:gap-2">
+          <div className="flex h-full items-center gap-2 md:gap-3">
             <button
               type="button"
               onClick={openSearch}
