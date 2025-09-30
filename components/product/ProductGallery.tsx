@@ -131,7 +131,7 @@ export default function ProductGallery({ slug, name, imageCount, imageFilenames,
                   <button
                     type="button"
                     onClick={handleUnlock}
-                    className="rounded-full bg-brand-primary px-5 py-2 text-sm font-semibold text-white shadow-lg transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                    className="btn-primary transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-xl"
                   >
                     Ver imágenes
                   </button>
@@ -188,7 +188,7 @@ export default function ProductGallery({ slug, name, imageCount, imageFilenames,
                 onClick={() => setActiveIndex(index)}
                 className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border transition-all duration-200 ${
                   isActive
-                    ? 'border-brand-primary shadow-lg ring-2 ring-brand-primary/30'
+                    ? 'border-brand-pink shadow-lg ring-2 ring-brand-pink/30'
                     : 'border-transparent bg-neutral-100 hover:border-neutral-300'
                 }`}
                 >

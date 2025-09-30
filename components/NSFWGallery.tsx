@@ -39,7 +39,7 @@ export default function NSFWGallery({ slug, count }: { slug: string; count: numb
         <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
           <div className="text-sm font-medium">Imágenes sensibles — sólo para mayores de 18</div>
           <p className="text-xs text-neutral-600 mt-1">Al continuar confirma su intención de ver imágenes del producto.</p>
-          <button onClick={() => setShow(true)} className="mt-3 px-4 py-2 rounded-xl bg-brand-primary text-white">Mostrar imágenes</button>
+          <button onClick={() => setShow(true)} className="btn-primary mt-3">Mostrar imágenes</button>
         </div>
       ) : (
         <div className="space-y-3">

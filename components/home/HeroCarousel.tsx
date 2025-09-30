@@ -72,11 +72,10 @@ type HeroCarouselProps = {
 }
 
 const baseButtonClasses =
-  'inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300'
-const primaryButtonClasses =
-  `${baseButtonClasses} bg-fuchsia-600 text-white shadow-neon hover:bg-fuchsia-700`
+  'inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink'
+const primaryButtonClasses = 'btn-primary'
 const secondaryButtonClasses =
-  `${baseButtonClasses} border border-neutral-300 bg-transparent text-neutral-700 hover:border-neutral-400 hover:text-neutral-900`
+  `${baseButtonClasses} border border-neutral-300 bg-white/80 text-neutral-700 hover:border-brand-pink/40 hover:text-brand-pink`
 type SlideMotionProps = HTMLMotionProps<'div'> & { className?: string }
 
 const SlideMotion = forwardRef<HTMLDivElement, SlideMotionProps>((props, ref) => <motion.div ref={ref} {...props} />)
@@ -161,17 +160,17 @@ export default function HeroCarousel({
             type="button"
             onClick={handlePrevious}
             aria-label="Ver anterior"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-brand-pink/40 hover:text-brand-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
           >
-            <ChevronLeft className="h-4 w-4 text-fuchsia-600" aria-hidden />
+            <ChevronLeft className="h-4 w-4 text-brand-violet" aria-hidden />
           </button>
           <button
             type="button"
             onClick={handleNext}
             aria-label="Ver siguiente"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-neutral-400 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 shadow-sm transition hover:border-brand-pink/40 hover:text-brand-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
           >
-            <ChevronRight className="h-4 w-4 text-fuchsia-600" aria-hidden />
+            <ChevronRight className="h-4 w-4 text-brand-violet" aria-hidden />
           </button>
         </div>
       </div>

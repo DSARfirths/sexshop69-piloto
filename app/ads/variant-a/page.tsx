@@ -8,7 +8,7 @@
         <li>Pagos seguros y discretos</li>
         <li>Asesoría personalizada</li>
       </ul>
-      <a href="/categoria/bienestar" className="inline-block mt-6 px-5 py-3 rounded-xl bg-brand-primary text-white">Explorar Bienestar</a>
+      <a href="/categoria/bienestar" className="btn-primary mt-6">Explorar Bienestar</a>
     </main>
   )
 }

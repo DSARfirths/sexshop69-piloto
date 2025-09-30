@@ -34,9 +34,9 @@ const sectionClass = 'space-y-2'
 const sectionTitleClass = 'text-sm font-semibold text-neutral-800'
 const toggleListClass = 'flex flex-wrap gap-2'
 const toggleClassBase =
-  'rounded-full border px-3 py-1 text-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
-const toggleActiveClass = 'border-brand-primary bg-brand-primary text-white shadow-sm'
-const toggleInactiveClass = 'border-neutral-200 bg-white text-neutral-700 hover:border-brand-primary/60'
+  'rounded-full border px-3 py-1 text-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink'
+const toggleActiveClass = 'border-brand-pink bg-brand-pink text-white shadow-sm'
+const toggleInactiveClass = 'border-neutral-200 bg-white text-neutral-700 hover:border-brand-pink/60'
 
 const FACET_LABELS: Record<TagType, string> = {
   persona: 'Colección',
@@ -74,12 +74,12 @@ function FacetCheckboxGroup({
             <label
               key={value}
               htmlFor={safeId}
-              className="flex items-center gap-2 rounded-lg border border-transparent px-2 py-1 text-sm text-neutral-700 transition hover:border-brand-primary/40 hover:bg-brand-primary/5"
+              className="flex items-center gap-2 rounded-lg border border-transparent px-2 py-1 text-sm text-neutral-700 transition hover:border-brand-pink/40 hover:bg-brand-pink/5"
             >
               <input
                 id={safeId}
                 type="checkbox"
-                className="h-4 w-4 rounded border-neutral-300 text-brand-primary focus:ring-brand-primary"
+                className="h-4 w-4 rounded border-neutral-300 text-brand-pink focus:ring-brand-pink"
                 checked={isChecked}
                 onChange={() => onToggle(value)}
               />
@@ -148,7 +148,7 @@ function SelectFilter({
       <label className={sectionTitleClass}>
         {label}
         <select
-          className="mt-1 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
+          className="mt-1 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 focus:border-brand-pink focus:outline-none focus:ring-2 focus:ring-brand-pink/40"
           value={value ?? ''}
           onChange={(event) => {
             const selected = event.target.value
@@ -204,7 +204,7 @@ function FilterContent({
         <button
           type="button"
           onClick={onReset}
-          className="text-sm font-medium text-brand-primary hover:underline"
+          className="text-sm font-medium text-brand-pink hover:underline"
         >
           Limpiar
         </button>
