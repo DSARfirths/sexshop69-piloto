@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import type { CSSProperties } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronDown, ChevronRight, Sparkles } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 
 import { megaMenuConfig } from '@/data/mega-menu.config'
 import type { MegaMenuLink, MegaMenuTab } from '@/data/mega-menu.config'
@@ -179,14 +179,9 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
           }
         }}
         data-active={open}
-        className="nav-link inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
+        className="nav-link inline-flex items-center justify-center rounded-full px-5 py-3 text-lg font-semibold uppercase transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
       >
-        <Sparkles className="relative z-10 h-4 w-4" aria-hidden />
         <span className="relative z-10">{buttonLabel}</span>
-        <ChevronDown
-          className={`relative z-10 h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
-          aria-hidden
-        />
       </button>
 
       <div
