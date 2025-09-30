@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Script from 'next/script'
-import { Montserrat } from 'next/font/google'
+import { Cormorant_Garamond, Manrope } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ChatBubble } from '@/components/ChatBubble'
@@ -11,9 +11,16 @@ import Tracker from './Tracker'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
 
-const montserrat = Montserrat({
+const manrope = Manrope({
   subsets: ['latin'],
-  weight: ['700', '800'],
+  weight: ['300', '400', '500', '600'],
+  display: 'swap',
+  variable: '--font-sans'
+})
+
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['500', '600'],
   display: 'swap',
   variable: '--font-heading'
 })
@@ -46,11 +53,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
         />
         <link
-          rel="preload"
-          as="font"
-          type="font/woff2"
-          href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
-          crossOrigin="anonymous"
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
         />
         {gaId && (
           <>
@@ -78,7 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="preconnect" href="https://plausible.io" />
         )}
       </head>
-      <body className={`${montserrat.variable} min-h-screen bg-white text-neutral-900 antialiased`}>
+      <body className={`${manrope.variable} ${cormorantGaramond.variable} min-h-screen bg-white text-neutral-900 antialiased`}>
         <Suspense fallback={null}>
           <Tracker />
         </Suspense>

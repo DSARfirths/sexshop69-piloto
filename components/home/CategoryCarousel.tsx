@@ -74,7 +74,7 @@ export function CategoryCard({
           </div>
         )}
         <div className="flex flex-1 flex-col gap-1 px-4 pb-6 pt-4">
-          <h3 className="font-heading text-lg font-extrabold uppercase text-neutral-900">{category.label}</h3>
+          <h3 className="font-heading text-lg font-semibold uppercase text-neutral-900">{category.label}</h3>
           <p className="truncate text-xs font-semibold uppercase tracking-[0.08em] text-neutral-600">{category.subtitle}</p>
           <p className="truncate text-xs font-semibold uppercase text-neutral-600">{category.description}</p>
         </div>
