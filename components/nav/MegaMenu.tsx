@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 
 import { megaMenuConfig } from '@/data/mega-menu.config'
 import type { MegaMenuLink, MegaMenuTab } from '@/data/mega-menu.config'
