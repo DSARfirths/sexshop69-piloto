@@ -11,6 +11,8 @@ import type { MegaMenuLink, MegaMenuTab } from '@/data/mega-menu.config'
 type MegaMenuProps = {
   variant?: 'desktop' | 'mobile'
   onNavigate?: () => void
+  tabId?: MegaMenuTab['id']
+  triggerLabel?: string
 }
 
 type TrackContext = 'column' | 'quick-link' | 'cta'
@@ -38,8 +40,13 @@ function trackMegaMenuInteraction({ tab, linkLabel, href, context, columnTitle }
   })
 }
 
-function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
-  const tabs = megaMenuConfig.tabs
+type DesktopMegaMenuProps = {
+  tabs: MegaMenuTab[]
+  onNavigate?: () => void
+  triggerLabel?: string
+}
+
+function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProps) {
   const hasTabs = tabs.length > 0
   const [open, setOpen] = useState(false)
   const [activeTabId, setActiveTabId] = useState(tabs[0]?.id ?? '')
@@ -52,6 +59,23 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
     if (!tabs.length) return undefined
     return tabs.find((tab) => tab.id === activeTabId) ?? tabs[0]
   }, [tabs, activeTabId])
+
+  useEffect(() => {
+    if (!tabs.length) {
+      setActiveTabId('')
+      return
+    }
+
+    setActiveTabId((currentId) => {
+      if (tabs.some((tab) => tab.id === currentId)) {
+        return currentId
+      }
+
+      return tabs[0].id
+    })
+  }, [tabs])
+
+  const buttonLabel = triggerLabel ?? (tabs.length === 1 ? tabs[0]?.label ?? 'Categorías' : 'Categorías')
 
   const clearScheduledClose = useCallback(() => {
     if (closeTimeout.current) {
@@ -158,7 +182,7 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
         className="nav-link inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
       >
         <Sparkles className="relative z-10 h-4 w-4" aria-hidden />
-        <span className="relative z-10">Categorías</span>
+        <span className="relative z-10">{buttonLabel}</span>
         <ChevronDown
           className={`relative z-10 h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
           aria-hidden
@@ -187,34 +211,36 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
                 <p className="text-sm text-neutral-300">{activeTab.description}</p>
               </div>
 
-              <div role="tablist" aria-label="Personas">
-                <ul className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-[0.2em]">
-                  {tabs.map((tab) => {
-                    const isActive = tab.id === activeTab.id
-                    return (
-                      <li key={tab.id}>
-                        <button
-                          type="button"
-                          role="tab"
-                          id={`mega-tab-${tab.id}`}
-                          aria-selected={isActive}
-                          aria-controls={`mega-panel-${tab.id}`}
-                          className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
-                            isActive
-                              ? 'text-brand-pink'
-                              : 'text-neutral-300 hover:text-brand-pink'
-                          }`}
-                          onMouseEnter={() => setActiveTabId(tab.id)}
-                          onFocus={() => setActiveTabId(tab.id)}
-                          onClick={() => setActiveTabId(tab.id)}
-                        >
-                          {tab.label}
-                        </button>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
+              {tabs.length > 1 ? (
+                <div role="tablist" aria-label="Personas">
+                  <ul className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-[0.2em]">
+                    {tabs.map((tab) => {
+                      const isActive = tab.id === activeTab.id
+                      return (
+                        <li key={tab.id}>
+                          <button
+                            type="button"
+                            role="tab"
+                            id={`mega-tab-${tab.id}`}
+                            aria-selected={isActive}
+                            aria-controls={`mega-panel-${tab.id}`}
+                            className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
+                              isActive
+                                ? 'text-brand-pink'
+                                : 'text-neutral-300 hover:text-brand-pink'
+                            }`}
+                            onMouseEnter={() => setActiveTabId(tab.id)}
+                            onFocus={() => setActiveTabId(tab.id)}
+                            onClick={() => setActiveTabId(tab.id)}
+                          >
+                            {tab.label}
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              ) : null}
 
               <ul className="flex flex-wrap gap-x-8 gap-y-3 text-xs font-medium text-neutral-200">
                 {activeTab.quickLinks.map((link) => (
@@ -313,9 +339,34 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
   )
 }
 
-function MobileMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
-  const tabs = megaMenuConfig.tabs
-  const [openTab, setOpenTab] = useState<string | null>(null)
+type MobileMegaMenuProps = {
+  tabs: MegaMenuTab[]
+  onNavigate?: () => void
+}
+
+function MobileMegaMenu({ tabs, onNavigate }: MobileMegaMenuProps) {
+  const [openTab, setOpenTab] = useState<string | null>(() => (tabs.length === 1 ? tabs[0]?.id ?? null : null))
+
+  useEffect(() => {
+    if (!tabs.length) {
+      setOpenTab(null)
+      return
+    }
+
+    setOpenTab((current) => {
+      if (tabs.length === 1) {
+        return tabs[0].id
+      }
+
+      if (current && tabs.some((tab) => tab.id === current)) {
+        return current
+      }
+
+      return null
+    })
+  }, [tabs])
+
+  const headingLabel = tabs.length === 1 ? tabs[0]?.label ?? 'Colecciones' : 'Colecciones'
 
   if (!tabs.length) {
     return null
@@ -323,7 +374,7 @@ function MobileMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="space-y-4 md:hidden">
-      <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/80">Colecciones</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/80">{headingLabel}</p>
       <div className="space-y-3">
         {tabs.map((tab) => {
           const isOpen = openTab === tab.id
@@ -446,10 +497,23 @@ function MobileMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
   )
 }
 
-export default function MegaMenu({ variant = 'desktop', onNavigate }: MegaMenuProps) {
+export default function MegaMenu({
+  variant = 'desktop',
+  onNavigate,
+  tabId,
+  triggerLabel
+}: MegaMenuProps) {
+  const tabs = useMemo(() => {
+    if (!tabId) {
+      return megaMenuConfig.tabs
+    }
+
+    return megaMenuConfig.tabs.filter((tab) => tab.id === tabId)
+  }, [tabId])
+
   if (variant === 'mobile') {
-    return <MobileMegaMenu onNavigate={onNavigate} />
+    return <MobileMegaMenu tabs={tabs} onNavigate={onNavigate} />
   }
 
-  return <DesktopMegaMenu onNavigate={onNavigate} />
+  return <DesktopMegaMenu tabs={tabs} onNavigate={onNavigate} triggerLabel={triggerLabel} />
 }
