@@ -225,28 +225,21 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
         {open ? (
           <motion.div
             key="mega-menu-layer"
-            initial={{ opacity: 0, y: -16 }}
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="fixed inset-x-0 bottom-0 z-30 flex flex-col bg-black"
+            className="fixed inset-x-0 z-30 flex justify-center pt-4 pb-10"
             style={{ top: panelTop }}
+            onMouseEnter={clearScheduledClose}
+            onMouseLeave={scheduleClose}
           >
-            <motion.div
-              aria-hidden="true"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.8 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: 'linear' }}
-              className="absolute inset-0 bg-black/80"
-              onClick={handleClose}
-            />
-            <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-6 pb-10">
+            <div className="pointer-events-auto w-full max-w-7xl px-4">
               <div
                 ref={menuRef}
                 id="mega-menu-panel"
                 aria-hidden={!open}
-                className="w-full rounded-3xl bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10"
+                className="max-h-[calc(100vh-6rem)] overflow-y-auto rounded-3xl bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10"
               >
                 <div className="flex flex-col gap-8">
                   <div className="flex flex-col gap-5">
