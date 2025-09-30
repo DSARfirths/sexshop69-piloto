@@ -119,7 +119,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
             <div className="flex items-center gap-3 border-b border-neutral-100 px-5 py-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-pink/10 text-brand-pink">
                 <Search className="h-5 w-5" />
               </div>
               <input
@@ -133,7 +133,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition hover:text-brand-pink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/40"
                 aria-label="Cerrar buscador"
               >
                 <X className="h-4 w-4" />
@@ -174,7 +174,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                               </p>
                             </div>
                             <div className="flex flex-col items-end gap-1 text-right">
-                              <span className="text-sm font-semibold text-brand-primary">S/ {displayPrice}</span>
+                              <span className="text-sm font-semibold text-brand-pink">S/ {displayPrice}</span>
                               {hasSalePrice && (
                                 <span className="text-xs font-medium text-neutral-400 line-through">S/ {regularPrice}</span>
                               )}
@@ -184,7 +184,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                             <Link
                               href={`/producto/${product.slug}`}
                               onClick={onClose}
-                              className="inline-flex items-center gap-2 rounded-full border border-brand-primary/30 bg-brand-primary/10 px-4 py-2 font-medium text-brand-primary transition hover:bg-brand-primary/20"
+                              className="inline-flex items-center gap-2 rounded-full border border-brand-pink/30 bg-brand-pink/10 px-4 py-2 font-medium text-brand-pink transition hover:bg-brand-pink/20"
                             >
                               Ver producto
                             </Link>
@@ -192,7 +192,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                               href={`https://wa.me/51924281623?text=Consulta%20${encodeURIComponent(product.sku)}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 font-medium text-neutral-700 transition hover:border-brand-primary/40 hover:text-brand-primary"
+                              className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 font-medium text-neutral-700 transition hover:border-brand-pink/40 hover:text-brand-pink"
                               onClick={onClose}
                             >
                               <MessageCircle className="h-4 w-4" />
@@ -240,7 +240,7 @@ function highlightMatches(text: string, rawQuery: string) {
     }
     if (matches[index]) {
       highlighted.push(
-        <mark key={`${text}-${index}-${matches[index]}`} className="rounded bg-brand-primary/20 px-1 text-brand-primary">
+        <mark key={`${text}-${index}-${matches[index]}`} className="rounded bg-brand-pink/20 px-1 text-brand-pink">
           {matches[index]}
         </mark>
       )

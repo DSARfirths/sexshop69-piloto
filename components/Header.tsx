@@ -61,7 +61,7 @@ export default function Header() {
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
-        className={`sticky top-0 z-40 border-b border-brand-primary/60 backdrop-blur-xl transition-colors duration-300 ${
+        className={`sticky top-0 z-40 border-b border-brand-pink/60 backdrop-blur-xl transition-colors duration-300 ${
           isScrolled
             ? 'bg-neutral-950/70 supports-[backdrop-filter]:bg-neutral-950/60'
             : 'bg-neutral-950 supports-[backdrop-filter]:bg-neutral-950'
@@ -70,14 +70,14 @@ export default function Header() {
         <header className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-3 text-neutral-100 sm:px-4">
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold tracking-tight text-brand-primary transition hover:bg-brand-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60 md:text-base"
+            className="flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold tracking-tight text-brand-pink transition hover:bg-brand-pink/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60 md:text-base"
           >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-base font-bold uppercase">
+            <span className="logo-69 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-base font-bold uppercase">
               69
             </span>
             <span className="flex flex-col leading-tight">
               <span>SexShop del Perú</span>
-              <span className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-brand-primary/80 md:text-xs">
+              <span className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-brand-pink/80 md:text-xs">
                 Placer sin tabúes
               </span>
             </span>
@@ -89,7 +89,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-full px-3 py-2 text-brand-primary/90 transition hover:bg-brand-primary/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
+                className="rounded-full px-3 py-2 text-brand-pink/90 transition hover:bg-brand-pink/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
               >
                 {link.label}
               </Link>
@@ -100,7 +100,7 @@ export default function Header() {
             <button
               type="button"
               onClick={openSearch}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-primary transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70 md:w-auto md:px-3"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-pink transition hover:border-brand-pink/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 md:w-auto md:px-3"
               aria-label="Abrir buscador"
             >
               <Search className="h-4 w-4" aria-hidden />
@@ -109,7 +109,7 @@ export default function Header() {
 
             <Link
               href="/carrito"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-primary transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70 md:w-auto md:px-3"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-pink transition hover:border-brand-pink/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 md:w-auto md:px-3"
               aria-label="Abrir carrito"
             >
               <ShoppingBag className="h-4 w-4" aria-hidden />
@@ -119,7 +119,7 @@ export default function Header() {
             <button
               type="button"
               onClick={openChat}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-brand-primary/40 bg-brand-primary/20 px-4 text-sm font-semibold text-brand-primary transition hover:border-brand-primary/50 hover:bg-brand-primary/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
+              className="btn-primary h-10 px-5"
             >
               <MessageCircle className="h-4 w-4" aria-hidden />
               <span className="hidden md:inline">Asistente</span>
@@ -129,7 +129,7 @@ export default function Header() {
             <button
               type="button"
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-primary transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70 md:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-brand-pink transition hover:border-brand-pink/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 md:hidden"
               onClick={toggleMenu}
             >
               {menuOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
@@ -162,11 +162,11 @@ export default function Header() {
                 className="flex h-full w-[min(20rem,85vw)] flex-col bg-neutral-950/95 text-neutral-100 shadow-2xl"
               >
                 <div className="flex items-center justify-between px-4 pb-2 pt-4">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-primary/80">Explorar</p>
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-pink/80">Explorar</p>
                   <button
                     type="button"
                     onClick={toggleMenu}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-brand-primary transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-brand-pink transition hover:border-brand-pink/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
                   >
                     <X className="h-4 w-4" aria-hidden />
                     <span className="sr-only">Cerrar menú</span>
@@ -177,13 +177,13 @@ export default function Header() {
                     <nav className="space-y-6">
                       <MegaMenu variant="mobile" onNavigate={() => setMenuOpen(false)} />
                       <div className="space-y-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-brand-primary/80">Descubre más</p>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/80">Descubre más</p>
                         {primaryLinks.map((link) => (
                           <Link
                             key={link.href}
                             href={link.href}
                             onClick={() => setMenuOpen(false)}
-                            className="block rounded-xl border border-white/5 bg-white/5 px-3 py-2 text-sm transition hover:border-brand-primary/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
+                            className="block rounded-xl border border-white/5 bg-white/5 px-3 py-2 text-sm transition hover:border-brand-pink/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
                           >
                             {link.label}
                           </Link>
@@ -204,7 +204,7 @@ export default function Header() {
                       openChat()
                       setMenuOpen(false)
                     }}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
+                    className="btn-primary flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm"
                   >
                     <MessageCircle className="h-4 w-4" aria-hidden />
                     Abrir asistente

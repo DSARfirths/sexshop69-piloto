@@ -117,7 +117,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           <h1 className="text-2xl font-semibold mt-1">{product.name}</h1>
           <div className="mt-2 flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-baseline gap-2 text-brand-primary">
+              <div className="flex items-baseline gap-2 text-brand-pink">
                 <span className="text-3xl font-bold md:text-4xl">S/ {displayPrice}</span>
                 {hasSalePrice && (
                   <span className="text-lg font-semibold text-neutral-400 line-through">S/ {regularPrice}</span>
@@ -129,9 +129,9 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                 </span>
               )}
             </div>
-            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-brand-primary">
-              <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-3 py-1">Envío 100% discreto</span>
-              <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-3 py-1">Empaque sin logos</span>
+            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-brand-pink">
+              <span className="inline-flex items-center rounded-full bg-brand-pink/10 px-3 py-1">Envío 100% discreto</span>
+              <span className="inline-flex items-center rounded-full bg-brand-pink/10 px-3 py-1">Empaque sin logos</span>
             </div>
           </div>
           <div className="text-sm text-neutral-500 mt-1">
@@ -142,7 +142,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
             <ul className="mt-4 space-y-2 rounded-2xl bg-neutral-50 p-4 text-sm text-neutral-700">
               {bulletPoints.map(point => (
                 <li key={point.label} className="flex items-start gap-2">
-                  <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-brand-primary/60" aria-hidden />
+                  <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-brand-pink/60" aria-hidden />
                   <div>
                     <span className="font-semibold text-neutral-900">{point.label}:</span> {point.value}
                   </div>
@@ -155,7 +155,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
             {/* Este enlace simula la compra y envía los datos a la página de éxito para la conversión */}
             <Link
               href={checkoutHref}
-              className="group inline-flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl bg-brand-primary px-6 py-4 text-center text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              className="btn-primary group inline-flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-6 py-4 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
             >
               <span className="text-base font-semibold">Comprar ahora</span>
               <span className="text-xs text-white/80">Checkout seguro y discreto</span>
@@ -164,10 +164,10 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
               href={whatsappHref}
               target="_blank"
               rel="noreferrer"
-              className="group inline-flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-brand-primary/20 bg-white px-6 py-4 text-center text-brand-primary shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              className="group inline-flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-brand-pink/20 bg-white px-6 py-4 text-center text-brand-pink shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-pink/40 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
             >
               <span className="text-base font-semibold">WhatsApp 24/7</span>
-              <span className="text-xs text-brand-primary/80">Resolvemos tus dudas en minutos</span>
+              <span className="text-xs text-brand-pink/80">Resolvemos tus dudas en minutos</span>
             </a>
           </div>
 

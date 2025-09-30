@@ -71,7 +71,7 @@ export default function CollectionPage({
     <div>
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold text-neutral-900">{collection.name}</h1>
-        {collection.headline && <p className="text-sm font-medium text-brand-primary">{collection.headline}</p>}
+        {collection.headline && <p className="text-sm font-medium text-brand-pink">{collection.headline}</p>}
         {collection.description && <p className="max-w-2xl text-sm text-neutral-600">{collection.description}</p>}
         <p className="text-xs text-neutral-500">{filteredProducts.length} productos disponibles</p>
       </div>

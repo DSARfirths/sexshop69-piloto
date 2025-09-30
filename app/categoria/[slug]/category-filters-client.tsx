@@ -228,14 +228,14 @@ export default function CategoryFiltersClient() {
               onChange={(event) => onQueryChange(event.target.value)}
               placeholder="Buscar en la categoría"
               aria-label="Buscar"
-              className="flex-1 rounded-xl border border-neutral-200 px-4 py-2 text-sm shadow-sm focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
+              className="flex-1 rounded-xl border border-neutral-200 px-4 py-2 text-sm shadow-sm focus:border-brand-pink focus:outline-none focus:ring-2 focus:ring-brand-pink/40"
             />
             <div className="relative">
               <button
                 type="button"
                 aria-expanded={isSheetOpen}
                 aria-haspopup="dialog"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-brand-primary/60 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-brand-pink/60 hover:text-brand-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink sm:w-auto"
                 onClick={() => setIsSheetOpen((prev) => !prev)}
               >
                 Filtros

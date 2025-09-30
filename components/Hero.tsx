@@ -8,10 +8,10 @@ import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 const AUTO_PLAY_DELAY = 9000
 
 const baseButtonClasses =
-  'inline-flex items-center justify-center rounded-full px-6 py-3 text-base font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+  'inline-flex items-center justify-center rounded-full px-6 py-3 text-base font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink'
 
-const primaryButtonClasses = `${baseButtonClasses} bg-white text-neutral-900 shadow-xl shadow-black/30 hover:bg-neutral-200`
-const secondaryButtonClasses = `${baseButtonClasses} border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20`
+const primaryButtonClasses = 'btn-gradient'
+const secondaryButtonClasses = `${baseButtonClasses} border border-white/40 bg-white/10 text-white backdrop-blur hover:border-white/60 hover:bg-white/15`
 
 type SlideMedia = { type: 'image'; src: string; alt: string }
 
@@ -197,7 +197,7 @@ export default function Hero() {
                     sizes="40vw"
                     className="object-cover object-center"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/30 via-transparent to-brand-accent/30 mix-blend-screen" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-pink/30 via-transparent to-brand-violet/30 mix-blend-screen" />
                 </MotionContent>
               </AnimatePresence>
             </div>

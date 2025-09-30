@@ -124,7 +124,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                 <button
                   type="button"
                   onClick={() => onOpenChange(false)}
-                  className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-neutral-500 shadow-md transition hover:bg-white hover:text-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                  className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-neutral-500 shadow-md transition hover:bg-white hover:text-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
                   aria-label="Cerrar vista rápida"
                 >
                   <X className="h-5 w-5" />
@@ -176,7 +176,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                         {product.badge && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold uppercase text-amber-700">{product.badge}</span>}
                       </Dialog.Description>
                       <div className="flex flex-wrap items-baseline gap-3">
-                        <span className="text-2xl font-bold text-brand-primary">S/ {displayPrice}</span>
+                        <span className="text-2xl font-bold text-brand-pink">S/ {displayPrice}</span>
                         {hasSalePrice && (
                           <span className="text-base font-medium text-neutral-400 line-through">S/ {regularPrice}</span>
                         )}
@@ -190,7 +190,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                         <ul className="space-y-2 rounded-2xl bg-neutral-50 p-4 text-sm text-neutral-700">
                           {features.map((feature, index) => (
                             <li key={index} className="flex items-start gap-2">
-                              <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand-primary" aria-hidden />
+                              <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand-pink" aria-hidden />
                               <span>{feature}</span>
                             </li>
                           ))}
@@ -211,7 +211,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                     <div className="space-y-3">
                       <Link
                         href={checkoutHref}
-                        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-primary px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                        className="btn-primary w-full gap-2 rounded-2xl px-4 py-3 text-sm shadow-lg transition hover:opacity-95"
                         onClick={() => onOpenChange(false)}
                       >
                         <ShoppingBag className="h-4 w-4" /> Comprar ahora
@@ -220,7 +220,7 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                         href={whatsappHref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-brand-primary hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-brand-pink hover:text-brand-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
                       >
                         <MessageCircle className="h-4 w-4" /> WhatsApp
                       </a>
