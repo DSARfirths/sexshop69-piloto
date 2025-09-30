@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ComponentType, PropsWithChildren, useEffect, useState } from 'react'
+import { ComponentType, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 import { Menu, MessageCircle, Search, ShoppingBag, X } from 'lucide-react'
 
@@ -17,7 +17,17 @@ const MotionMobileOverlay = motion.div as ComponentType<
 const MotionButton: any = motion.button
 const MotionAside: any = motion.aside
 
-const promoMessages = [
+type PromoMessage = {
+  id: string
+  text: string
+  link?: {
+    href: string
+    label: string
+  }
+  hideOnMobile?: boolean
+}
+
+const promoMessages: PromoMessage[] = [
   {
     id: 'pink15',
     text: 'Celebra el placer con 15% de descuento en juguetes premium usando el código PINK15.',
@@ -25,7 +35,6 @@ const promoMessages = [
       href: '/ofertas',
       label: 'Descubre la promo',
     },
-    hideOnMobile: false,
   },
   {
     id: 'envio-gratis',
@@ -34,7 +43,6 @@ const promoMessages = [
       href: '/envio-gratis',
       label: 'Ver condiciones',
     },
-    hideOnMobile: false,
   },
   {
     id: 'asesoria',
@@ -52,22 +60,68 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [isCompact, setIsCompact] = useState(false)
   const [currentPromoIndex, setCurrentPromoIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  const availablePromos = useMemo(() => {
+    if (!isMobile) {
+      return promoMessages
+    }
+
+    return promoMessages.filter((promo) => !promo.hideOnMobile)
+  }, [isMobile])
 
   useEffect(() => {
-    if (promoMessages.length <= 1) {
+    const mediaQuery = window.matchMedia('(max-width: 639px)')
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches)
+    }
+
+    setIsMobile(mediaQuery.matches)
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', handleChange)
+      return () => {
+        mediaQuery.removeEventListener('change', handleChange)
+      }
+    }
+
+    mediaQuery.addListener(handleChange)
+    return () => {
+      mediaQuery.removeListener(handleChange)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!availablePromos.length) {
+      setCurrentPromoIndex(0)
+      return
+    }
+
+    setCurrentPromoIndex((prevIndex) => {
+      if (prevIndex >= availablePromos.length) {
+        return 0
+      }
+
+      return prevIndex
+    })
+  }, [availablePromos])
+
+  useEffect(() => {
+    if (availablePromos.length <= 1) {
       return
     }
 
     const interval = window.setInterval(() => {
-      setCurrentPromoIndex((prevIndex) => (prevIndex + 1) % promoMessages.length)
+      setCurrentPromoIndex((prevIndex) => (prevIndex + 1) % availablePromos.length)
     }, 7000)
 
     return () => {
       window.clearInterval(interval)
     }
-  }, [])
+  }, [availablePromos])
 
-  const currentPromo = promoMessages[currentPromoIndex]
+  const currentPromo = availablePromos[currentPromoIndex]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,12 +148,11 @@ export default function Header() {
   return (
     <>
       {currentPromo?.text ? (
-        <div
-          className={`bg-brand-pink text-white ${currentPromo.hideOnMobile ? 'hidden sm:block' : ''}`}
-        >
+        <div className="bg-brand-pink text-white">
           <div
             className="mx-auto flex w-full max-w-7xl justify-center px-3 py-1 text-xs sm:px-4 sm:text-sm"
             aria-live="polite"
+            aria-atomic="true"
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
@@ -110,13 +163,13 @@ export default function Header() {
                 transition={{ duration: 0.35, ease: 'easeOut' }}
                 className="flex w-full flex-col items-center justify-center gap-2 text-center sm:flex-row sm:gap-3"
               >
-                <p className="font-promo text-center font-semibold leading-tight sm:text-left">
+                <p className="promo-rotator-text text-center leading-tight sm:text-left">
                   {currentPromo.text}
                 </p>
                 {currentPromo.link ? (
                   <Link
                     href={currentPromo.link.href}
-                    className="inline-flex items-center gap-1 rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white transition hover:border-white/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--brand-pink)] sm:text-[0.8rem]"
+                    className="promo-rotator-text inline-flex items-center gap-1 rounded-full border border-white/30 px-3 py-1 text-[0.7rem] text-white transition hover:border-white/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--brand-pink)] sm:text-[0.8rem]"
                   >
                     {currentPromo.link.label}
                   </Link>
