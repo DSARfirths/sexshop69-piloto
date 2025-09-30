@@ -171,12 +171,12 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
         ref={menuRef}
         id="mega-menu-panel"
         aria-hidden={!open}
-        className={`absolute left-0 top-full z-30 w-[min(48rem,calc(100vw-2rem))] pt-3 transition duration-150 ease-out ${
+        className={`absolute left-0 top-full z-30 w-screen max-w-none pt-3 transition duration-150 ease-out ${
           open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
         style={{ transform: open ? 'translateY(0.5rem)' : 'translateY(0.25rem)' }}
       >
-        <div className="rounded-3xl border border-brand-primary/30 bg-neutral-950/95 p-6 text-sm text-neutral-100 shadow-2xl ring-1 ring-white/5">
+        <div className="mx-auto max-w-5xl bg-[#1C1C2B] p-6 text-sm text-white shadow-2xl">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
@@ -213,35 +213,36 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
                 })}
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium">
                 {activeTab.quickLinks.map((link) => (
-                  <Link
-                    key={`${activeTab.id}-${link.href}`}
-                    href={link.href}
-                    className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-neutral-100 transition hover:border-brand-primary/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
-                    onClick={() => {
-                      trackMegaMenuInteraction({
-                        tab: activeTab,
-                        linkLabel: link.label,
-                        href: link.href,
-                        context: 'quick-link'
-                      })
-                      onNavigate?.()
-                      handleClose()
-                    }}
-                  >
-                    <span>{link.label}</span>
-                    <ChevronRight className="h-3 w-3 text-brand-primary/80" aria-hidden />
-                  </Link>
+                  <li key={`${activeTab.id}-${link.href}`}>
+                    <Link
+                      href={link.href}
+                      className="inline-flex items-center gap-1 text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
+                      onClick={() => {
+                        trackMegaMenuInteraction({
+                          tab: activeTab,
+                          linkLabel: link.label,
+                          href: link.href,
+                          context: 'quick-link'
+                        })
+                        onNavigate?.()
+                        handleClose()
+                      }}
+                    >
+                      <span>{link.label}</span>
+                      <ChevronRight className="h-3 w-3 text-brand-primary/70" aria-hidden />
+                    </Link>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
             <div
               id={`mega-panel-${activeTab.id}`}
               role="tabpanel"
               aria-labelledby={`mega-tab-${activeTab.id}`}
-              className="grid gap-6 md:grid-cols-3"
+              className="grid gap-6 md:grid-cols-3 lg:grid-cols-4"
             >
               {activeTab.columns.map((column) => (
                 <div key={`${activeTab.id}-${column.title}`} className="space-y-3">
@@ -253,7 +254,7 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
                       <li key={`${column.title}-${link.href}`}>
                         <Link
                           href={link.href}
-                          className="group block rounded-xl border border-white/5 bg-white/5 px-3 py-2 transition hover:border-brand-primary/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
+                          className="group block px-1 py-1 text-sm text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/60"
                           onClick={() => {
                             trackMegaMenuInteraction({
                               tab: activeTab,
@@ -268,12 +269,12 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div>
-                              <p className="text-sm font-semibold text-neutral-50">{link.label}</p>
+                              <p className="font-semibold text-white">{link.label}</p>
                               {link.description && (
-                                <p className="mt-0.5 text-xs text-neutral-300">{link.description}</p>
+                                <p className="mt-0.5 text-xs text-white/70">{link.description}</p>
                               )}
                             </div>
-                            <ChevronRight className="mt-1 h-4 w-4 flex-shrink-0 text-brand-primary/80 transition group-hover:translate-x-0.5" aria-hidden />
+                            <ChevronRight className="mt-1 h-4 w-4 flex-shrink-0 text-brand-primary/70 transition group-hover:translate-x-0.5" aria-hidden />
                           </div>
                         </Link>
                       </li>
@@ -351,28 +352,29 @@ function MobileMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
               >
                 <p className="text-neutral-300">{tab.description}</p>
 
-                <div className="flex flex-wrap gap-2">
+                <ul className="space-y-2 text-sm">
                   {tab.quickLinks.map((link) => (
-                    <Link
-                      key={`${tab.id}-${link.href}`}
-                      href={link.href}
-                      className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium text-neutral-100 transition hover:border-brand-primary/50 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
-                      onClick={() => {
-                        trackMegaMenuInteraction({
-                          tab,
-                          linkLabel: link.label,
-                          href: link.href,
-                          context: 'quick-link'
-                        })
-                        onNavigate?.()
-                        setOpenTab(null)
-                      }}
-                    >
-                      <span>{link.label}</span>
-                      <ChevronRight className="h-3 w-3 text-brand-primary/80" aria-hidden />
-                    </Link>
+                    <li key={`${tab.id}-${link.href}`}>
+                      <Link
+                        href={link.href}
+                        className="inline-flex items-center gap-2 text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
+                        onClick={() => {
+                          trackMegaMenuInteraction({
+                            tab,
+                            linkLabel: link.label,
+                            href: link.href,
+                            context: 'quick-link'
+                          })
+                          onNavigate?.()
+                          setOpenTab(null)
+                        }}
+                      >
+                        <span>{link.label}</span>
+                        <ChevronRight className="h-3 w-3 text-brand-primary/70" aria-hidden />
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
 
                 <div className="space-y-3">
                   {tab.columns.map((column) => (
@@ -385,7 +387,7 @@ function MobileMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
                           <li key={`${column.title}-${link.href}`}>
                             <Link
                               href={link.href}
-                              className="block rounded-xl border border-white/5 bg-white/10 px-3 py-2 text-sm transition hover:border-brand-primary/60 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
+                              className="block px-1 py-1 text-sm text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/70"
                               onClick={() => {
                                 trackMegaMenuInteraction({
                                   tab,
@@ -398,15 +400,15 @@ function MobileMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
                                 setOpenTab(null)
                               }}
                             >
-                              <div className="flex items-start justify-between gap-3">
-                                <div>
-                                  <p className="text-sm font-semibold text-neutral-50">{link.label}</p>
-                                  {link.description && (
-                                    <p className="mt-0.5 text-xs text-neutral-300">{link.description}</p>
-                                  )}
+                                <div className="flex items-start justify-between gap-3">
+                                  <div>
+                                    <p className="text-sm font-semibold text-white">{link.label}</p>
+                                    {link.description && (
+                                      <p className="mt-0.5 text-xs text-white/70">{link.description}</p>
+                                    )}
+                                  </div>
+                                  <ChevronRight className="mt-1 h-4 w-4 flex-shrink-0 text-brand-primary/70" aria-hidden />
                                 </div>
-                                <ChevronRight className="mt-1 h-4 w-4 flex-shrink-0 text-brand-primary/80" aria-hidden />
-                              </div>
                             </Link>
                           </li>
                         ))}
