@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Script from 'next/script'
+import { Montserrat } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ChatBubble } from '@/components/ChatBubble'
@@ -9,6 +10,13 @@ import { AgeGate } from '@/components/AgeGate'
 import Tracker from './Tracker'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['700', '800'],
+  display: 'swap',
+  variable: '--font-heading'
+})
 
 const baseMetadata: Metadata = {
   title: 'SexShop del Perú 69 — Piloto',
@@ -70,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="preconnect" href="https://plausible.io" />
         )}
       </head>
-      <body className="min-h-screen bg-white text-neutral-900 antialiased">
+      <body className={`${montserrat.variable} min-h-screen bg-white text-neutral-900 antialiased`}>
         <Suspense fallback={null}>
           <Tracker />
         </Suspense>

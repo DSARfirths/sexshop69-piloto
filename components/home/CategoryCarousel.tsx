@@ -74,7 +74,7 @@ export function CategoryCard({
           </div>
         )}
         <div className="flex flex-1 flex-col gap-1 px-4 pb-6 pt-4">
-          <h3 className="text-lg font-extrabold uppercase text-neutral-900">{category.label}</h3>
+          <h3 className="font-heading text-lg font-extrabold uppercase text-neutral-900">{category.label}</h3>
           <p className="truncate text-xs font-semibold uppercase tracking-[0.08em] text-neutral-600">{category.subtitle}</p>
           <p className="truncate text-xs font-semibold uppercase text-neutral-600">{category.description}</p>
         </div>
@@ -124,7 +124,7 @@ export default function CategoryCarousel({ title, subtitle, headingId, categorie
     <section className="space-y-4" id="catalogo">
       {title && (
         <div className="space-y-1">
-          <h2 id={headingId} className="text-xl font-semibold text-neutral-900">
+          <h2 id={headingId} className="font-heading text-xl font-semibold text-neutral-900">
             {title}
           </h2>
           {subtitle && <p className="text-sm text-neutral-600">{subtitle}</p>}

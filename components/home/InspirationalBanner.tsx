@@ -73,7 +73,7 @@ export default function InspirationalBanner({
     <div className="flex flex-col justify-center gap-6 px-8 py-10 text-neutral-900">
       {eyebrow && <span className="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-600">{eyebrow}</span>}
       <div className="space-y-4">
-        <h3 className="text-3xl font-semibold text-neutral-900">{title}</h3>
+        <h3 className="font-heading text-3xl font-semibold text-neutral-900">{title}</h3>
         <p className="text-base leading-relaxed text-neutral-600">{description}</p>
       </div>
       {ctaHref && ctaLabel && (

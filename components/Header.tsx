@@ -76,8 +76,13 @@ export default function Header() {
               69
             </span>
             <span className="flex flex-col leading-tight">
-              <span>SexShop del Perú</span>
-              <span className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-brand-pink/80 md:text-xs">
+              <span className="font-heading text-[0.95rem] font-bold uppercase tracking-[0.02em] md:text-lg">
+                Sex Shop
+              </span>
+              <span className="font-heading text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-brand-pink/80 md:text-[0.65rem]">
+                Del Perú
+              </span>
+              <span className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-brand-pink/70 md:text-xs">
                 Placer sin tabúes
               </span>
             </span>

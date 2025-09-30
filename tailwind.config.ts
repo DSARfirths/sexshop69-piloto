@@ -9,7 +9,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', ...defaultTheme.fontFamily.sans]
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        heading: ['var(--font-heading)', 'Montserrat', ...defaultTheme.fontFamily.sans]
       },
       colors: {
         background: 'var(--background)',
