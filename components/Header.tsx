@@ -6,7 +6,7 @@ import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 import { Menu, MessageCircle, Search, ShoppingBag, X } from 'lucide-react'
 
 import SearchOverlay from './header/SearchOverlay'
-import MegaMenu from './nav/MegaMenu'
+import PersonaMegaMenu from './nav/PersonaMegaMenu'
 import { openChatAssistant } from '@/lib/chat-assistant'
 
 const MotionWrapper: any = motion.div
@@ -15,12 +15,6 @@ const MotionMobileOverlay = motion.div as ComponentType<
 >
 const MotionButton: any = motion.button
 const MotionAside: any = motion.aside
-
-const primaryLinks = [
-  { href: '/coleccion/para-el?persona=him', label: 'Él' },
-  { href: '/coleccion/para-ella?persona=her', label: 'Ella' },
-  { href: '/coleccion/para-parejas?persona=couples', label: 'Parejas' },
-]
 
 const promoBanner = {
   text: 'Celebra el placer con 15% de descuento en juguetes premium usando el código PINK15.',
@@ -90,16 +84,9 @@ export default function Header() {
           </Link>
 
           <nav className="hidden items-center gap-2 text-sm font-medium md:flex">
-            <MegaMenu />
-            {primaryLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="nav-link inline-flex items-center justify-center rounded-full px-3 py-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
-              >
-                {link.label}
-              </Link>
-            ))}
+            <PersonaMegaMenu personaFacet="him" />
+            <PersonaMegaMenu personaFacet="her" />
+            <PersonaMegaMenu personaFacet="couples" />
           </nav>
 
           <div className="flex items-center gap-1 md:gap-2">
@@ -181,20 +168,21 @@ export default function Header() {
                 <div className="relative flex-1 overflow-hidden">
                   <div className="h-full overflow-y-auto px-4 pb-10">
                     <nav className="space-y-6">
-                      <MegaMenu variant="mobile" onNavigate={() => setMenuOpen(false)} />
-                      <div className="space-y-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/80">Descubre más</p>
-                        {primaryLinks.map((link) => (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            onClick={() => setMenuOpen(false)}
-                            className="block rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm transition hover:border-brand-pink/40 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
-                          >
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
+                      <PersonaMegaMenu
+                        personaFacet="him"
+                        variant="mobile"
+                        onNavigate={() => setMenuOpen(false)}
+                      />
+                      <PersonaMegaMenu
+                        personaFacet="her"
+                        variant="mobile"
+                        onNavigate={() => setMenuOpen(false)}
+                      />
+                      <PersonaMegaMenu
+                        personaFacet="couples"
+                        variant="mobile"
+                        onNavigate={() => setMenuOpen(false)}
+                      />
                     </nav>
                   </div>
                   <div
