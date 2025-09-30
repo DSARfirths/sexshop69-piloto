@@ -110,7 +110,7 @@ export default function Header() {
               aria-label="Abrir buscador"
             >
               <Search className="h-4 w-4" aria-hidden />
-              <span className="hidden pl-2 text-sm font-medium md:inline">Buscar</span>
+              <span className="sr-only">Buscar</span>
             </button>
 
             <Link
@@ -119,17 +119,17 @@ export default function Header() {
               aria-label="Abrir carrito"
             >
               <ShoppingBag className="h-4 w-4" aria-hidden />
-              <span className="hidden pl-2 text-sm font-medium md:inline">Carrito</span>
+              <span className="sr-only">Carrito</span>
             </Link>
 
             <button
               type="button"
               onClick={openChat}
               className="btn-primary h-10 px-5"
+              aria-label="Abrir asistente"
             >
               <MessageCircle className="h-4 w-4" aria-hidden />
-              <span className="hidden md:inline">Asistente</span>
-              <span className="sr-only">Asistente AI</span>
+              <span className="sr-only">Abrir chat con el asistente</span>
             </button>
 
             <button
