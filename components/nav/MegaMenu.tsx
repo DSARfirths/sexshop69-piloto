@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import type { CSSProperties } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronDown, ChevronRight, Sparkles } from 'lucide-react'
 
@@ -168,12 +169,14 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
         ref={menuRef}
         id="mega-menu-panel"
         aria-hidden={!open}
-        className={`absolute left-0 top-full z-30 w-screen max-w-none pt-3 transition duration-150 ease-out ${
+        className={`absolute left-1/2 top-full z-30 w-screen max-w-7xl -translate-x-1/2 px-4 pt-3 transition duration-150 ease-out transform ${
           open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
-        style={{ transform: open ? 'translateY(0.5rem)' : 'translateY(0.25rem)' }}
+        style={{
+          '--tw-translate-y': open ? '0.5rem' : '0.25rem'
+        } as CSSProperties}
       >
-        <div className="w-screen max-w-none bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10">
+        <div className="mx-auto w-full rounded-3xl bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-1">
