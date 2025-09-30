@@ -17,19 +17,57 @@ const MotionMobileOverlay = motion.div as ComponentType<
 const MotionButton: any = motion.button
 const MotionAside: any = motion.aside
 
-const promoBanner = {
-  text: 'Celebra el placer con 15% de descuento en juguetes premium usando el código PINK15.',
-  link: {
-    href: '/ofertas',
-    label: 'Descubre la promo',
+const promoMessages = [
+  {
+    id: 'pink15',
+    text: 'Celebra el placer con 15% de descuento en juguetes premium usando el código PINK15.',
+    link: {
+      href: '/ofertas',
+      label: 'Descubre la promo',
+    },
+    hideOnMobile: false,
   },
-  hideOnMobile: false,
-}
+  {
+    id: 'envio-gratis',
+    text: 'Envío gratis en compras superiores a S/249 en Lima y Callao durante todo junio.',
+    link: {
+      href: '/envio-gratis',
+      label: 'Ver condiciones',
+    },
+    hideOnMobile: false,
+  },
+  {
+    id: 'asesoria',
+    text: '¿No sabes qué elegir? Agenda una asesoría personalizada y encuentra tu match perfecto.',
+    link: {
+      href: '/asesoria',
+      label: 'Agenda ahora',
+    },
+    hideOnMobile: true,
+  },
+]
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [isCompact, setIsCompact] = useState(false)
+  const [currentPromoIndex, setCurrentPromoIndex] = useState(0)
+
+  useEffect(() => {
+    if (promoMessages.length <= 1) {
+      return
+    }
+
+    const interval = window.setInterval(() => {
+      setCurrentPromoIndex((prevIndex) => (prevIndex + 1) % promoMessages.length)
+    }, 7000)
+
+    return () => {
+      window.clearInterval(interval)
+    }
+  }, [])
+
+  const currentPromo = promoMessages[currentPromoIndex]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,20 +93,36 @@ export default function Header() {
 
   return (
     <>
-      {promoBanner.text ? (
+      {currentPromo?.text ? (
         <div
-          className={`bg-brand-pink text-white ${promoBanner.hideOnMobile ? 'hidden sm:block' : ''}`}
+          className={`bg-brand-pink text-white ${currentPromo.hideOnMobile ? 'hidden sm:block' : ''}`}
         >
-          <div className="mx-auto flex w-full max-w-7xl items-center justify-center gap-3 px-3 py-1 text-xs sm:px-4 sm:text-sm">
-            <p className="text-center font-medium leading-tight">{promoBanner.text}</p>
-            {promoBanner.link ? (
-              <Link
-                href={promoBanner.link.href}
-                className="inline-flex items-center gap-1 rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:border-white/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--brand-pink)] sm:text-[0.8rem]"
+          <div
+            className="mx-auto flex w-full max-w-7xl justify-center px-3 py-1 text-xs sm:px-4 sm:text-sm"
+            aria-live="polite"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={currentPromo.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="flex w-full flex-col items-center justify-center gap-2 text-center sm:flex-row sm:gap-3"
               >
-                {promoBanner.link.label}
-              </Link>
-            ) : null}
+                <p className="font-promo text-center font-semibold leading-tight sm:text-left">
+                  {currentPromo.text}
+                </p>
+                {currentPromo.link ? (
+                  <Link
+                    href={currentPromo.link.href}
+                    className="inline-flex items-center gap-1 rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white transition hover:border-white/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--brand-pink)] sm:text-[0.8rem]"
+                  >
+                    {currentPromo.link.label}
+                  </Link>
+                ) : null}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       ) : null}
