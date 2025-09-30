@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 
@@ -482,18 +482,19 @@ function MobileMegaMenu({ tabs, onNavigate }: MobileMegaMenuProps) {
                 transition={{ duration: 0.28, ease: 'easeInOut' }}
                 className="space-y-5 px-4 py-5"
               >
-                <div className="flex items-center gap-3">
+                <div className="relative flex min-h-[2.75rem] items-center justify-center px-12">
                   <button
                     type="button"
                     onClick={() => {
                       setDirection(-1)
                       setActiveView('root')
                     }}
-                    className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-pink/80 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
+                    className="absolute left-0 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
                   >
-                    Volver
+                    <ChevronLeft className="h-5 w-5" aria-hidden />
+                    <span className="sr-only">Volver</span>
                   </button>
-                  <span className="text-sm font-semibold uppercase tracking-wide text-brand-pink/70">
+                  <span className="text-sm font-semibold uppercase tracking-wide text-brand-pink/70 text-center">
                     {activeTab.label}
                   </span>
                 </div>
