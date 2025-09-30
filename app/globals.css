@@ -52,6 +52,10 @@
     filter: brightness(1.06);
   }
 
+  .btn-primary:focus-visible {
+    outline-color: rgba(218, 70, 154, 0.85);
+  }
+
   .btn-primary:active {
     transform: translateY(1px);
   }
@@ -66,7 +70,29 @@
     filter: brightness(1.04);
   }
 
+  .btn-gradient:focus-visible {
+    outline-color: rgba(98, 78, 169, 0.8);
+  }
+
   .btn-gradient:active {
+    transform: translateY(1px);
+  }
+
+  .btn-solid-violet {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-white transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+    background-color: var(--brand-violet);
+    box-shadow: 0 24px 54px -22px rgba(98, 78, 169, 0.55);
+  }
+
+  .btn-solid-violet:hover {
+    filter: brightness(1.05);
+  }
+
+  .btn-solid-violet:focus-visible {
+    outline-color: rgba(98, 78, 169, 0.85);
+  }
+
+  .btn-solid-violet:active {
     transform: translateY(1px);
   }
 

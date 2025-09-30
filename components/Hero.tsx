@@ -7,11 +7,8 @@ import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 
 const AUTO_PLAY_DELAY = 9000
 
-const baseButtonClasses =
-  'inline-flex items-center justify-center rounded-full px-6 py-3 text-base font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink'
-
 const primaryButtonClasses = 'btn-gradient'
-const secondaryButtonClasses = `${baseButtonClasses} border border-white/40 bg-white/10 text-white backdrop-blur hover:border-white/60 hover:bg-white/15`
+const secondaryButtonClasses = 'btn-solid-violet'
 
 type SlideMedia = { type: 'image'; src: string; alt: string }
 
