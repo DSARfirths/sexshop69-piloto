@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ComponentType,
   PropsWithChildren,
@@ -72,20 +73,15 @@ export default function Header() {
             href="/"
             className="flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold tracking-tight text-brand-pink transition hover:bg-brand-pink/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60 md:text-base"
           >
-            <span className="logo-69 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-base font-bold uppercase">
-              69
-            </span>
-            <span className="flex flex-col leading-tight">
-              <span className="font-heading text-[0.95rem] font-bold uppercase tracking-[0.02em] md:text-lg">
-                Sex Shop
-              </span>
-              <span className="font-heading text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-brand-pink/80 md:text-[0.65rem]">
-                Del Perú
-              </span>
-              <span className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-brand-pink/70 md:text-xs">
-                Placer sin tabúes
-              </span>
-            </span>
+            <Image
+              src="/logo-moderno-para-fondos-oscuros.png"
+              alt="Logo Sex Shop 69"
+              width={160}
+              height={48}
+              priority
+              className="h-8 w-auto md:h-9"
+            />
+            <span className="sr-only">Sex Shop 69 - Placer sin tabues</span>
           </Link>
 
           <nav className="hidden items-center gap-2 text-sm font-medium md:flex">
