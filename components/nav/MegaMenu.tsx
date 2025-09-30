@@ -2,7 +2,9 @@
 
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 
 import { megaMenuConfig } from '@/data/mega-menu.config'
 import type { MegaMenuLink, MegaMenuTab } from '@/data/mega-menu.config'
@@ -338,124 +340,188 @@ type MobileMegaMenuProps = {
 }
 
 function MobileMegaMenu({ tabs, onNavigate }: MobileMegaMenuProps) {
-  const [openTab, setOpenTab] = useState<string | null>(() => (tabs.length === 1 ? tabs[0]?.id ?? null : null))
+  const visibleTabs = useMemo(() => tabs.slice(0, 3), [tabs])
+  const [direction, setDirection] = useState(0)
+  const [activeView, setActiveView] = useState<'root' | MegaMenuTab['id']>(() => {
+    if (visibleTabs.length === 1) {
+      return visibleTabs[0]?.id ?? 'root'
+    }
+    return 'root'
+  })
 
   useEffect(() => {
-    if (!tabs.length) {
-      setOpenTab(null)
+    if (!visibleTabs.length) {
+      setActiveView('root')
+      setDirection(0)
       return
     }
 
-    setOpenTab((current) => {
-      if (tabs.length === 1) {
-        return tabs[0].id
+    setActiveView((current) => {
+      if (current === 'root') {
+        if (visibleTabs.length === 1) {
+          return visibleTabs[0].id
+        }
+        return 'root'
       }
 
-      if (current && tabs.some((tab) => tab.id === current)) {
+      if (visibleTabs.some((tab) => tab.id === current)) {
         return current
       }
 
-      return null
+      return visibleTabs.length === 1 ? visibleTabs[0].id : 'root'
     })
-  }, [tabs])
+    setDirection(0)
+  }, [visibleTabs])
 
-  const headingLabel = tabs.length === 1 ? tabs[0]?.label ?? 'Colecciones' : 'Colecciones'
+  const activeTab = useMemo(() => {
+    if (activeView === 'root') return null
+    return visibleTabs.find((tab) => tab.id === activeView) ?? null
+  }, [activeView, visibleTabs])
 
-  if (!tabs.length) {
+  const headingLabel = visibleTabs.length === 1 ? visibleTabs[0]?.label ?? 'Colecciones' : 'Colecciones'
+
+  if (!visibleTabs.length) {
     return null
+  }
+
+  const ctaHref = activeTab
+    ? `/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`
+    : null
+
+  const variants: Variants = {
+    enter: (slideDirection: number) => ({
+      x: slideDirection > 0 ? '100%' : '-100%',
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1
+    },
+    exit: (slideDirection: number) => ({
+      x: slideDirection > 0 ? '-100%' : '100%',
+      opacity: 0
+    })
   }
 
   return (
     <div className="space-y-4 md:hidden">
       <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/80">{headingLabel}</p>
-      <div className="space-y-3">
-        {tabs.map((tab) => {
-          const isOpen = openTab === tab.id
-          const panelId = `mega-mobile-${tab.id}`
-          const ctaHref = `/coleccion/${tab.collectionSlug}?persona=${tab.personaFacet}`
-          return (
-            <div key={tab.id} className="overflow-hidden rounded-2xl border border-white/5 bg-white/5">
-              <button
-                type="button"
-                className="flex w-full items-center justify-between gap-2 px-4 py-3 text-left text-sm font-semibold text-neutral-50 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
-                aria-expanded={isOpen}
-                aria-controls={panelId}
-                onClick={() => {
-                  setOpenTab((current) => (current === tab.id ? null : tab.id))
-                }}
+      <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-white/5">
+        <AnimatePresence initial={false} mode="wait" custom={direction}>
+          {activeView === 'root' ? (
+            <motion.div
+              key="root-view"
+              custom={direction}
+              variants={variants}
+              initial={direction === 0 ? 'center' : 'enter'}
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.28, ease: 'easeInOut' }}
+              className="space-y-4 px-4 py-5"
+            >
+              <p className="text-sm text-neutral-200">
+                Descubre colecciones diseñadas para distintas formas de placer.
+              </p>
+              <div className="space-y-3">
+                {visibleTabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => {
+                      setDirection(1)
+                      setActiveView(tab.id)
+                    }}
+                    className="w-full rounded-xl bg-white/5 px-4 py-3 text-left transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
+                  >
+                    <span className="text-sm font-semibold text-white">{tab.label}</span>
+                    <p className="mt-1 text-sm text-neutral-300">{tab.tagline}</p>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            activeTab && (
+              <motion.div
+                key={activeTab.id}
+                custom={direction}
+                variants={variants}
+                initial={direction === 0 ? 'center' : 'enter'}
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.28, ease: 'easeInOut' }}
+                className="space-y-5 px-4 py-5"
               >
-                <span>{tab.label}</span>
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                  aria-hidden
-                />
-              </button>
-
-              <div
-                id={panelId}
-                className={`space-y-4 border-t border-white/5 px-4 pb-4 pt-4 text-sm text-neutral-100 transition ${
-                  isOpen ? 'opacity-100' : 'hidden opacity-0'
-                }`}
-              >
-                <p className="text-neutral-300">{tab.description}</p>
-
-                <ul className="space-y-2 text-sm">
-                  {tab.quickLinks.map((link) => (
-                    <li key={`${tab.id}-${link.href}`}>
-                      <Link
-                        href={link.href}
-                        className="inline-flex items-center gap-2 text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
-                        onClick={() => {
-                          trackMegaMenuInteraction({
-                            tab,
-                            linkLabel: link.label,
-                            href: link.href,
-                            context: 'quick-link'
-                          })
-                          onNavigate?.()
-                          setOpenTab(null)
-                        }}
-                      >
-                        <span>{link.label}</span>
-                        <ChevronRight className="h-3 w-3 text-brand-pink/70" aria-hidden />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="space-y-3">
-                  {tab.columns.map((column) => (
-                    <div key={`${tab.id}-${column.title}`}>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDirection(-1)
+                      setActiveView('root')
+                    }}
+                    className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-pink/80 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
+                  >
+                    Volver
+                  </button>
+                  <span className="text-sm font-semibold uppercase tracking-wide text-brand-pink/70">
+                    {activeTab.label}
+                  </span>
+                </div>
+                <div className="space-y-3 text-sm text-neutral-100">
+                  <p className="text-neutral-300">{activeTab.description}</p>
+                  <ul className="space-y-2">
+                    {activeTab.quickLinks.map((link) => (
+                      <li key={`${activeTab.id}-${link.href}`}>
+                        <Link
+                          href={link.href}
+                          className="inline-flex items-center justify-between gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-white/90 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
+                          onClick={() => {
+                            trackMegaMenuInteraction({
+                              tab: activeTab,
+                              linkLabel: link.label,
+                              href: link.href,
+                              context: 'quick-link'
+                            })
+                            onNavigate?.()
+                            setDirection(-1)
+                            setActiveView('root')
+                          }}
+                        >
+                          <span>{link.label}</span>
+                          <ChevronRight className="h-3 w-3 text-brand-pink/70" aria-hidden />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="space-y-4">
+                  {activeTab.columns.map((column) => (
+                    <div key={`${activeTab.id}-${column.title}`} className="space-y-2">
                       <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/70">
                         {column.title}
                       </p>
-                      <ul className="mt-2 space-y-2">
+                      <ul className="space-y-2">
                         {column.links.map((link) => (
                           <li key={`${column.title}-${link.href}`}>
                             <Link
                               href={link.href}
-                              className="block px-1 py-1 text-sm text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
+                              className="block rounded-lg px-3 py-2 text-white/90 transition hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70"
                               onClick={() => {
                                 trackMegaMenuInteraction({
-                                  tab,
+                                  tab: activeTab,
                                   linkLabel: link.label,
                                   href: link.href,
                                   context: 'column',
                                   columnTitle: column.title
                                 })
                                 onNavigate?.()
-                                setOpenTab(null)
+                                setDirection(-1)
+                                setActiveView('root')
                               }}
                             >
-                                <div className="flex items-start justify-between gap-3">
-                                  <div>
-                                    <p className="text-sm font-semibold text-white">{link.label}</p>
-                                    {link.description && (
-                                      <p className="mt-0.5 text-xs text-white/70">{link.description}</p>
-                                    )}
-                                  </div>
-                                  <ChevronRight className="mt-1 h-4 w-4 flex-shrink-0 text-brand-pink/70" aria-hidden />
-                                </div>
+                              <p className="text-sm font-semibold text-white">{link.label}</p>
+                              {link.description && (
+                                <p className="mt-0.5 text-xs text-white/70">{link.description}</p>
+                              )}
                             </Link>
                           </li>
                         ))}
@@ -463,28 +529,30 @@ function MobileMegaMenu({ tabs, onNavigate }: MobileMegaMenuProps) {
                     </div>
                   ))}
                 </div>
-
+                {ctaHref && (
                   <Link
                     href={ctaHref}
                     className="btn-primary inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2 text-sm"
                     onClick={() => {
                       trackMegaMenuInteraction({
-                        tab,
-                        linkLabel: tab.ctaLabel,
+                        tab: activeTab,
+                        linkLabel: activeTab.ctaLabel,
                         href: ctaHref,
                         context: 'cta'
                       })
                       onNavigate?.()
-                      setOpenTab(null)
+                      setDirection(-1)
+                      setActiveView('root')
                     }}
                   >
-                    {tab.ctaLabel}
+                    {activeTab.ctaLabel}
                     <ChevronRight className="h-4 w-4" aria-hidden />
                   </Link>
-              </div>
-            </div>
-          )
-        })}
+                )}
+              </motion.div>
+            )
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )

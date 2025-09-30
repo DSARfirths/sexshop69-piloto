@@ -8,6 +8,7 @@ import { Menu, MessageCircle, Search, ShoppingBag, X } from 'lucide-react'
 
 import SearchOverlay from './header/SearchOverlay'
 import PersonaMegaMenu from './nav/PersonaMegaMenu'
+import MegaMenu from './nav/MegaMenu'
 import { openChatAssistant } from '@/lib/chat-assistant'
 
 const MotionWrapper: any = motion.div
@@ -297,21 +298,7 @@ export default function Header() {
                 <div className="relative flex-1 overflow-hidden">
                   <div className="h-full overflow-y-auto px-4 pb-10">
                     <nav className="space-y-6">
-                      <PersonaMegaMenu
-                        personaFacet="him"
-                        variant="mobile"
-                        onNavigate={() => setMenuOpen(false)}
-                      />
-                      <PersonaMegaMenu
-                        personaFacet="her"
-                        variant="mobile"
-                        onNavigate={() => setMenuOpen(false)}
-                      />
-                      <PersonaMegaMenu
-                        personaFacet="couples"
-                        variant="mobile"
-                        onNavigate={() => setMenuOpen(false)}
-                      />
+                      <MegaMenu variant="mobile" onNavigate={() => setMenuOpen(false)} />
                     </nav>
                   </div>
                   <div
