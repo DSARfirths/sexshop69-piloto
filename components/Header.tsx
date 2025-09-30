@@ -93,7 +93,7 @@ export default function Header() {
             <button
               type="button"
               onClick={openSearch}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-brand-pink transition hover:border-brand-pink/60 hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 md:w-auto md:px-3"
+              className="icon-button"
               aria-label="Abrir buscador"
             >
               <Search className="h-4 w-4" aria-hidden />
@@ -102,7 +102,7 @@ export default function Header() {
 
             <Link
               href="/carrito"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-brand-pink transition hover:border-brand-pink/60 hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 md:w-auto md:px-3"
+              className="icon-button"
               aria-label="Abrir carrito"
             >
               <ShoppingBag className="h-4 w-4" aria-hidden />
@@ -112,7 +112,7 @@ export default function Header() {
             <button
               type="button"
               onClick={openChat}
-              className="btn-primary h-10 px-5"
+              className="icon-button"
               aria-label="Abrir asistente"
             >
               <MessageCircle className="h-4 w-4" aria-hidden />
@@ -122,7 +122,7 @@ export default function Header() {
             <button
               type="button"
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-brand-pink transition hover:border-brand-pink/60 hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 md:hidden"
+              className="icon-button md:hidden"
               onClick={toggleMenu}
             >
               {menuOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
