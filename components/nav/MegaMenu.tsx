@@ -153,16 +153,13 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
             handleOpen()
           }
         }}
-        className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60 ${
-          open
-            ? 'bg-brand-pink/20 text-white'
-            : 'text-brand-pink/90 hover:bg-brand-pink/15 hover:text-white'
-        }`}
+        data-active={open}
+        className="nav-link inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
       >
-        <Sparkles className="h-4 w-4" aria-hidden />
-        Categorías
+        <Sparkles className="relative z-10 h-4 w-4" aria-hidden />
+        <span className="relative z-10">Categorías</span>
         <ChevronDown
-          className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`relative z-10 h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
           aria-hidden
         />
       </button>
