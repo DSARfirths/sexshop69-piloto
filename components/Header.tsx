@@ -22,6 +22,15 @@ const primaryLinks = [
   { href: '/blog', label: 'Blog/Guías' },
 ]
 
+const promoBanner = {
+  text: 'Celebra el placer con 15% de descuento en juguetes premium usando el código PINK15.',
+  link: {
+    href: '/ofertas',
+    label: 'Descubre la promo',
+  },
+  hideOnMobile: false,
+}
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -37,6 +46,23 @@ export default function Header() {
 
   return (
     <>
+      {promoBanner.text ? (
+        <div
+          className={`bg-brand-pink text-white ${promoBanner.hideOnMobile ? 'hidden sm:block' : ''}`}
+        >
+          <div className="mx-auto flex w-full max-w-7xl items-center justify-center gap-3 px-3 py-1 text-xs sm:px-4 sm:text-sm">
+            <p className="text-center font-medium leading-tight">{promoBanner.text}</p>
+            {promoBanner.link ? (
+              <Link
+                href={promoBanner.link.href}
+                className="inline-flex items-center gap-1 rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:border-white/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--brand-pink)] sm:text-[0.8rem]"
+              >
+                {promoBanner.link.label}
+              </Link>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
       <MotionWrapper
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
