@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ComponentType, PropsWithChildren, useState } from 'react'
+import { ComponentType, PropsWithChildren, useEffect, useState } from 'react'
 import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 import { Menu, MessageCircle, Search, ShoppingBag, X } from 'lucide-react'
 
@@ -29,6 +29,20 @@ const promoBanner = {
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [isCompact, setIsCompact] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsCompact(window.scrollY > 16)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
   const toggleMenu = () => setMenuOpen((prev) => !prev)
   const openSearch = () => {
     setSearchOpen(true)
@@ -64,7 +78,9 @@ export default function Header() {
         transition={{ duration: 0.35, ease: 'easeOut' }}
         className="sticky top-0 z-40 border-b border-brand-pink/60 bg-black"
       >
-        <header className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 text-neutral-100 sm:px-6">
+        <header
+          className={`mx-auto flex w-full max-w-7xl items-center justify-between px-4 text-neutral-100 transition-[height,padding] duration-300 sm:px-6 ${isCompact ? 'h-16' : 'h-24'}`}
+        >
           <Link
             href="/"
             aria-label="Inicio de Sex Shop del Perú"
@@ -75,7 +91,7 @@ export default function Header() {
               alt="Logotipo de Sex Shop del Perú con isotipo y tagline"
               width={176}
               height={56}
-              className="h-14 w-auto"
+              className={`w-auto transition-all duration-300 ${isCompact ? 'h-12' : 'h-16'}`}
               priority
             />
           </Link>
@@ -93,7 +109,10 @@ export default function Header() {
               className="icon-button"
               aria-label="Abrir buscador"
             >
-              <Search className="h-4 w-4" aria-hidden />
+              <Search
+                className={`transition-all duration-300 ${isCompact ? 'h-5 w-5' : 'h-6 w-6'}`}
+                aria-hidden
+              />
               <span className="sr-only">Buscar</span>
             </button>
 
@@ -102,7 +121,10 @@ export default function Header() {
               className="icon-button"
               aria-label="Abrir carrito"
             >
-              <ShoppingBag className="h-4 w-4" aria-hidden />
+              <ShoppingBag
+                className={`transition-all duration-300 ${isCompact ? 'h-5 w-5' : 'h-6 w-6'}`}
+                aria-hidden
+              />
               <span className="sr-only">Carrito</span>
             </Link>
 
@@ -112,7 +134,10 @@ export default function Header() {
               className="icon-button"
               aria-label="Abrir asistente"
             >
-              <MessageCircle className="h-4 w-4" aria-hidden />
+              <MessageCircle
+                className={`transition-all duration-300 ${isCompact ? 'h-5 w-5' : 'h-6 w-6'}`}
+                aria-hidden
+              />
               <span className="sr-only">Abrir chat con el asistente</span>
             </button>
 
