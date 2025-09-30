@@ -47,8 +47,7 @@ export default function Header() {
           <Link
             href="/"
             className="flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold tracking-tight text-brand-pink transition hover:bg-brand-pink/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60 md:text-base"
-          >
-            <span className="logo-69 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-base font-bold uppercase">
+          >            <span className="logo-69 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-base font-bold uppercase">
               69
             </span>
             <span className="flex flex-col leading-tight">
