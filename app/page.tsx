@@ -136,7 +136,7 @@ export default function Page() {
             className="relative rounded-3xl border border-neutral-200 bg-neutral-50 px-4 py-10 sm:px-6 lg:px-8"
           >
             <div className="relative z-10 space-y-6">
-              <h2 id="buscas-algo-mas-especifico" className="text-xl font-semibold text-neutral-900 lg:text-2xl">
+              <h2 id="buscas-algo-mas-especifico" className="font-heading text-xl font-semibold text-neutral-900 lg:text-2xl">
                 ¿Buscas algo más específico?
               </h2>
               <p className="max-w-2xl text-sm text-neutral-600">

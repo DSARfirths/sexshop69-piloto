@@ -37,7 +37,7 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
   return (
     <section className="space-y-8" aria-labelledby={headingId}>
       <div className="space-y-2">
-        <h2 id={headingId} className="text-3xl font-semibold text-neutral-900">
+        <h2 id={headingId} className="font-heading text-3xl font-semibold text-neutral-900">
           Productos destacados
         </h2>
         <p className="max-w-2xl text-sm text-neutral-600">
@@ -81,7 +81,7 @@ export default function FeaturedProducts({ products, headingId }: FeaturedProduc
               <div className="relative space-y-4 p-8">
                 <div className="space-y-2">
                   <span className="inline-flex items-center rounded-full bg-fuchsia-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-fuchsia-700">Premium</span>
-                  <h3 className="text-2xl font-semibold text-neutral-900">{product.name}</h3>
+                  <h3 className="font-heading text-2xl font-semibold text-neutral-900">{product.name}</h3>
                   {product.shortDescription && (
                     <p className="text-sm leading-relaxed text-neutral-600">{product.shortDescription}</p>
                   )}

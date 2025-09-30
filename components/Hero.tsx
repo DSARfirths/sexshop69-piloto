@@ -150,7 +150,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
+              className="font-heading text-4xl font-semibold leading-tight sm:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
             >
               {activeSlide.title}
             </MotionHeading>
