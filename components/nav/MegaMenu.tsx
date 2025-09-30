@@ -176,9 +176,9 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
         }`}
         style={{ transform: open ? 'translateY(0.5rem)' : 'translateY(0.25rem)' }}
       >
-        <div className="mx-auto max-w-5xl bg-surface-strong p-6 text-sm text-white shadow-2xl">
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-4">
+        <div className="w-screen max-w-none bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10">
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-pink/80">
                   {activeTab.tagline}
@@ -187,38 +187,41 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
                 <p className="text-sm text-neutral-300">{activeTab.description}</p>
               </div>
 
-              <div role="tablist" aria-label="Personas" className="flex flex-wrap gap-2">
-                {tabs.map((tab) => {
-                  const isActive = tab.id === activeTab.id
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      role="tab"
-                      id={`mega-tab-${tab.id}`}
-                      aria-selected={isActive}
-                      aria-controls={`mega-panel-${tab.id}`}
-                      className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60 ${
-                        isActive
-                          ? 'border-brand-pink/70 bg-brand-pink/20 text-white'
-                          : 'border-transparent bg-white/5 text-brand-pink/70 hover:border-brand-pink/40 hover:bg-white/10 hover:text-white'
-                      }`}
-                      onMouseEnter={() => setActiveTabId(tab.id)}
-                      onFocus={() => setActiveTabId(tab.id)}
-                      onClick={() => setActiveTabId(tab.id)}
-                    >
-                      {tab.label}
-                    </button>
-                  )
-                })}
+              <div role="tablist" aria-label="Personas">
+                <ul className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-[0.2em]">
+                  {tabs.map((tab) => {
+                    const isActive = tab.id === activeTab.id
+                    return (
+                      <li key={tab.id}>
+                        <button
+                          type="button"
+                          role="tab"
+                          id={`mega-tab-${tab.id}`}
+                          aria-selected={isActive}
+                          aria-controls={`mega-panel-${tab.id}`}
+                          className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
+                            isActive
+                              ? 'text-brand-pink'
+                              : 'text-neutral-300 hover:text-brand-pink'
+                          }`}
+                          onMouseEnter={() => setActiveTabId(tab.id)}
+                          onFocus={() => setActiveTabId(tab.id)}
+                          onClick={() => setActiveTabId(tab.id)}
+                        >
+                          {tab.label}
+                        </button>
+                      </li>
+                    )
+                  })}
+                </ul>
               </div>
 
-              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium">
+              <ul className="flex flex-wrap gap-x-8 gap-y-3 text-xs font-medium text-neutral-200">
                 {activeTab.quickLinks.map((link) => (
                   <li key={`${activeTab.id}-${link.href}`}>
                     <Link
                       href={link.href}
-                      className="inline-flex items-center gap-1 text-white/90 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
+                      className="inline-flex items-center gap-1 transition hover:text-brand-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
                       onClick={() => {
                         trackMegaMenuInteraction({
                           tab: activeTab,
@@ -242,10 +245,10 @@ function DesktopMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
               id={`mega-panel-${activeTab.id}`}
               role="tabpanel"
               aria-labelledby={`mega-tab-${activeTab.id}`}
-              className="grid gap-6 md:grid-cols-3 lg:grid-cols-4"
+              className="grid gap-8 md:grid-cols-4 xl:grid-cols-5"
             >
               {activeTab.columns.map((column) => (
-                <div key={`${activeTab.id}-${column.title}`} className="space-y-3">
+                <div key={`${activeTab.id}-${column.title}`} className="space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/70">
                     {column.title}
                   </p>
