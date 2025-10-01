@@ -184,7 +184,7 @@ export default function Header() {
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
-        className="sticky top-0 z-40 border-b border-brand-pink/60 bg-black"
+        className="sticky top-0 z-40 bg-black shadow-[0_1px_0_rgba(255,255,255,0.08)]"
       >
         <header
           className={`mx-auto flex w-full max-w-7xl items-center justify-between px-4 text-neutral-100 transition-[height,padding] duration-300 sm:px-6 ${isCompact ? 'h-16' : 'h-24'}`}
