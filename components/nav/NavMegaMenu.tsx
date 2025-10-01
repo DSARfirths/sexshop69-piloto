@@ -169,15 +169,6 @@ export default function NavMegaMenu({ onNavigate }: NavMegaMenuProps) {
     [handleOpenForTab, open, activeTabId]
   )
 
-  const handlePanelMouseEnter = useCallback(
-    (_event: ReactMouseEvent<HTMLElement>) => {
-      if (!open) {
-        setOpen(true)
-      }
-    },
-    [open]
-  )
-
   if (!hasTabs) {
     return null
   }
@@ -217,12 +208,10 @@ export default function NavMegaMenu({ onNavigate }: NavMegaMenuProps) {
       <MegaMenu
         onNavigate={onNavigate}
         open={open}
+        onOpenChange={setOpen}
         activeTabId={activeTabId}
-        onTabChange={setActiveTabId}
-        onClose={() => setOpen(false)}
+        onActiveTabChange={setActiveTabId}
         panelTop={panelTop}
-        onPanelMouseEnter={handlePanelMouseEnter}
-        onPanelMouseLeave={handleMouseLeave}
         menuId={menuId}
         menuRef={menuRef}
         activeTrigger={activeTrigger}

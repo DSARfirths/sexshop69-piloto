@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { MouseEvent as ReactMouseEvent } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
@@ -15,12 +14,11 @@ type MegaMenuProps = {
   onNavigate?: () => void
   tabId?: MegaMenuTab['id']
   open?: boolean
+  onOpenChange?: (open: boolean) => void
   activeTabId?: MegaMenuTab['id']
-  onTabChange?: (tabId: MegaMenuTab['id']) => void
-  onClose?: () => void
+  onActiveTabChange?: (tabId: MegaMenuTab['id']) => void
+  triggerLabel?: string
   panelTop?: number
-  onPanelMouseEnter?: (event: ReactMouseEvent<HTMLElement>) => void
-  onPanelMouseLeave?: (event: ReactMouseEvent<HTMLElement>) => void
   menuId?: string
   menuRef?: React.RefObject<HTMLDivElement | null>
   activeTrigger?: HTMLElement | null
@@ -55,12 +53,10 @@ type DesktopMegaMenuProps = {
   tabs: MegaMenuTab[]
   onNavigate?: () => void
   open: boolean
+  onOpenChange?: (open: boolean) => void
   activeTabId?: MegaMenuTab['id']
-  onTabChange?: (tabId: MegaMenuTab['id']) => void
-  onClose?: () => void
+  onActiveTabChange?: (tabId: MegaMenuTab['id']) => void
   panelTop?: number
-  onPanelMouseEnter?: (event: ReactMouseEvent<HTMLElement>) => void
-  onPanelMouseLeave?: (event: ReactMouseEvent<HTMLElement>) => void
   menuId: string
   menuRef?: React.RefObject<HTMLDivElement | null>
   activeTrigger?: HTMLElement | null
@@ -117,12 +113,10 @@ function DesktopMegaMenu({
   tabs,
   onNavigate,
   open,
+  onOpenChange,
   activeTabId,
-  onTabChange,
-  onClose,
+  onActiveTabChange,
   panelTop = 0,
-  onPanelMouseEnter,
-  onPanelMouseLeave,
   menuId,
   menuRef,
   activeTrigger
@@ -157,19 +151,27 @@ function DesktopMegaMenu({
     return null
   }
 
+  const handleOpen = () => {
+    onOpenChange?.(true)
+  }
+
+  const handleClose = () => {
+    onOpenChange?.(false)
+  }
+
   return (
     <AnimatePresence>
       {open ? (
         <motion.div
-          key="mega-menu-layer"
+          key={`mega-menu-layer-${activeTab.id}`}
           variants={panelVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
           className="fixed inset-x-0 z-30 overflow-hidden bg-neutral-950"
           style={{ top: panelTop }}
-          onMouseEnter={onPanelMouseEnter}
-          onMouseLeave={onPanelMouseLeave}
+          onMouseEnter={handleOpen}
+          onMouseLeave={handleClose}
         >
           <div className="flex justify-center pt-1 pb-10">
             <div className="pointer-events-auto w-full max-w-7xl px-4">
@@ -200,9 +202,9 @@ function DesktopMegaMenu({
                                 className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
                                   isActive ? 'text-brand-pink' : 'text-neutral-300 hover:text-brand-pink'
                                 }`}
-                                onMouseEnter={() => onTabChange?.(tab.id)}
-                                onFocus={() => onTabChange?.(tab.id)}
-                                onClick={() => onTabChange?.(tab.id)}
+                                onMouseEnter={() => onActiveTabChange?.(tab.id)}
+                                onFocus={() => onActiveTabChange?.(tab.id)}
+                                onClick={() => onActiveTabChange?.(tab.id)}
                               >
                                 {tab.label}
                               </button>
@@ -230,7 +232,7 @@ function DesktopMegaMenu({
                               context: 'quick-link'
                             })
                             onNavigate?.()
-                            onClose?.()
+                            handleClose()
                           }}
                         >
                           <span>{link.label}</span>
@@ -261,20 +263,20 @@ function DesktopMegaMenu({
                               <Link
                                 href={link.href}
                                 className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-white/90 transition hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
-                                onClick={() => {
-                                  trackMegaMenuInteraction({
-                                    tab: activeTab,
-                                    linkLabel: link.label,
-                                    href: link.href,
-                                    context: 'column',
-                                    columnTitle: column.title
-                                  })
-                                  onNavigate?.()
-                                  onClose?.()
-                                }}
-                              >
-                                <span>{link.label}</span>
-                                <ChevronRight
+                              onClick={() => {
+                                trackMegaMenuInteraction({
+                                  tab: activeTab,
+                                  linkLabel: link.label,
+                                  href: link.href,
+                                  context: 'column',
+                                  columnTitle: column.title
+                                })
+                                onNavigate?.()
+                                handleClose()
+                              }}
+                            >
+                              <span>{link.label}</span>
+                              <ChevronRight
                                   className="h-4 w-4 flex-shrink-0 text-brand-pink/70 transition group-hover:translate-x-0.5"
                                   aria-hidden
                                 />
@@ -298,7 +300,7 @@ function DesktopMegaMenu({
                           context: 'cta'
                         })
                         onNavigate?.()
-                        onClose?.()
+                        handleClose()
                       }}
                     >
                       {activeTab.ctaLabel}
@@ -543,12 +545,10 @@ export default function MegaMenu({
   onNavigate,
   tabId,
   open = false,
+  onOpenChange,
   activeTabId,
-  onTabChange,
-  onClose,
+  onActiveTabChange,
   panelTop = 0,
-  onPanelMouseEnter,
-  onPanelMouseLeave,
   menuId = 'mega-menu-panel',
   menuRef,
   activeTrigger
@@ -570,12 +570,10 @@ export default function MegaMenu({
       tabs={tabs}
       onNavigate={onNavigate}
       open={open}
+      onOpenChange={onOpenChange}
       activeTabId={activeTabId}
-      onTabChange={onTabChange}
-      onClose={onClose}
+      onActiveTabChange={onActiveTabChange}
       panelTop={panelTop}
-      onPanelMouseEnter={onPanelMouseEnter}
-      onPanelMouseLeave={onPanelMouseLeave}
       menuId={menuId}
       menuRef={menuRef}
       activeTrigger={activeTrigger}
