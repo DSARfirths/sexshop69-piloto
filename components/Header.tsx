@@ -70,6 +70,10 @@ export default function Header() {
     return promoMessages.filter((promo) => !promo.hideOnMobile)
   }, [isMobile])
 
+  const safeIndex = useMemo(() => {
+    return availablePromos.length ? currentPromoIndex % availablePromos.length : 0
+  }, [availablePromos.length, currentPromoIndex])
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 639px)')
 
@@ -108,6 +112,12 @@ export default function Header() {
   }, [availablePromos])
 
   useEffect(() => {
+    if (currentPromoIndex !== safeIndex) {
+      setCurrentPromoIndex(safeIndex)
+    }
+  }, [currentPromoIndex, safeIndex])
+
+  useEffect(() => {
     if (availablePromos.length <= 1) {
       return
     }
@@ -121,7 +131,7 @@ export default function Header() {
     }
   }, [availablePromos])
 
-  const currentPromo = availablePromos[currentPromoIndex]
+  const currentPromo = availablePromos[safeIndex]
 
   const toggleMenu = () => setMenuOpen((prev) => !prev)
   const openSearch = () => {
