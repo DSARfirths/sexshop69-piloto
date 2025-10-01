@@ -7,7 +7,7 @@ import { AnimatePresence, motion, type HTMLMotionProps } from 'framer-motion'
 import { Menu, MessageCircle, Search, ShoppingBag, X } from 'lucide-react'
 
 import SearchOverlay from './header/SearchOverlay'
-import PersonaMegaMenu from './nav/PersonaMegaMenu'
+import NavMegaMenu from './nav/NavMegaMenu'
 import MegaMenu from './nav/MegaMenu'
 import { openChatAssistant } from '@/lib/chat-assistant'
 
@@ -190,9 +190,7 @@ export default function Header() {
           </Link>
 
           <nav className="hidden h-full items-center gap-3 text-sm font-medium md:flex">
-            <PersonaMegaMenu personaFacet="him" />
-            <PersonaMegaMenu personaFacet="her" />
-            <PersonaMegaMenu personaFacet="couples" />
+            <NavMegaMenu onNavigate={() => setMenuOpen(false)} />
           </nav>
 
           <div className="flex h-full items-center gap-2 md:gap-3">
