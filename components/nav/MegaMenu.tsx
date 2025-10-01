@@ -109,6 +109,24 @@ const fadeInUpVariants: Variants = {
   }
 }
 
+const scrimVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.15,
+      ease: 'easeOut'
+    }
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.15,
+      ease: 'easeInOut'
+    }
+  }
+}
+
 function DesktopMegaMenu({
   tabs,
   onNavigate,
@@ -162,18 +180,29 @@ function DesktopMegaMenu({
   return (
     <AnimatePresence>
       {open ? (
-        <motion.div
-          key={`mega-menu-layer-${activeTab.id}`}
-          variants={panelVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className="fixed inset-x-0 z-30 overflow-hidden bg-neutral-950"
-          style={{ top: panelTop }}
-          onMouseEnter={handleOpen}
-          onMouseLeave={handleClose}
-        >
-          <div className="flex justify-center pt-1 pb-10">
+        <>
+          <motion.div
+            key="mega-menu-scrim"
+            variants={scrimVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="pointer-events-auto fixed inset-0 z-20 bg-black/50"
+            aria-hidden
+            onClick={handleClose}
+          />
+          <motion.div
+            key={`mega-menu-layer-${activeTab.id}`}
+            variants={panelVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="pointer-events-auto fixed inset-x-4 z-30 overflow-hidden bg-neutral-950 sm:inset-x-6 lg:inset-x-8"
+            style={{ top: panelTop }}
+            onMouseEnter={handleOpen}
+            onMouseLeave={handleClose}
+          >
+            <div className="flex justify-center pt-1 pb-10">
             <div className="pointer-events-auto w-full max-w-7xl px-4">
               <motion.div
                 ref={resolvedMenuRef}
@@ -310,8 +339,9 @@ function DesktopMegaMenu({
                 </motion.div>
               </motion.div>
             </div>
-          </div>
-        </motion.div>
+            </div>
+          </motion.div>
+        </>
       ) : null}
     </AnimatePresence>
   )
