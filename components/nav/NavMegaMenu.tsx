@@ -47,35 +47,27 @@ export default function NavMegaMenu({ onNavigate }: NavMegaMenuProps) {
     })
   }, [hasTabs, personaTabs])
 
-  const ensureHeaderReference = useCallback(() => {
-    if (headerRef.current) return
-    if (!containerRef.current) return
-    const header = containerRef.current.closest('header')
-    if (header instanceof HTMLElement) {
-      headerRef.current = header
-    }
-  }, [])
-
   const updatePanelPosition = useCallback(() => {
-    ensureHeaderReference()
+    if (typeof document === 'undefined') return
+
+    if (!headerRef.current) {
+      const header =
+        containerRef.current?.closest('header') ?? document.querySelector('header')
+      if (header instanceof HTMLElement) {
+        headerRef.current = header
+      }
+    }
+
     if (headerRef.current) {
       const rect = headerRef.current.getBoundingClientRect()
       setPanelTop(rect.bottom)
       return
     }
 
-    if (activeTrigger) {
-      const rect = activeTrigger.getBoundingClientRect()
-      setPanelTop(rect.bottom)
-      return
-    }
-
     setPanelTop(0)
-  }, [activeTrigger, ensureHeaderReference])
+  }, [])
 
   useEffect(() => {
-    if (!open) return
-
     updatePanelPosition()
 
     const handleResize = () => {
@@ -89,7 +81,7 @@ export default function NavMegaMenu({ onNavigate }: NavMegaMenuProps) {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('scroll', handleResize, true)
     }
-  }, [open, updatePanelPosition])
+  }, [updatePanelPosition])
 
   const isNodeWithinContainer = useCallback(
     (node: Node | null) => {
