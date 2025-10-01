@@ -47,6 +47,53 @@ type DesktopMegaMenuProps = {
   triggerLabel?: string
 }
 
+const panelVariants: Variants = {
+  hidden: { opacity: 0, y: -12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 160,
+      damping: 20,
+      when: 'beforeChildren',
+      staggerChildren: 0.05
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: -12,
+    transition: {
+      duration: 0.15,
+      ease: 'easeInOut'
+    }
+  }
+}
+
+const contentWrapperVariants: Variants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.08
+    }
+  }
+}
+
+const fadeInUpVariants: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 210,
+      damping: 24
+    }
+  }
+}
+
 function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProps) {
   const hasTabs = tabs.length > 0
   const [open, setOpen] = useState(false)
@@ -237,140 +284,153 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
         {open ? (
           <motion.div
             key="mega-menu-layer"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="fixed inset-x-0 z-30 flex justify-center pt-4 pb-10"
+            variants={panelVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="fixed inset-x-0 z-30 overflow-hidden bg-neutral-950"
             style={{ top: panelTop }}
             onMouseEnter={handleOpen}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="pointer-events-auto w-full max-w-7xl px-4">
-              <div
-                ref={menuRef}
-                id="mega-menu-panel"
-                aria-hidden={!open}
-                className="max-h-[calc(100vh-6rem)] overflow-y-auto rounded-3xl bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10"
-              >
-                <div className="flex flex-col gap-8">
-                  {tabs.length > 1 ? (
-                    <div role="tablist" aria-label="Personas">
-                      <ul className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-[0.2em]">
-                        {tabs.map((tab) => {
-                          const isActive = tab.id === activeTab.id
-                          return (
-                            <li key={tab.id}>
-                              <button
-                                type="button"
-                                role="tab"
-                                id={`mega-tab-${tab.id}`}
-                                aria-selected={isActive}
-                                aria-controls={`mega-panel-${tab.id}`}
-                                className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
-                                  isActive
-                                    ? 'text-brand-pink'
-                                    : 'text-neutral-300 hover:text-brand-pink'
-                                }`}
-                                onMouseEnter={() => setActiveTabId(tab.id)}
-                                onFocus={() => setActiveTabId(tab.id)}
-                                onClick={() => setActiveTabId(tab.id)}
-                              >
-                                {tab.label}
-                              </button>
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    </div>
-                  ) : null}
-
-                  <ul className="grid gap-2 text-sm font-medium text-neutral-200 sm:grid-cols-2 lg:grid-cols-3">
-                    {activeTab.quickLinks.map((link) => (
-                      <li key={`${activeTab.id}-${link.href}`}>
-                        <Link
-                          href={link.href}
-                          className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2 transition hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
-                          onClick={() => {
-                            trackMegaMenuInteraction({
-                              tab: activeTab,
-                              linkLabel: link.label,
-                              href: link.href,
-                              context: 'quick-link'
-                            })
-                            onNavigate?.()
-                            handleClose()
-                          }}
+            <div className="flex justify-center pt-1 pb-10">
+              <div className="pointer-events-auto w-full max-w-7xl px-4">
+                <motion.div
+                  ref={menuRef}
+                  id="mega-menu-panel"
+                  aria-hidden={!open}
+                  className="max-h-[calc(100vh-6rem)] overflow-y-auto rounded-3xl bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10"
+                  variants={contentWrapperVariants}
+                >
+                  <motion.div className="flex flex-col gap-8" variants={contentWrapperVariants}>
+                    {tabs.length > 1 ? (
+                      <motion.div role="tablist" aria-label="Personas" variants={fadeInUpVariants}>
+                        <motion.ul
+                          className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-[0.2em]"
+                          variants={contentWrapperVariants}
                         >
-                          <span>{link.label}</span>
-                          <ChevronRight className="h-4 w-4 text-brand-pink/70 transition group-hover:translate-x-0.5" aria-hidden />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                          {tabs.map((tab) => {
+                            const isActive = tab.id === activeTab.id
+                            return (
+                              <motion.li key={tab.id} variants={fadeInUpVariants}>
+                                <button
+                                  type="button"
+                                  role="tab"
+                                  id={`mega-tab-${tab.id}`}
+                                  aria-selected={isActive}
+                                  aria-controls={`mega-panel-${tab.id}`}
+                                  className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
+                                    isActive
+                                      ? 'text-brand-pink'
+                                      : 'text-neutral-300 hover:text-brand-pink'
+                                  }`}
+                                  onMouseEnter={() => setActiveTabId(tab.id)}
+                                  onFocus={() => setActiveTabId(tab.id)}
+                                  onClick={() => setActiveTabId(tab.id)}
+                                >
+                                  {tab.label}
+                                </button>
+                              </motion.li>
+                            )
+                          })}
+                        </motion.ul>
+                      </motion.div>
+                    ) : null}
 
-                  <div
-                    id={`mega-panel-${activeTab.id}`}
-                    role="tabpanel"
-                    aria-labelledby={`mega-tab-${activeTab.id}`}
-                    className="grid gap-6 md:grid-cols-3"
-                  >
-                    {activeTab.columns.map((column) => (
-                      <div key={`${activeTab.id}-${column.title}`} className="space-y-3">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-brand-pink/70">
-                          {column.title}
-                        </p>
-                        <ul className="space-y-2">
-                          {column.links.map((link) => (
-                            <li key={`${column.title}-${link.href}`}>
-                              <Link
-                                href={link.href}
-                                className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-white/90 transition hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
-                                onClick={() => {
-                                  trackMegaMenuInteraction({
-                                    tab: activeTab,
-                                    linkLabel: link.label,
-                                    href: link.href,
-                                    context: 'column',
-                                    columnTitle: column.title
-                                  })
-                                  onNavigate?.()
-                                  handleClose()
-                                }}
-                              >
-                                <span>{link.label}</span>
-                                <ChevronRight
-                                  className="h-4 w-4 flex-shrink-0 text-brand-pink/70 transition group-hover:translate-x-0.5"
-                                  aria-hidden
-                                />
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex justify-end">
-                    <Link
-                      href={`/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`}
-                      className="btn-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm"
-                      onClick={() => {
-                        trackMegaMenuInteraction({
-                          tab: activeTab,
-                          linkLabel: activeTab.ctaLabel,
-                          href: `/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`,
-                          context: 'cta'
-                        })
-                        onNavigate?.()
-                        handleClose()
-                      }}
+                    <motion.ul
+                      className="grid gap-2 text-sm font-medium text-neutral-200 sm:grid-cols-2 lg:grid-cols-3"
+                      variants={contentWrapperVariants}
                     >
-                      {activeTab.ctaLabel}
-                      <ChevronRight className="h-4 w-4" aria-hidden />
-                    </Link>
-                  </div>
-                </div>
+                      {activeTab.quickLinks.map((link) => (
+                        <motion.li key={`${activeTab.id}-${link.href}`} variants={fadeInUpVariants}>
+                          <Link
+                            href={link.href}
+                            className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2 transition hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
+                            onClick={() => {
+                              trackMegaMenuInteraction({
+                                tab: activeTab,
+                                linkLabel: link.label,
+                                href: link.href,
+                                context: 'quick-link'
+                              })
+                              onNavigate?.()
+                              handleClose()
+                            }}
+                          >
+                            <span>{link.label}</span>
+                            <ChevronRight className="h-4 w-4 text-brand-pink/70 transition group-hover:translate-x-0.5" aria-hidden />
+                          </Link>
+                        </motion.li>
+                      ))}
+                    </motion.ul>
+
+                    <motion.div
+                      id={`mega-panel-${activeTab.id}`}
+                      role="tabpanel"
+                      aria-labelledby={`mega-tab-${activeTab.id}`}
+                      className="grid gap-6 md:grid-cols-3"
+                      variants={contentWrapperVariants}
+                    >
+                      {activeTab.columns.map((column) => (
+                        <motion.div key={`${activeTab.id}-${column.title}`} className="space-y-3" variants={fadeInUpVariants}>
+                          <motion.p
+                            className="text-xs font-semibold uppercase tracking-wide text-brand-pink/70"
+                            variants={fadeInUpVariants}
+                          >
+                            {column.title}
+                          </motion.p>
+                          <motion.ul className="space-y-2" variants={contentWrapperVariants}>
+                            {column.links.map((link) => (
+                              <motion.li key={`${column.title}-${link.href}`} variants={fadeInUpVariants}>
+                                <Link
+                                  href={link.href}
+                                  className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-white/90 transition hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
+                                  onClick={() => {
+                                    trackMegaMenuInteraction({
+                                      tab: activeTab,
+                                      linkLabel: link.label,
+                                      href: link.href,
+                                      context: 'column',
+                                      columnTitle: column.title
+                                    })
+                                    onNavigate?.()
+                                    handleClose()
+                                  }}
+                                >
+                                  <span>{link.label}</span>
+                                  <ChevronRight
+                                    className="h-4 w-4 flex-shrink-0 text-brand-pink/70 transition group-hover:translate-x-0.5"
+                                    aria-hidden
+                                  />
+                                </Link>
+                              </motion.li>
+                            ))}
+                          </motion.ul>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+
+                    <motion.div className="flex justify-end" variants={fadeInUpVariants}>
+                      <Link
+                        href={`/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`}
+                        className="btn-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm"
+                        onClick={() => {
+                          trackMegaMenuInteraction({
+                            tab: activeTab,
+                            linkLabel: activeTab.ctaLabel,
+                            href: `/coleccion/${activeTab.collectionSlug}?persona=${activeTab.personaFacet}`,
+                            context: 'cta'
+                          })
+                          onNavigate?.()
+                          handleClose()
+                        }}
+                      >
+                        {activeTab.ctaLabel}
+                        <ChevronRight className="h-4 w-4" aria-hidden />
+                      </Link>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
