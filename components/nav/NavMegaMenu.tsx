@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { FocusEvent as ReactFocusEvent, MouseEvent as ReactMouseEvent } from 'react'
 
 import MegaMenu from './MegaMenu'
@@ -22,6 +22,12 @@ export default function NavMegaMenu({ onNavigate }: NavMegaMenuProps) {
   const [activeTabId, setActiveTabId] = useState<string>('')
   const [panelTop, setPanelTop] = useState(0)
 
+  const reactId = useId()
+  const menuBaseId = useMemo(
+    () => `nav-mega-menu-${reactId.replace(/:/g, '-')}`,
+    [reactId]
+  )
+
   const personaTabs = useMemo(() => {
     return PERSONA_ORDER.map((facet) =>
       megaMenuConfig.tabs.find((tab) => tab.personaFacet === facet) ?? null
@@ -29,7 +35,7 @@ export default function NavMegaMenu({ onNavigate }: NavMegaMenuProps) {
   }, [])
 
   const hasTabs = personaTabs.length > 0
-  const menuId = 'nav-mega-menu-panel'
+  const menuId = `${menuBaseId}-panel`
   const activeTrigger = activeTabId ? triggerRefs.current[activeTabId] ?? null : null
 
   useEffect(() => {
@@ -174,6 +180,7 @@ export default function NavMegaMenu({ onNavigate }: NavMegaMenuProps) {
     >
       {personaTabs.map((tab) => {
         const isExpanded = open && activeTabId === tab.id
+        const panelId = `${menuId}-${tab.id}`
         return (
           <button
             key={tab.id}
@@ -183,13 +190,14 @@ export default function NavMegaMenu({ onNavigate }: NavMegaMenuProps) {
             type="button"
             aria-haspopup="true"
             aria-expanded={isExpanded}
-            aria-controls={menuId}
+            aria-controls={panelId}
             onMouseEnter={() => handleOpenForTab(tab.id)}
             onMouseLeave={handleMouseLeave}
             onFocus={() => handleOpenForTab(tab.id)}
             onBlur={handleBlur}
             onClick={() => handleTriggerClick(tab.id)}
             data-active={isExpanded}
+            id={`${menuBaseId}-trigger-${tab.id}`}
             className="nav-link inline-flex items-center justify-center rounded-full px-5 py-3 text-lg font-semibold uppercase transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
           >
             <span className="relative z-10">{tab.label}</span>

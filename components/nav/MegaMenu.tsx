@@ -151,14 +151,22 @@ function DesktopMegaMenu({
     return tabs.find((tab) => tab.id === currentTabId) ?? tabs[0]
   }, [tabs, currentTabId])
 
+  const activePanelId = activeTab ? `${menuId}-${activeTab.id}` : ''
+  const panelLabelledBy = [activeTrigger?.id, activeTab ? `mega-tab-${activeTab.id}` : '']
+    .filter(Boolean)
+    .join(' ') || undefined
+
   useEffect(() => {
     if (!open) return
     if (typeof document === 'undefined') return
     if (!activeTrigger) return
     if (document.activeElement !== activeTrigger) return
 
-    const focusable = resolvedMenuRef.current?.querySelector<HTMLElement>('button, a')
-    focusable?.focus({ preventScroll: true })
+    const focusTarget =
+      resolvedMenuRef.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]') ??
+      resolvedMenuRef.current?.querySelector<HTMLElement>('a, button')
+
+    focusTarget?.focus({ preventScroll: true })
   }, [open, activeTrigger, activeTab, resolvedMenuRef])
 
   if (!hasTabs) {
@@ -206,7 +214,7 @@ function DesktopMegaMenu({
             <div className="pointer-events-auto w-full max-w-7xl px-4">
               <motion.div
                 ref={resolvedMenuRef}
-                id={menuId}
+                id={`${menuId}-container`}
                 aria-hidden={!open}
                 className="max-h-[calc(100vh-6rem)] overflow-y-auto rounded-3xl bg-neutral-950 p-8 text-sm text-white shadow-2xl md:p-10"
                 variants={contentWrapperVariants}
@@ -220,6 +228,7 @@ function DesktopMegaMenu({
                       >
                         {tabs.map((tab) => {
                           const isActive = tab.id === activeTab.id
+                          const tabPanelId = `${menuId}-${tab.id}`
                           return (
                             <motion.li key={tab.id} variants={fadeInUpVariants}>
                               <button
@@ -227,7 +236,7 @@ function DesktopMegaMenu({
                                 role="tab"
                                 id={`mega-tab-${tab.id}`}
                                 aria-selected={isActive}
-                                aria-controls={`mega-panel-${tab.id}`}
+                                aria-controls={tabPanelId}
                                 className={`px-0 py-1 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
                                   isActive ? 'text-brand-pink' : 'text-neutral-300 hover:text-brand-pink'
                                 }`}
@@ -272,9 +281,9 @@ function DesktopMegaMenu({
                   </motion.ul>
 
                   <motion.div
-                    id={`mega-panel-${activeTab.id}`}
+                    id={activePanelId}
                     role="tabpanel"
-                    aria-labelledby={`mega-tab-${activeTab.id}`}
+                    aria-labelledby={panelLabelledBy}
                     className="grid gap-6 md:grid-cols-3"
                     variants={contentWrapperVariants}
                   >
