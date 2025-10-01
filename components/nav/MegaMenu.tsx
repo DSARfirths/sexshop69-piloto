@@ -50,11 +50,12 @@ type DesktopMegaMenuProps = {
 function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProps) {
   const hasTabs = tabs.length > 0
   const [open, setOpen] = useState(false)
+  const [isTriggerHovered, setIsTriggerHovered] = useState(false)
+  const [isTriggerFocused, setIsTriggerFocused] = useState(false)
   const [activeTabId, setActiveTabId] = useState(tabs[0]?.id ?? '')
   const containerRef = useRef<HTMLDivElement | null>(null)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const menuRef = useRef<HTMLDivElement | null>(null)
-  const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [panelTop, setPanelTop] = useState(0)
 
   const activeTab = useMemo(() => {
@@ -79,31 +80,40 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
 
   const buttonLabel = triggerLabel ?? (tabs.length === 1 ? tabs[0]?.label ?? 'Categorías' : 'Categorías')
 
-  const clearScheduledClose = useCallback(() => {
-    if (closeTimeout.current) {
-      clearTimeout(closeTimeout.current)
-      closeTimeout.current = null
-    }
-  }, [])
-
-  const scheduleClose = useCallback(() => {
-    clearScheduledClose()
-    closeTimeout.current = setTimeout(() => {
-      setOpen(false)
-      closeTimeout.current = null
-    }, 160)
-  }, [clearScheduledClose])
+  const isNodeWithinContainer = useCallback(
+    (node: Node | null) => {
+      if (!node) return false
+      if (!containerRef.current) return false
+      return containerRef.current.contains(node)
+    },
+    []
+  )
 
   const handleOpen = useCallback(() => {
     if (!hasTabs) return
-    clearScheduledClose()
     setOpen(true)
-  }, [clearScheduledClose, hasTabs])
+  }, [hasTabs])
 
   const handleClose = useCallback(() => {
-    clearScheduledClose()
     setOpen(false)
-  }, [clearScheduledClose])
+  }, [])
+
+  const closeIfOutside = useCallback(
+    (nextTarget: Node | null) => {
+      if (isNodeWithinContainer(nextTarget)) {
+        return
+      }
+      handleClose()
+    },
+    [handleClose, isNodeWithinContainer]
+  )
+
+  const handleMouseLeave = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      closeIfOutside(event.relatedTarget as Node | null)
+    },
+    [closeIfOutside]
+  )
 
   const updatePanelPosition = useCallback(() => {
     const header = containerRef.current?.closest('header')
@@ -121,12 +131,6 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
 
     setPanelTop(0)
   }, [])
-
-  useEffect(() => {
-    return () => {
-      clearScheduledClose()
-    }
-  }, [clearScheduledClose])
 
   useEffect(() => {
     if (!open) return
@@ -194,12 +198,10 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
       ref={containerRef}
       className="relative hidden md:block"
       onMouseEnter={handleOpen}
-      onMouseLeave={scheduleClose}
+      onMouseLeave={handleMouseLeave}
       onFocusCapture={handleOpen}
       onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          scheduleClose()
-        }
+        closeIfOutside(event.relatedTarget as Node | null)
       }}
     >
       <button
@@ -215,7 +217,17 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
             handleOpen()
           }
         }}
-        data-active={open}
+        onMouseEnter={() => setIsTriggerHovered(true)}
+        onMouseLeave={(event) => {
+          setIsTriggerHovered(false)
+          handleMouseLeave(event)
+        }}
+        onFocus={() => setIsTriggerFocused(true)}
+        onBlur={(event) => {
+          setIsTriggerFocused(false)
+          closeIfOutside(event.relatedTarget as Node | null)
+        }}
+        data-active={isTriggerHovered || isTriggerFocused}
         className="nav-link inline-flex items-center justify-center rounded-full px-5 py-3 text-lg font-semibold uppercase transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
       >
         <span className="relative z-10">{buttonLabel}</span>
@@ -231,8 +243,8 @@ function DesktopMegaMenu({ tabs, onNavigate, triggerLabel }: DesktopMegaMenuProp
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className="fixed inset-x-0 z-30 flex justify-center pt-4 pb-10"
             style={{ top: panelTop }}
-            onMouseEnter={clearScheduledClose}
-            onMouseLeave={scheduleClose}
+            onMouseEnter={handleOpen}
+            onMouseLeave={handleMouseLeave}
           >
             <div className="pointer-events-auto w-full max-w-7xl px-4">
               <div
