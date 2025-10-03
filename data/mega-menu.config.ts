@@ -22,7 +22,7 @@ export type MegaMenuConfig = {
   categories: MegaMenuCategory[]
 }
 
-const buildHref = (slug: string) => /categoria/
+const buildHref = (slug: string) => `/categoria/${slug}`
 
 export const megaMenuConfig: MegaMenuConfig = {
   categories: [
@@ -145,3 +145,4 @@ export const megaMenuConfig: MegaMenuConfig = {
     }
   ]
 }
+
