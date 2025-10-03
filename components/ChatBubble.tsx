@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useEffect, useMemo, useState } from 'react'
 import { MessageCircle, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
@@ -38,7 +38,7 @@ function getCtx(pathname: string): PageContext {
 function buildSuggestions(ctx: PageContext) {
   if (ctx.pageType === 'product' && ctx.product) {
     return [
-      { label: `Llévate ${ctx.product.name} ahora`, href: `/api/checkout?s=${ctx.product.sku}` },
+      { label: `LlÃ©vate ${ctx.product.name} ahora`, href: `/api/checkout?s=${ctx.product.sku}` },
       { label: 'Explorar sensaciones similares', href: `/categoria/${ctx.product.category}` },
       { label: 'Conversa con una asesora por WhatsApp', href: `https://wa.me/51924281623?text=Consulta%20${ctx.product.sku}` },
     ]
@@ -47,13 +47,13 @@ function buildSuggestions(ctx: PageContext) {
     const top = byCategory(ctx.category).slice(0, 3)
     const topHref = top.length ? `/producto/${top[0].slug}` : `/categoria/${ctx.category}`
     return [
-      { label: 'Favoritos más deseados de esta categoría', href: topHref },
-      { label: 'Ver toda la colección', href: `/categoria/${ctx.category}` },
-      { label: 'Pedir una recomendación discreta', href: 'https://wa.me/51924281623?text=Quiero%20recomendaciones' },
+      { label: 'Favoritos mÃ¡s deseados de esta categorÃ­a', href: topHref },
+      { label: 'Ver toda la colecciÃ³n', href: `/categoria/${ctx.category}` },
+      { label: 'Pedir una recomendaciÃ³n discreta', href: 'https://wa.me/51924281623?text=Quiero%20recomendaciones' },
     ]
   }
   return [
-    { label: 'Colección Romance Nocturno', href: '/categoria/vibradores' },
+    { label: 'ColecciÃ³n Romance Nocturno', href: '/categoria/vibradores' },
     { label: 'Ritual de bienestar sensorial', href: '/categoria/bienestar' },
     { label: 'Arma tu kit deluxe', href: '/categoria/kits' },
   ]
@@ -74,22 +74,22 @@ export function ChatBubble() {
   const notifications = useMemo(() => {
     if (ctx.pageType === 'product' && ctx.product) {
       return [
-        `¡${ctx.product.name} está listo para enviarse!`,
-        'Pregúntame por sensaciones similares para ti.',
-        '¿Quieres que te ayude a armar un pack perfecto?'
+        `Â¡${ctx.product.name} estÃ¡ listo para enviarse!`,
+        'PregÃºntame por sensaciones similares para ti.',
+        'Â¿Quieres que te ayude a armar un pack perfecto?'
       ]
     }
     if (ctx.pageType === 'category' && ctx.category) {
       return [
         `Descubre los favoritos de ${ctx.category.replace(/-/g, ' ')}.`,
-        '¿Buscas algo discreto? Te puedo guiar.',
+        'Â¿Buscas algo discreto? Te puedo guiar.',
         'Explora combinaciones irresistibles conmigo.'
       ]
     }
     return [
-      'Te muestro lo más deseado del momento.',
-      'Pídeme ideas para sorprender esta noche.',
-      'Estoy lista para sugerirte algo único.'
+      'Te muestro lo mÃ¡s deseado del momento.',
+      'PÃ­deme ideas para sorprender esta noche.',
+      'Estoy lista para sugerirte algo Ãºnico.'
     ]
   }, [ctx])
 
@@ -122,7 +122,7 @@ export function ChatBubble() {
   }, [notifications, open])
 
   return (
-    <div className="pointer-events-none fixed right-4 bottom-4 z-[70] flex flex-col items-end gap-3">
+    <div className="chat-bubble pointer-events-none fixed right-4 bottom-4 z-[70] flex flex-col items-end gap-3">
       <div className="relative flex flex-col items-end gap-3">
         {notificationMessage && (
           <div
@@ -145,7 +145,7 @@ export function ChatBubble() {
               <div className="flex-1">
                 <p className="text-sm font-semibold text-white">Asesora virtual SexShop69</p>
                 <p className="mt-1 text-xs leading-relaxed text-neutral-200">
-                  Estoy aquí para inspirarte con recomendaciones cuidadosas y sugerentes. Elige una propuesta o cuéntame qué te gustaría explorar.
+                  Estoy aquÃ­ para inspirarte con recomendaciones cuidadosas y sugerentes. Elige una propuesta o cuÃ©ntame quÃ© te gustarÃ­a explorar.
                 </p>
               </div>
               <button
@@ -190,7 +190,7 @@ export function ChatBubble() {
           </span>
           <span className="sr-only md:not-sr-only md:flex md:flex-col md:leading-tight">
             <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-fuchsia-200/90">
-              ¿Necesitas ayuda? Chatea conmigo
+              Â¿Necesitas ayuda? Chatea conmigo
             </span>
             <span className="text-sm font-semibold text-white">Descubre tu placer ideal</span>
           </span>
@@ -199,3 +199,4 @@ export function ChatBubble() {
     </div>
   )
 }
+

@@ -15,7 +15,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 
 import type { MegaMenuCategory } from "@/data/mega-menu.config"
 
-import { createFocusTrap, splitIntoColumns } from "./menu-utils"
+import { createFocusTrap, splitIntoColumns, setRootNavOverlay } from "./menu-utils"
 import styles from "./HeaderSheet.module.css"
 
 type DesktopMenuProps = {
@@ -130,17 +130,11 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
   )
 
   useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    const previousOverflow = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
-
+    setRootNavOverlay("desktop", open)
     return () => {
-      document.documentElement.style.overflow = previousOverflow;
-    };
-  }, [open]);
+      setRootNavOverlay("desktop", false)
+    }
+  }, [open])
   useEffect(() => {
     if (!open) {
       return
@@ -393,7 +387,7 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
               exit="exit"
             >
               <motion.div
-                className={`relative flex w-full max-w-[1180px] flex-col gap-8 rounded-[32px] p-[clamp(28px,3vw,52px)] text-left ${styles.sheetContent}`}
+                className={`relative flex w-full max-w-[1180px] flex-col gap-8 rounded-[32px] p-[clamp(24px,3vw,48px)] text-left max-h-[calc(100vh-160px)] overflow-y-auto ${styles.sheetContent}`}
               >
                 <header className="flex flex-col gap-3">
                   <p
@@ -453,7 +447,7 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
               ref={notchRef}
               type="button"
               onClick={() => setOpen(false)}
-              className={`fixed right-[clamp(16px,4vw,36px)] top-[calc(var(--nav-height)+clamp(16px,3vw,36px)-6px)] z-[47] flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white transition hover:border-[var(--sheet-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${styles.notch}`}
+              className={`fixed right-[clamp(16px,4vw,36px)] top-[calc(var(--nav-height)+clamp(12px,2.2vw,28px)-6px)] z-[47] flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white transition hover:border-[var(--sheet-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${styles.notch}`}
               style={accentStyle}
               variants={notchVariants}
               initial="hidden"
@@ -472,6 +466,12 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
     </div>
   )
 }
+
+
+
+
+
+
 
 
 

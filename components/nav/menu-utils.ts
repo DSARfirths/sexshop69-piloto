@@ -1,4 +1,4 @@
-export function splitIntoColumns<T>(items: T[], columnCount: number): T[][] {
+﻿export function splitIntoColumns<T>(items: T[], columnCount: number): T[][] {
   const safeColumnCount = Math.max(1, Math.floor(columnCount))
 
   if (!Array.isArray(items) || items.length === 0) {
@@ -35,7 +35,7 @@ export function createFocusTrap(
     )
 
     const extras = extraElements.filter((element): element is HTMLElement => Boolean(element))
-  const focusableElements = [...extras, ...focusableWithinContainer]
+    const focusableElements = [...extras, ...focusableWithinContainer]
 
     if (!focusableElements.length) {
       return
@@ -56,6 +56,30 @@ export function createFocusTrap(
       first.focus()
       event.preventDefault()
     }
+  }
+}
+
+
+
+export function setRootNavOverlay(key: "desktop" | "mobile", value: boolean) {
+  if (typeof document === "undefined") return
+  const root = document.documentElement
+  const datasetKey = key === "desktop" ? "navDesktopMegaOpen" : "navMobileMegaOpen"
+
+  if (value) {
+    root.dataset[datasetKey] = "true"
+  } else {
+    delete root.dataset[datasetKey]
+  }
+
+  const shouldLock = root.dataset.navDesktopMegaOpen === "true" || root.dataset.navMobileMegaOpen === "true"
+
+  if (shouldLock) {
+    root.classList.add("nav-overlay-open")
+    root.style.setProperty("overflow", "hidden")
+  } else {
+    root.classList.remove("nav-overlay-open")
+    root.style.removeProperty("overflow")
   }
 }
 

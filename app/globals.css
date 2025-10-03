@@ -156,6 +156,9 @@
     font-size: var(--f-badge);
     font-weight: var(--w-badge);
   }
+  :root.nav-overlay-open .chat-bubble {
+    display: none;
+  }
 }
 
 @layer utilities {

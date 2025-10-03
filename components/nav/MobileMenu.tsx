@@ -14,7 +14,7 @@ import { ChevronRight, Menu, X } from "lucide-react"
 
 import type { MegaMenuCategory } from "@/data/mega-menu.config"
 
-import { createFocusTrap } from "./menu-utils"
+import { createFocusTrap, setRootNavOverlay } from "./menu-utils"
 import styles from "./MobileMenu.module.css"
 
 type MobileMenuProps = {
@@ -42,14 +42,9 @@ export function MobileMenu({ categories, onNavigate }: MobileMenuProps) {
   }, [categories, defaultAccent, expandedCategoryId])
 
   useEffect(() => {
-    if (!open) {
-      document.documentElement.style.overflow = ""
-      return
-    }
-    document.documentElement.style.overflow = "hidden"
-
+    setRootNavOverlay("mobile", open)
     return () => {
-      document.documentElement.style.overflow = ""
+      setRootNavOverlay("mobile", false)
     }
   }, [open])
 
@@ -306,5 +301,6 @@ export function MobileMenu({ categories, onNavigate }: MobileMenuProps) {
     </div>
   )
 }
+
 
 
