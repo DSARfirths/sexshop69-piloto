@@ -131,6 +131,18 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
 
   useEffect(() => {
     if (!open) {
+      return;
+    }
+
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+
+    return () => {
+      document.documentElement.style.overflow = previousOverflow;
+    };
+  }, [open]);
+  useEffect(() => {
+    if (!open) {
       return
     }
 
@@ -373,7 +385,7 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
               aria-labelledby={`${activeCategory.id}-title`}
               aria-modal="true"
               role="dialog"
-              className={`fixed inset-0 z-[46] flex justify-center overflow-y-auto px-[clamp(16px,4vw,36px)] pb-[clamp(32px,6vh,64px)] pt-[calc(var(--nav-height)+clamp(16px,3vw,36px))] text-white ${styles.sheet}`}
+              className={`fixed inset-0 z-[46] flex justify-center overflow-y-auto px-[clamp(16px,4vw,36px)] pb-[clamp(32px,6vh,64px)] pt-[calc(var(--nav-height)+clamp(12px,2.2vw,28px))] text-white ${styles.sheet}`}
               style={accentStyle}
               variants={sheetVariants}
               initial="hidden"
@@ -460,6 +472,8 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
     </div>
   )
 }
+
+
 
 
 

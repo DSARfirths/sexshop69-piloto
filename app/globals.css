@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -116,7 +116,7 @@
   }
 
   .icon-button {
-    @apply inline-flex items-center justify-center rounded-full p-2 text-neutral-700 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-femme/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+    @apply inline-flex items-center justify-center rounded-full p-2 text-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-femme/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
   }
 
   .icon-button:hover {
@@ -189,3 +189,4 @@
     height: var(--nav-height);
   }
 }
+
