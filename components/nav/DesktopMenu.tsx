@@ -381,7 +381,7 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
               exit="exit"
             >
               <motion.div
-                className={`relative flex w-full max-w-[1180px] flex-col gap-8 rounded-[32px] border border-white/12 bg-[rgba(10,10,12,0.72)] p-[clamp(28px,3vw,52px)] text-left shadow-[var(--shadow-strong)] ${styles.sheetContent}`}
+                className={`relative flex w-full max-w-[1180px] flex-col gap-8 rounded-[32px] p-[clamp(28px,3vw,52px)] text-left ${styles.sheetContent}`}
               >
                 <header className="flex flex-col gap-3">
                   <p
@@ -460,5 +460,7 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
     </div>
   )
 }
+
+
 
 
