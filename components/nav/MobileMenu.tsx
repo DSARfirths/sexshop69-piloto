@@ -63,9 +63,9 @@ export function MobileMenu({ categories, onNavigate }: MobileMenuProps) {
       return
     }
 
-    const extras = [hamburgerRef.current].filter(
-      (element): element is HTMLElement => Boolean(element)
-    )
+    const extras = hamburgerRef.current ? [hamburgerRef.current] : []
+
+
     const trap = createFocusTrap(menu, extras)
 
     const handleKeyDown = (event: KeyboardEvent) => {

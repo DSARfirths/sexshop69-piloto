@@ -167,9 +167,9 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
       return
     }
 
-    const extras = [notchRef.current].filter(
-      (element): element is HTMLElement => Boolean(element)
-    )
+    const extras = notchRef.current ? [notchRef.current] : []
+
+
     const trap = createFocusTrap(sheet, extras)
 
     const handleKeyDown = (event: KeyboardEvent) => {
