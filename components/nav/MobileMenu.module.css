@@ -1,0 +1,19 @@
+﻿.panel {
+  will-change: transform, opacity;
+}
+
+.backdrop {
+  will-change: opacity;
+}
+
+.item {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .item {
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+  }
+}

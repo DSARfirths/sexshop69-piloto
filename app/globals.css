@@ -3,141 +3,84 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
-  --brand-blue: #2551B6;
-  --brand-violet: #624EA9;
-  --brand-pink: #DA469A;
-  --grad: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-violet) 55%, var(--brand-pink) 100%);
-  --background: #05000f;
-  --foreground: #f7f2ff;
-  --muted-foreground: #cbbdf5;
-  --subtle-foreground: #a99eda;
-  --surface: rgba(26, 6, 43, 0.85);
-  --surface-strong: #170629;
-  --border: rgba(219, 196, 255, 0.25);
-  --border-strong: rgba(236, 208, 255, 0.45);
+  --brand-black: #000000;
+  --brand-white: #ffffff;
+  --accent-femme: #ff2193;
+  --accent-homme: #1151bb;
+  --accent-couple: #0098d5;
+  --muted: #5d5b66;
+  --surface: #ffffff;
+  --surface-soft: #f5f7fb;
+  --outline: rgba(0, 0, 0, 0.08);
+  --shadow-soft: 0 30px 60px rgba(15, 17, 32, 0.12);
+  --shadow-strong: 0 40px 80px rgba(0, 0, 0, 0.45);
+  --nav-height: 72px;
+  --transition-brand: cubic-bezier(0.2, 1, 0.3, 1);
+
+  --f-brand: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem);
+  --w-brand: 500;
+  --f-title: clamp(1rem, 0.9rem + 0.6vw, 1.25rem);
+  --w-title: 600;
+  --f-price: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
+  --w-price: 600;
+  --f-badge: clamp(0.6875rem, 0.65rem + 0.2vw, 0.75rem);
+  --w-badge: 600;
 }
 
 @layer base {
   html {
-    font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans, 'Jost'), system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--surface);
+    color: var(--brand-black);
+    text-rendering: optimizeLegibility;
   }
+
   body {
-    background-color: var(--background);
-    color: var(--foreground);
+    background-color: var(--surface);
+    color: var(--brand-black);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
+
   ::selection {
-    background-color: rgba(218, 70, 154, 0.65);
-    color: #fff;
+    background-color: rgba(255, 33, 147, 0.35);
+    color: var(--brand-white);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  button {
+    font: inherit;
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
-    background: var(--brand-pink);
-    box-shadow: 0 22px 46px -20px rgba(218, 70, 154, 0.6);
-  }
-
-  .btn-primary:hover {
-    filter: brightness(1.06);
-  }
-
-  .btn-primary:focus-visible {
-    outline-color: rgba(218, 70, 154, 0.85);
-  }
-
-  .btn-primary:active {
-    transform: translateY(1px);
-  }
-
-  .icon-button {
-    @apply inline-flex items-center justify-center rounded-full p-2 text-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black;
-  }
-
-  .icon-button:hover {
-    @apply text-brand-pink;
-  }
-
-  .icon-button:focus-visible {
-    @apply text-white;
-  }
-
-  .promo-rotator-text {
-    font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
-  .btn-gradient {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-white transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
-    background-image: var(--grad);
-    box-shadow: 0 28px 60px -24px rgba(37, 81, 182, 0.55);
-  }
-
-  .btn-gradient:hover {
-    filter: brightness(1.04);
-  }
-
-  .btn-gradient:focus-visible {
-    outline-color: rgba(98, 78, 169, 0.8);
-  }
-
-  .btn-gradient:active {
-    transform: translateY(1px);
-  }
-
-  .btn-solid-violet {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-white transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
-    background-color: var(--brand-violet);
-    box-shadow: 0 24px 54px -22px rgba(98, 78, 169, 0.55);
-  }
-
-  .btn-solid-violet:hover {
-    filter: brightness(1.05);
-  }
-
-  .btn-solid-violet:focus-visible {
-    outline-color: rgba(98, 78, 169, 0.85);
-  }
-
-  .btn-solid-violet:active {
-    transform: translateY(1px);
-  }
-
-  .logo-69 {
-    background-image: var(--grad);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 18px rgba(98, 78, 169, 0.35);
-  }
-
   .nav-link {
     position: relative;
     z-index: 0;
-    color: #fff;
+    color: var(--brand-black);
     overflow: hidden;
     isolation: isolate;
-    transition: color 200ms ease;
+    transition: color 200ms var(--transition-brand);
   }
 
   .nav-link::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.9);
     border-radius: inherit;
     transform: translateY(101%);
     transform-origin: bottom;
-    transition: transform 240ms ease;
+    transition: transform 240ms var(--transition-brand);
     z-index: -1;
   }
 
   .nav-link:hover,
   .nav-link:focus-visible {
-    color: #05000f;
+    color: var(--brand-black);
   }
 
   .nav-link:hover::before,
@@ -146,20 +89,103 @@
   }
 
   .nav-link[data-active='true'] {
-    color: #05000f;
+    color: var(--brand-black);
   }
 
   .nav-link[data-active='true']::before {
     transform: translateY(0%);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .nav-link {
-      transition: none;
-    }
 
-    .nav-link::before {
-      transition: none;
-    }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+    background: var(--accent-femme);
+    box-shadow: 0 22px 46px -20px rgba(255, 33, 147, 0.4);
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.06);
+  }
+
+  .btn-primary:focus-visible {
+    outline-color: rgba(255, 33, 147, 0.65);
+  }
+
+  .btn-primary:active {
+    transform: translateY(1px);
+  }
+
+  .icon-button {
+    @apply inline-flex items-center justify-center rounded-full p-2 text-neutral-700 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-femme/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+  }
+
+  .icon-button:hover {
+    @apply text-accent-femme;
+  }
+
+  .promo-rotator-text {
+    font-family: var(--font-sans, 'Jost'), system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .product-card .brand {
+    font-family: var(--font-sans, 'Jost'), system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: var(--f-brand);
+    font-weight: var(--w-brand);
+    letter-spacing: 0.01em;
+    opacity: 0.8;
+  }
+
+  .product-card .title {
+    font-family: var(--font-sans, 'Jost'), system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: var(--f-title);
+    font-weight: var(--w-title);
+    line-height: 1.25;
+  }
+
+  .product-card .price {
+    font-family: var(--font-sans, 'Jost'), system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: var(--f-price);
+    font-weight: var(--w-price);
+    line-height: 1.2;
+  }
+
+  .product-card .badge {
+    font-size: var(--f-badge);
+    font-weight: var(--w-badge);
+  }
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-strong {
+    box-shadow: var(--shadow-strong);
+  }
+
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+  }
+
+  .glass-sheet {
+    background: var(--surface);
+    backdrop-filter: blur(6px);
+  }
+
+  .bg-surface-soft {
+    background-color: var(--surface-soft);
+  }
+
+  .text-muted {
+    color: var(--muted);
+  }
+
+  .nav-height {
+    height: var(--nav-height);
   }
 }

@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Script from 'next/script'
-import { Cormorant_Garamond, Manrope } from 'next/font/google'
+import { Cormorant_Garamond, Jost } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ChatBubble } from '@/components/ChatBubble'
@@ -11,9 +11,9 @@ import Tracker from './Tracker'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
 
-const manrope = Manrope({
+const jost = Jost({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
   variable: '--font-sans'
 })
@@ -82,7 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="preconnect" href="https://plausible.io" />
         )}
       </head>
-      <body className={`${manrope.variable} ${cormorantGaramond.variable} min-h-screen bg-white text-neutral-900 antialiased`}>
+      <body className={`${jost.variable} ${cormorantGaramond.variable} min-h-screen bg-white text-neutral-900 antialiased`}>
         <Suspense fallback={null}>
           <Tracker />
         </Suspense>
@@ -103,3 +103,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
+
+

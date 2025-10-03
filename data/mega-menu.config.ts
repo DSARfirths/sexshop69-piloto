@@ -1,229 +1,144 @@
-export type MegaMenuLink = {
-  label: string
+﻿export type MegaMenuPersona = 'her' | 'him' | 'couples'
+
+export type MegaMenuSubcategory = {
+  name: string
   href: string
 }
 
-export type MegaMenuColumn = {
-  title: string
-  links: MegaMenuLink[]
+export type MegaMenuSection = {
+  name: string
+  subcategories: MegaMenuSubcategory[]
 }
 
-export type MegaMenuQuickLink = {
-  label: string
-  href: string
-}
-
-export type MegaMenuTab = {
+export type MegaMenuCategory = {
   id: string
   label: string
-  personaFacet: 'her' | 'him' | 'couples'
-  collectionSlug: string
-  ctaLabel: string
-  quickLinks: MegaMenuQuickLink[]
-  columns: MegaMenuColumn[]
+  personaFacet: MegaMenuPersona
+  accentColor: string
+  sections: MegaMenuSection[]
 }
 
 export type MegaMenuConfig = {
-  tabs: MegaMenuTab[]
+  categories: MegaMenuCategory[]
 }
 
+const buildHref = (slug: string) => /categoria/
+
 export const megaMenuConfig: MegaMenuConfig = {
-  tabs: [
+  categories: [
     {
       id: 'for-her',
-      label: 'Para ella',
+      label: 'Para Ellas',
       personaFacet: 'her',
-      collectionSlug: 'para-ella',
-      ctaLabel: 'Ver colección para ella',
-      quickLinks: [
-        { label: 'Succionadores', href: '/categoria/clitorales' },
-        { label: 'Vibradores rabbit', href: '/categoria/rabbits' },
-        { label: 'Lubricantes íntimos', href: '/categoria/lubricantes' }
-      ],
-      columns: [
+      accentColor: '#ff2193',
+      sections: [
         {
-          title: 'Vibradores y succionadores',
-          links: [
-            {
-              label: 'Succionadores clitorales',
-              href: '/categoria/clitorales'
-            },
-            {
-              label: 'Vibradores rabbit',
-              href: '/categoria/rabbits'
-            },
-            {
-              label: 'Vibradores clásicos',
-              href: '/categoria/clasicos'
-            },
-            {
-              label: 'Vibradores anales',
-              href: '/categoria/anales'
-            }
+          name: 'Vibradores',
+          subcategories: [
+            { name: 'Vibradores clásicos', href: buildHref('vibradores-clasicos') },
+            { name: 'Vibradores clitorales', href: buildHref('vibradores-clitorales') },
+            { name: 'Vibradores extremos', href: buildHref('vibradores-extremos') },
+            { name: 'Vibradores rabbit', href: buildHref('vibradores-rabbit') },
+            { name: 'Vibradores ciberskin y jelly', href: buildHref('vibradores-ciberskin-jelly') }
           ]
         },
         {
-          title: 'Otras texturas y formas',
-          links: [
-            {
-              label: 'Consoladores realistas',
-              href: '/categoria/consoladores'
-            },
-            {
-              label: 'Strapless y dobles',
-              href: '/categoria/dobles'
-            },
-            {
-              label: 'Juguetes tipo wand',
-              href: '/categoria/extremo'
-            }
+          name: 'Succionadores',
+          subcategories: [
+            { name: 'Succionadores clitorales', href: buildHref('succionadores-clitorales') }
           ]
         },
         {
-          title: 'Bienestar y autocuidado',
-          links: [
-            {
-              label: 'Lubricantes y geles',
-              href: '/categoria/lubricantes'
-            },
-            {
-              label: 'Bolas chinas y Kegel',
-              href: '/categoria/bolaschinas'
-            },
-            {
-              label: 'Feromonas y aromas',
-              href: '/categoria/feromonas'
-            }
+          name: 'Consoladores',
+          subcategories: [
+            { name: 'Consoladores realistas', href: buildHref('consoladores-realistas') },
+            { name: 'Consoladores dobles', href: buildHref('consoladores-dobles') },
+            { name: 'Consoladores extremos', href: buildHref('consoladores-extremos') }
+          ]
+        },
+        {
+          name: 'Anales',
+          subcategories: [
+            { name: 'Dildos', href: buildHref('dildos') },
+            { name: 'Bolas chinas y cuentas', href: buildHref('bolas-chinas-cuentas') }
+          ]
+        },
+        {
+          name: 'Bienestar y autocuidado',
+          subcategories: [
+            { name: 'Lubricantes y geles', href: buildHref('lubricantes-geles') },
+            { name: 'Feromonas y excitantes', href: buildHref('feromonas-excitantes') }
           ]
         }
       ]
     },
     {
       id: 'for-him',
-      label: 'Para él',
+      label: 'Para Ellos',
       personaFacet: 'him',
-      collectionSlug: 'para-el',
-      ctaLabel: 'Ver colección para él',
-      quickLinks: [
-        { label: 'Masturbadores realistas', href: '/categoria/fleshlight' },
-        { label: 'Anillos vibradores', href: '/categoria/anillos' },
-        { label: 'Bombas de vacío', href: '/categoria/bombas-succionadoras' }
-      ],
-      columns: [
+      accentColor: '#1151bb',
+      sections: [
         {
-          title: 'Mangas y masturbadores',
-          links: [
-            {
-              label: 'Fleshlight y realistas',
-              href: '/categoria/fleshlight'
-            },
-            {
-              label: 'Mangas compactas',
-              href: '/categoria/masturbadores'
-            },
-            {
-              label: 'Automáticos y high-tech',
-              href: '/categoria/mega'
-            }
+          name: 'Pene',
+          subcategories: [
+            { name: 'Acariciadores', href: buildHref('acariciadores') },
+            { name: 'Masturbadores realistas', href: buildHref('masturbadores-realistas') },
+            { name: 'Anillos vibradores', href: buildHref('anillos-vibradores') },
+            { name: 'Bombas de succión', href: buildHref('bombas-succion') },
+            { name: 'Extensiones de pene y mangas', href: buildHref('extensiones-pene-mangas') },
+            { name: 'Fundas y prótesis', href: buildHref('fundas-protesis') }
           ]
         },
         {
-          title: 'Control del rendimiento',
-          links: [
-            {
-              label: 'Anillos y cockrings',
-              href: '/categoria/anillos'
-            },
-            {
-              label: 'Geles retardantes',
-              href: '/categoria/retardantes'
-            },
-            {
-              label: 'Desarrolladores',
-              href: '/categoria/desarrolladores'
-            }
+          name: 'Anal',
+          subcategories: [
+            { name: 'Plugs y masaje prostático', href: buildHref('plugs-masaje-prostatico') },
+            { name: 'Bolas chinas y cuentas', href: buildHref('bolas-chinas-cuentas') },
+            { name: 'Prostáticos', href: buildHref('prostaticos') }
           ]
         },
         {
-          title: 'Exploración avanzada',
-          links: [
-            {
-              label: 'Plugs y masaje prostático',
-              href: '/categoria/plugs'
-            },
-            {
-              label: 'Fundas texturizadas',
-              href: '/categoria/fundas'
-            },
-            {
-              label: 'Bombas de succión',
-              href: '/categoria/bombas-succionadoras'
-            }
+          name: 'Bienestar y autocuidado',
+          subcategories: [
+            { name: 'Geles retardantes', href: buildHref('geles-retardantes') },
+            { name: 'Desarrolladores', href: buildHref('desarrolladores') },
+            { name: 'Lubricantes y geles', href: buildHref('lubricantes-geles') },
+            { name: 'Feromonas y excitantes', href: buildHref('feromonas-excitantes') }
           ]
         }
       ]
     },
     {
       id: 'for-couples',
-      label: 'Parejas',
+      label: 'Para Parejas',
       personaFacet: 'couples',
-      collectionSlug: 'para-parejas',
-      ctaLabel: 'Ver colección para parejas',
-      quickLinks: [
-        { label: 'Arneses y strap-ons', href: '/categoria/arneses-protesis' },
-        { label: 'Juegos anales en conjunto', href: '/categoria/plugs' },
-        { label: 'Ambiente sensorial', href: '/categoria/feromonas' }
-      ],
-      columns: [
+      accentColor: '#0098d5',
+      sections: [
         {
-          title: 'Para compartir vibraciones',
-          links: [
-            {
-              label: 'Vibradores para parejas',
-              href: '/categoria/vibradores'
-            },
-            {
-              label: 'Arneses y strap-ons',
-              href: '/categoria/arneses-protesis'
-            },
-            {
-              label: 'Anillos vibradores',
-              href: '/categoria/anillos'
-            }
+          name: 'Juguetes de parejas',
+          subcategories: [
+            { name: 'Control remoto', href: buildHref('control-remoto') },
+            { name: 'Vibraciones en pareja', href: buildHref('vibraciones-en-pareja') },
+            { name: 'Correas, prótesis y fundas', href: buildHref('correas-protesis-fundas') },
+            { name: 'Consoladores dobles', href: buildHref('consoladores-dobles') },
+            { name: 'Plugs y estimulación anal', href: buildHref('plugs-estimulacion-anal') }
           ]
         },
         {
-          title: 'Nuevas dinámicas',
-          links: [
-            {
-              label: 'Plugs y estimulación anal',
-              href: '/categoria/plugs'
-            },
-            {
-              label: 'Consoladores dobles',
-              href: '/categoria/dobles'
-            },
-            {
-              label: 'Elementos BDSM y juegos',
-              href: '/categoria/sadobondage'
-            }
+          name: 'Parejas fetiches',
+          subcategories: [
+            { name: 'Restricciones y posicionador', href: buildHref('restricciones-posicionador') },
+            { name: 'Paletas, látigos y BDSM', href: buildHref('paletas-latigos-bdsm') },
+            { name: 'Arneses y prótesis', href: buildHref('arneses-protesis') }
           ]
         },
         {
-          title: 'Ambientación y sensorial',
-          links: [
-            {
-              label: 'Lubricantes y potenciadores',
-              href: '/categoria/lubricantes'
-            },
-            {
-              label: 'Feromonas y perfumes',
-              href: '/categoria/feromonas'
-            },
-            {
-              label: 'Fetiches y roleplay',
-              href: '/categoria/fetiches'
-            }
+          name: 'Más placer',
+          subcategories: [
+            { name: 'Juegos para adultos', href: buildHref('juegos-para-adultos') },
+            { name: 'Lubricantes y potenciadores', href: buildHref('lubricantes-potenciadores') },
+            { name: 'Feromonas y excitantes', href: buildHref('feromonas-excitantes') },
+            { name: 'Fetiches y roleplay', href: buildHref('fetiches-roleplay') }
           ]
         }
       ]

@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+﻿import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default {
@@ -9,43 +9,66 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-sans)', ...defaultTheme.fontFamily.sans],
-        heading: ['var(--font-heading)', ...defaultTheme.fontFamily.serif]
+        sans: ['"Jost"', ...defaultTheme.fontFamily.sans],
+        brand: ['"Jost"', ...defaultTheme.fontFamily.sans],
+        heading: ['var(--font-heading)', ...defaultTheme.fontFamily.serif],
       },
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        background: '#ffffff',
+        foreground: '#050505',
         muted: {
-          foreground: 'var(--muted-foreground)',
-          subtle: 'var(--subtle-foreground)'
-        },
-        surface: {
-          DEFAULT: 'var(--surface)',
-          strong: 'var(--surface-strong)'
-        },
-        border: {
-          DEFAULT: 'var(--border)',
-          strong: 'var(--border-strong)'
+          DEFAULT: '#5d5b66',
+          foreground: '#5d5b66',
         },
         brand: {
-          DEFAULT: '#DA469A',
-          pink: '#DA469A',
-          violet: '#624EA9',
-          blue: '#2551B6'
+          DEFAULT: '#ff2193',
+          black: '#000000',
+          white: '#ffffff',
+          pink: '#ff2193',
+          femme: '#ff2193',
+          homme: '#1151bb',
+          couple: '#0098d5',
+        },
+        accent: {
+          femme: '#ff2193',
+          homme: '#1151bb',
+          couple: '#0098d5',
+        },
+        surface: {
+          DEFAULT: '#ffffff',
+          soft: '#f5f7fb',
+          glass: 'rgba(10,10,12,0.7)',
+        },
+        outline: {
+          DEFAULT: 'rgba(0,0,0,0.08)',
         },
         neutral: {
-          950: '#05000F',
-          900: '#0B021B',
-          800: '#170629',
-          700: '#26123B',
-          300: '#B8AADC',
-          200: '#CBBDF5',
-          50: '#F7F2FF'
-        }
+          950: '#050505',
+          900: '#111013',
+          800: '#1f1d24',
+          700: '#34323d',
+          500: '#5d5b66',
+          300: '#d5d5da',
+          200: '#e8e8ec',
+          100: '#f5f7fb',
+          50: '#fafbff',
+        },
+      },
+      boxShadow: {
+        'brand-soft': '0 30px 60px rgba(15,17,32,0.12)',
+        'brand-strong': '0 40px 80px rgba(0,0,0,0.45)',
       },
       borderRadius: {
-        xl2: '1.25rem'
-      }
+        pill: '999px',
+        mega: '32px',
+        'mega-lg': '36px',
+      },
+      spacing: {
+        nav: '72px',
+      },
+      transitionTimingFunction: {
+        brand: 'cubic-bezier(0.2, 1, 0.3, 1)',
+      },
     },
   },
   plugins: [],
