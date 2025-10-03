@@ -307,3 +307,4 @@ export function MobileMenu({ categories, onNavigate }: MobileMenuProps) {
   )
 }
 
+

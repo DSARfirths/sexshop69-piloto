@@ -461,3 +461,4 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
   )
 }
 
+
