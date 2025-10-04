@@ -1,4 +1,4 @@
-﻿.sheet {
+.sheet {
   will-change: transform, opacity;
   background: rgba(5, 5, 7, 0.78);
   backdrop-filter: blur(18px);
@@ -6,7 +6,7 @@
 
 .sheetContent {
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(10, 10, 12, 0.86);
   box-shadow: var(--shadow-strong);
