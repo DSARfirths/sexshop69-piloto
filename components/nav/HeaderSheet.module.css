@@ -25,6 +25,19 @@
   opacity: 0.45;
 }
 
+.sheetScroller {
+  max-height: inherit;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sheetScroller::-webkit-scrollbar {
+  display: none;
+}
+
 .backdrop {
   will-change: opacity;
 }
@@ -46,3 +59,4 @@
     animation-duration: 0.01ms;
   }
 }
+

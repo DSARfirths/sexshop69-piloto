@@ -387,57 +387,59 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
               exit="exit"
             >
               <motion.div
-                className={`relative flex w-full max-w-[1180px] flex-col gap-8 rounded-[32px] p-[clamp(24px,3vw,48px)] text-left max-h-[calc(100vh-160px)] overflow-y-auto ${styles.sheetContent}`}
+                className={`relative flex w-full max-w-[1180px] flex-col rounded-[32px] p-[clamp(24px,3vw,48px)] text-left max-h-[calc(100vh-160px)] ${styles.sheetContent}`}
               >
-                <header className="flex flex-col gap-3">
-                  <p
-                    id={`${activeCategory.id}-title`}
-                    className="text-[clamp(1.45rem,1.1rem+1vw,2.2rem)] font-semibold uppercase tracking-[0.18em] text-[var(--sheet-accent)]"
-                  >
-                    Men\u00FA principal
-                  </p>
-                  <p className="text-[clamp(2rem,1.8rem+0.6vw,2.6rem)] font-brand font-semibold uppercase tracking-[0.24em] text-white">
-                    {activeCategory.label}
-                  </p>
-                </header>
+                <div className={`flex w-full flex-col gap-8 ${styles.sheetScroller}`}>
+                  <header className="flex flex-col gap-3">
+                    <p
+                      id={`${activeCategory.id}-title`}
+                      className="text-[clamp(1.45rem,1.1rem+1vw,2.2rem)] font-semibold uppercase tracking-[0.18em] text-[var(--sheet-accent)]"
+                    >
+                      Men\u00FA principal
+                    </p>
+                    <p className="text-[clamp(2rem,1.8rem+0.6vw,2.6rem)] font-brand font-semibold uppercase tracking-[0.24em] text-white">
+                      {activeCategory.label}
+                    </p>
+                  </header>
 
-                <div className="grid w-full gap-[clamp(20px,3vw,40px)] md:grid-cols-3">
-                  {renderedSections.map((column, columnIndex) => (
-                    <div key={`column-${columnIndex}`} className="flex flex-col gap-8">
-                      {column.map((section) => (
-                        <div key={section.name} className="flex flex-col gap-4">
-                          <p className="text-[var(--sheet-accent)] text-sm font-semibold uppercase tracking-[0.18em]">
-                            {section.name}
-                          </p>
-                          <motion.ul
-                            variants={listVariants}
-                            initial="hidden"
-                            animate="visible"
-                            className="flex flex-col gap-3"
-                          >
-                            {section.subcategories.map((subcategory) => (
-                              <motion.li
-                                key={subcategory.name}
-                                variants={itemVariants}
-                                className={styles.listItem}
-                              >
-                                <Link
-                                  href={subcategory.href}
-                                  className="block rounded-[14px] border border-white/10 bg-white/10 px-4 py-3 text-[clamp(0.95rem,0.9rem+0.4vw,1.05rem)] font-medium tracking-[0.04em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-white/15 hover:to-[var(--sheet-accent)] hover:text-brand-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                                  onClick={() => {
-                                    onNavigate?.()
-                                    setOpen(false)
-                                  }}
+                  <div className="grid w-full gap-[clamp(20px,3vw,40px)] md:grid-cols-3">
+                    {renderedSections.map((column, columnIndex) => (
+                      <div key={`column-${columnIndex}`} className="flex flex-col gap-8">
+                        {column.map((section) => (
+                          <div key={section.name} className="flex flex-col gap-4">
+                            <p className="text-[var(--sheet-accent)] text-sm font-semibold uppercase tracking-[0.18em]">
+                              {section.name}
+                            </p>
+                            <motion.ul
+                              variants={listVariants}
+                              initial="hidden"
+                              animate="visible"
+                              className="flex flex-col gap-3"
+                            >
+                              {section.subcategories.map((subcategory) => (
+                                <motion.li
+                                  key={subcategory.name}
+                                  variants={itemVariants}
+                                  className={styles.listItem}
                                 >
-                                  {subcategory.name}
-                                </Link>
-                              </motion.li>
-                            ))}
-                          </motion.ul>
-                        </div>
-                      ))}
-                    </div>
-                  ))}
+                                  <Link
+                                    href={subcategory.href}
+                                    className="block rounded-[14px] border border-white/10 bg-white/10 px-4 py-3 text-[clamp(0.95rem,0.9rem+0.4vw,1.05rem)] font-medium tracking-[0.04em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-white/15 hover:to-[var(--sheet-accent)] hover:text-brand-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                    onClick={() => {
+                                      onNavigate?.()
+                                      setOpen(false)
+                                    }}
+                                  >
+                                    {subcategory.name}
+                                  </Link>
+                                </motion.li>
+                              ))}
+                            </motion.ul>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             </motion.aside>
