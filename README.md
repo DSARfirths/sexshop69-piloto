@@ -54,14 +54,17 @@ app/
   coleccion/[slug]/             -> Listados por colecciones dinámicas (HER/HIM/COUPLES)
   ads/variant-a|b/              -> Landings A/B
 components/
-  nav/MegaMenu.tsx              -> Mega-menú desktop (hover) + mobile (drawer)
+  nav/DesktopMenu.tsx           -> Mega-menu desktop (sheet a pantalla completa)
+  nav/MobileMenu.tsx            -> Mega-menu mobile (drawer)
+  nav/NavMegaMenu.tsx          -> Dispara Desktop/Mobile y eventos de overlay
+  nav/menu-utils.ts            -> Helpers (focus trap, bloqueo de scroll, columnas)
   ProductCard.tsx               -> Tarjeta de producto
   ...
 data/
   products.json                 -> Catálogo (fase JSON)
   categories.json               -> Árbol de categorías/subcategorías
   collections.json              -> Reglas de colecciones (HER/HIM/COUPLES, etc.)
-  mega-menu.config.ts           -> Columnas y enlaces del mega-menú
+  mega-menu.config.ts           -> Jerarquía oficial de categorías/subcategorías para el mega-menú
 lib/
   products.ts                   -> Carga, filtrado, helpers
   tagging.ts                    -> Auto-etiquetado (tags) por reglas
@@ -81,7 +84,7 @@ SSG recomendado para producto/[slug] con generateStaticParams().
 
 ---
 
-## Colecciones y mega-menú
+## Colecciones y mega-menú (actualizado)
 - Colecciones (marketing, no son categorías): definidas en data/collections.json.
   Ejemplo:
   [
@@ -89,9 +92,9 @@ SSG recomendado para producto/[slug] con generateStaticParams().
     { "slug": "para-el",      "label": "HIM",     "tags": ["persona:him","uso:pene"] },
     { "slug": "para-parejas", "label": "COUPLES", "tags": ["persona:couples"] }
   ]
-- Mega-menú: components/nav/MegaMenu.tsx lee data/mega-menu.config.ts y muestra:
-  1) chips a colecciones (HER/HIM/COUPLES)
-  2) columnas con categorías/subcategorías (bosque completo).
+- Mega-menú responsive: NavMegaMenu + DesktopMenu/MobileMenu consumen data/mega-menu.config.ts, que ahora es la fuente de verdad validada por negocio.
+  1) chips de persona HER/HIM/COUPLES con acentos personalizados.
+  2) hoja desktop con columnas animadas y drawer mobile; ambos respetan la jerarquía aprobada.
 
 - Tags inteligentes (auto-tagging): lib/tagging.ts añade tags por categoría, subcategoría y keywords. Convención:
   persona:her|him|couples
@@ -111,9 +114,10 @@ Implementación en lib/products.ts -> filterProducts().
 ---
 
 ## Guía de estilos
-- Fondo de contenido: blanco.
-- Texto: neutros oscuros (900/700) sobre blanco; acentos fucsia/morado.
-- Tarjeta de producto: imagen alta (aspect 3/4), solo título + precio; botón “vista rápida” como icono de ojo en esquina superior derecha.
+- Fondo de contenido: blanco; nav y overlays usan negro translúcido con blur.
+- Tipografía: Jost 400/500/600/700 (variable --font-sans); encabezados pueden usar Cormorant para acentos.
+- Paleta oficial: negro (#000), blanco y acentos persona (#ff2193, #1151bb, #0098d5).
+- Tarjeta de producto: imagen alta (aspect 3/4), solo título + precio; botón "vista rápida" como icono de ojo en esquina superior derecha.
 - Grid de listados: 2 columnas en móvil; 5–6 en escritorio (grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6).
 - Accesibilidad: foco visible, tamaño táctil >=44px, aria en mega-menú, Esc cierra.
 
