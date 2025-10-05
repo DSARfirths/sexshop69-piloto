@@ -192,7 +192,7 @@ export function MobileMenu({ categories, onNavigate }: MobileMenuProps) {
         className="inline-flex h-12 w-12 items-center justify-center rounded-[14px] border border-black/10 bg-neutral-100 text-neutral-900 transition hover:-translate-y-0.5 hover:text-[var(--active-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--active-accent)]/60"
         style={containerStyle}
       >
-        <span className="sr-only">{open ? "Cerrar men\u00FA" : "Abrir men\u00FA"}</span>
+        <span className="sr-only">{open ? "Cerrar menú" : "Abrir menú"}</span>
         {open ? <X className="h-6 w-6" aria-hidden /> : <Menu className="h-6 w-6" aria-hidden />}
       </button>
 
@@ -222,14 +222,14 @@ export function MobileMenu({ categories, onNavigate }: MobileMenuProps) {
             >
               <div className="flex items-center justify-between px-[clamp(16px,6vw,28px)] pb-3 pt-[calc(var(--nav-height)+12px)]">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--active-accent)]">
-                  Explorar categor\u00EDas
+                  Explorar categorías
                 </p>
                 <button
                   type="button"
                   onClick={closeMenu}
                   className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white transition hover:border-[var(--active-accent)]/80 hover:text-[var(--active-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--active-accent)]/70"
                 >
-                  <span className="sr-only">Cerrar men\u00FA</span>
+                  <span className="sr-only">Cerrar menú</span>
                   <X className="h-5 w-5" aria-hidden />
                 </button>
               </div>

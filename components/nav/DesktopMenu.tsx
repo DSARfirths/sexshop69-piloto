@@ -395,7 +395,7 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
                       id={`${activeCategory.id}-title`}
                       className="text-[clamp(1.45rem,1.1rem+1vw,2.2rem)] font-semibold uppercase tracking-[0.18em] text-[var(--sheet-accent)]"
                     >
-                      Men\u00FA principal
+                      Menú principal
                     </p>
                     <p className="text-[clamp(2rem,1.8rem+0.6vw,2.6rem)] font-brand font-semibold uppercase tracking-[0.24em] text-white">
                       {activeCategory.label}
@@ -455,7 +455,7 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
               initial="hidden"
               animate="visible"
               exit="exit"
-              aria-label="Cerrar men\u00FA"
+              aria-label="Cerrar menú"
             >
               <span className="relative block h-4 w-4">
                 <span className="absolute left-1/2 top-1/2 h-[2px] w-full -translate-x-1/2 -translate-y-1/2 rotate-45 bg-current" />
@@ -468,15 +468,3 @@ export function DesktopMenu({ categories, onNavigate }: DesktopMenuProps) {
     </div>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
