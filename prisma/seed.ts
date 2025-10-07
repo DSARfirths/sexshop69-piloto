@@ -1,4 +1,4 @@
-import { PrismaClient, type PersonaFacet } from '@prisma/client'
+import { PrismaClient, Prisma, type PersonaFacet } from '@prisma/client'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -128,6 +128,35 @@ function clean<T extends Record<string, unknown>>(input: T): T {
     }
   })
   return result as T
+}
+
+function cleanJson(input: Record<string, unknown>): Record<string, Prisma.InputJsonValue> {
+  const output: Record<string, Prisma.InputJsonValue> = {}
+
+  Object.entries(input).forEach(([key, value]) => {
+    if (value === undefined) {
+      return
+    }
+
+    if (value === null) {
+      output[key] = null
+      return
+    }
+
+    if (Array.isArray(value)) {
+      output[key] = value as unknown as Prisma.InputJsonValue
+      return
+    }
+
+    if (typeof value === 'object') {
+      output[key] = cleanJson(value as Record<string, unknown>)
+      return
+    }
+
+    output[key] = value as Prisma.InputJsonValue
+  })
+
+  return output
 }
 
 async function loadCategories(): Promise<CategoryJson[]> {
@@ -314,24 +343,25 @@ async function applyMenuMapping(mapping: MenuMappingFile) {
 
 async function ensureCollection(slug: string, entry: Extract<MenuMappingEntry, { type: 'collection' }>) {
   const name = toTitle(slug)
-  const criteria = clean({
+  const rawCriteria = {
     attributeFilter: entry.attribute_filter ?? undefined,
     tags: entry.tags ?? undefined,
     notes: entry.notes ?? undefined
-  })
+  }
+  const criteria = cleanJson(rawCriteria)
 
   const collection = await prisma.collection.upsert({
     where: { slug },
     update: {
       name,
       description: entry.notes ?? null,
-      criteria: Object.keys(criteria).length > 0 ? criteria : undefined
+      criteria: Object.keys(criteria).length > 0 ? (criteria as Prisma.InputJsonValue) : undefined
     },
     create: clean({
       slug,
       name,
       description: entry.notes ?? null,
-      criteria: Object.keys(criteria).length > 0 ? criteria : undefined
+      criteria: Object.keys(criteria).length > 0 ? (criteria as Prisma.InputJsonValue) : undefined
     })
   })
 
