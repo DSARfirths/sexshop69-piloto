@@ -1,0 +1,455 @@
+{
+  "version": "2025-10-06",
+  "mapping": {
+    "vibradores-clasicos": {
+      "type": "subcategory",
+      "category_slug": "vibradores",
+      "subcategory_slug": "clasicos"
+    },
+    "vibradores-clitorales": {
+      "type": "subcategory",
+      "category_slug": "vibradores",
+      "subcategory_slug": "clitorales"
+    },
+    "vibradores-extremos": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "vibradores",
+        "subcategory_slug": "extremo"
+      },
+      "notes": "Canonical subcat es 'extremo' (singular)."
+    },
+    "vibradores-rabbit": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "vibradores",
+        "subcategory_slug": "rabbits"
+      }
+    },
+    "vibradores-ciberskin-jelly": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "vibradores",
+        "subcategory_slug": "gelatinosos"
+      }
+    },
+    "succionadores-clitorales": {
+      "type": "subcategory",
+      "category_slug": "succionadores",
+      "subcategory_slug": "clitorales",
+      "create": {
+        "category": true,
+        "subcategory": true
+      }
+    },
+    "consoladores-realistas": {
+      "type": "subcategory",
+      "category_slug": "consoladores",
+      "subcategory_slug": "realistas",
+      "create": {
+        "subcategory": true
+      }
+    },
+    "consoladores-dobles": {
+      "type": "subcategory",
+      "category_slug": "consoladores",
+      "subcategory_slug": "dobles"
+    },
+    "consoladores-extremos": {
+      "type": "subcategory",
+      "category_slug": "consoladores",
+      "subcategory_slug": "extremos"
+    },
+    "dildos": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "consoladores"
+      },
+      "notes": "Alias genérico hacia la categoría madre."
+    },
+    "bolas-chinas-cuentas": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "bolaschinas"
+      }
+    },
+    "lubricantes-geles": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "lubricantes"
+      }
+    },
+    "feromonas-excitantes": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "feromonas"
+      }
+    },
+    "acariciadores": {
+      "type": "subcategory",
+      "category_slug": "masturbadores",
+      "subcategory_slug": "acariciadores",
+      "create": {
+        "subcategory": true
+      }
+    },
+    "masturbadores-realistas": {
+      "type": "collection",
+      "includes": {
+        "masturbadores": [
+          "fleshlight",
+          "mega"
+        ]
+      },
+      "notes": "Agrupa subcats existentes de 'masturbadores'."
+    },
+    "anillos-vibradores": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "anillos"
+      },
+      "notes": "Opcional: aplicar filtro 'vibrador=true'."
+    },
+    "bombas-succion": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "bombas-succionadoras"
+      }
+    },
+    "extensiones-pene-mangas": {
+      "type": "collection",
+      "includes": {
+        "fundas": [
+          "extensiones",
+          "mangas"
+        ]
+      },
+      "suggest_create_subcategories": [
+        {
+          "category_slug": "fundas",
+          "subcategory_slug": "extensiones"
+        },
+        {
+          "category_slug": "fundas",
+          "subcategory_slug": "mangas"
+        }
+      ],
+      "notes": "Si no se crean subcats, usar tags/atributos."
+    },
+    "fundas-protesis": {
+      "type": "collection",
+      "includes": {
+        "fundas": "*",
+        "arneses-protesis": "*"
+      }
+    },
+    "plugs-masaje-prostatico": {
+      "type": "collection",
+      "includes": {
+        "plugs": "*",
+        "plugs#subcategories": [
+          "prostaticos"
+        ]
+      },
+      "requires": [
+        {
+          "category_slug": "plugs",
+          "subcategory_slug": "prostaticos"
+        }
+      ],
+      "notes": "Vista combinada de plugs + subcat prostáticos."
+    },
+    "prostaticos": {
+      "type": "subcategory",
+      "category_slug": "plugs",
+      "subcategory_slug": "prostaticos",
+      "create": {
+        "subcategory": true
+      }
+    },
+    "geles-retardantes": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "retardantes"
+      }
+    },
+    "desarrolladores": {
+      "type": "category",
+      "category_slug": "desarrolladores"
+    },
+    "control-remoto": {
+      "type": "collection",
+      "attribute_filter": {
+        "controlRemoto": true
+      },
+      "includes": "*",
+      "notes": "Colección transversal por atributo."
+    },
+    "vibraciones-en-pareja": {
+      "type": "collection",
+      "attribute_filter": {
+        "pareja": true
+      },
+      "includes": "*",
+      "notes": "Agrupa juguetes orientados a parejas."
+    },
+    "correas-protesis-fundas": {
+      "type": "collection",
+      "includes": {
+        "arneses-protesis": "*",
+        "fundas": "*"
+      }
+    },
+    "plugs-estimulacion-anal": {
+      "type": "alias",
+      "alias_to": {
+        "category_slug": "plugs"
+      }
+    },
+    "restricciones-posicionador": {
+      "type": "collection",
+      "includes": {
+        "sadobondage-fetiches": [
+          "sadobondage"
+        ]
+      },
+      "tags": [
+        "restricciones",
+        "posicionadores"
+      ]
+    },
+    "paletas-latigos-bdsm": {
+      "type": "collection",
+      "includes": {
+        "sadobondage-fetiches": [
+          "sadobondage"
+        ]
+      },
+      "tags": [
+        "paletas",
+        "latigos",
+        "bdsm"
+      ]
+    },
+    "arneses-protesis": {
+      "type": "category",
+      "category_slug": "arneses-protesis"
+    },
+    "juegos-para-adultos": {
+      "type": "category",
+      "category_slug": "juegos-para-adultos",
+      "create": {
+        "category": true
+      }
+    },
+    "lubricantes-potenciadores": {
+      "type": "collection",
+      "includes": {
+        "lubricantes": "*",
+        "retardantes": "*",
+        "desarrolladores": "*"
+      }
+    },
+    "fetiches-roleplay": {
+      "type": "collection",
+      "includes": {
+        "sadobondage-fetiches": [
+          "fetiches"
+        ]
+      },
+      "tags": [
+        "roleplay"
+      ]
+    }
+  },
+  "actions_summary": {
+    "create_categories": [
+      "succionadores",
+      "juegos-para-adultos"
+    ],
+    "create_subcategories": [
+      {
+        "category_slug": "consoladores",
+        "subcategory_slug": "realistas"
+      },
+      {
+        "category_slug": "masturbadores",
+        "subcategory_slug": "acariciadores"
+      },
+      {
+        "category_slug": "plugs",
+        "subcategory_slug": "prostaticos"
+      },
+      {
+        "category_slug": "succionadores",
+        "subcategory_slug": "clitorales"
+      }
+    ],
+    "collections_to_define": [
+      {
+        "slug": "masturbadores-realistas",
+        "includes": {
+          "masturbadores": [
+            "fleshlight",
+            "mega"
+          ]
+        }
+      },
+      {
+        "slug": "fundas-protesis",
+        "includes": {
+          "fundas": "*",
+          "arneses-protesis": "*"
+        }
+      },
+      {
+        "slug": "correas-protesis-fundas",
+        "includes": {
+          "arneses-protesis": "*",
+          "fundas": "*"
+        }
+      },
+      {
+        "slug": "plugs-masaje-prostatico",
+        "includes": {
+          "plugs": "*",
+          "plugs#subcategories": [
+            "prostaticos"
+          ]
+        }
+      },
+      {
+        "slug": "control-remoto",
+        "attribute_filter": {
+          "controlRemoto": true
+        },
+        "includes": "*"
+      },
+      {
+        "slug": "vibraciones-en-pareja",
+        "attribute_filter": {
+          "pareja": true
+        },
+        "includes": "*"
+      },
+      {
+        "slug": "lubricantes-potenciadores",
+        "includes": {
+          "lubricantes": "*",
+          "retardantes": "*",
+          "desarrolladores": "*"
+        }
+      },
+      {
+        "slug": "restricciones-posicionador",
+        "includes": {
+          "sadobondage-fetiches": [
+            "sadobondage"
+          ]
+        },
+        "tags": [
+          "restricciones",
+          "posicionadores"
+        ]
+      },
+      {
+        "slug": "paletas-latigos-bdsm",
+        "includes": {
+          "sadobondage-fetiches": [
+            "sadobondage"
+          ]
+        },
+        "tags": [
+          "paletas",
+          "latigos",
+          "bdsm"
+        ]
+      },
+      {
+        "slug": "fetiches-roleplay",
+        "includes": {
+          "sadobondage-fetiches": [
+            "fetiches"
+          ]
+        },
+        "tags": [
+          "roleplay"
+        ]
+      },
+      {
+        "slug": "extensiones-pene-mangas",
+        "includes": {
+          "fundas": [
+            "extensiones",
+            "mangas"
+          ]
+        }
+      }
+    ],
+    "aliases": [
+      {
+        "from": "vibradores-extremos",
+        "to": {
+          "category_slug": "vibradores",
+          "subcategory_slug": "extremo"
+        }
+      },
+      {
+        "from": "vibradores-rabbit",
+        "to": {
+          "category_slug": "vibradores",
+          "subcategory_slug": "rabbits"
+        }
+      },
+      {
+        "from": "vibradores-ciberskin-jelly",
+        "to": {
+          "category_slug": "vibradores",
+          "subcategory_slug": "gelatinosos"
+        }
+      },
+      {
+        "from": "bolas-chinas-cuentas",
+        "to": {
+          "category_slug": "bolaschinas"
+        }
+      },
+      {
+        "from": "bombas-succion",
+        "to": {
+          "category_slug": "bombas-succionadoras"
+        }
+      },
+      {
+        "from": "anillos-vibradores",
+        "to": {
+          "category_slug": "anillos"
+        }
+      },
+      {
+        "from": "lubricantes-geles",
+        "to": {
+          "category_slug": "lubricantes"
+        }
+      },
+      {
+        "from": "feromonas-excitantes",
+        "to": {
+          "category_slug": "feromonas"
+        }
+      },
+      {
+        "from": "dildos",
+        "to": {
+          "category_slug": "consoladores"
+        }
+      },
+      {
+        "from": "plugs-estimulacion-anal",
+        "to": {
+          "category_slug": "plugs"
+        }
+      }
+    ]
+  }
+}
