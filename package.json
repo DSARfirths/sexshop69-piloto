@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.8",
+    "@prisma/client": "^6.16.3",
     "autoprefixer": "10.4.20",
     "framer-motion": "11.2.6",
     "lucide-react": "0.453.0",
@@ -32,7 +33,10 @@
     "@types/react": "19.1.13",
     "@types/react-dom": "^19.1.9",
     "@types/sanitize-html": "^2.16.0",
+    "dotenv": "^17.2.3",
+    "prisma": "^6.16.3",
     "rimraf": "5.0.10",
+    "tsx": "^4.20.6",
     "vitest": "^3.2.4"
   }
 }
