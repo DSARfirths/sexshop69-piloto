@@ -1,6 +1,6 @@
 import collectionsData from '@/data/collections.json'
 import type { Product } from './products'
-import { allProducts } from './products'
+import { getAllProducts } from './products.server'
 import { enrichTags, parseTagStrings, type Tag } from './tagging'
 
 type RawCollection = (typeof collectionsData)[number]
@@ -83,16 +83,17 @@ export function matchCollection(product: Product, rule: CollectionRule): boolean
   return categoryMatch
 }
 
-export function allCollections(): Collection[] {
+export function getCollections(): Collection[] {
   return collections
 }
 
-export function findCollection(slug: string): Collection | undefined {
+export function getCollectionBySlug(slug: string): Collection | undefined {
   const normalized = normalizeCategorySlug(slug)
   if (!normalized) return undefined
   return collections.find(collection => collection.slug === normalized)
 }
 
-export function productsForCollection(collection: Collection): Product[] {
-  return allProducts().filter(product => matchCollection(product, collection.rule))
+export async function getProductsForCollection(collection: Collection): Promise<Product[]> {
+  const products = await getAllProducts()
+  return products.filter(product => matchCollection(product, collection.rule))
 }

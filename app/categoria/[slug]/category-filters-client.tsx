@@ -1,20 +1,25 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import FilterSheet from '@/components/category/FilterSheet'
 import ProductCard from '@/components/ProductCard'
 import { CategoryFiltersProvider, type CategoryFilterState } from '@/components/category/filters-context'
 import {
   buildCatalogSearchParams,
-  collectCatalogOptions,
   filterCatalogProducts,
   normalizeCatalogText,
   parseCatalogSearchParams,
   type CatalogFilterOptions
 } from '@/lib/catalog-filters'
-import { byCategory, filterProducts, type Filter } from '@/lib/products'
+import { filterProducts, type Filter, type Product } from '@/lib/products'
 import type { TagType } from '@/lib/tagging'
+
+type CategoryFiltersClientProps = {
+  slug: string
+  products: Product[]
+  options: CatalogFilterOptions
+}
 
 type FacetConfig = { type: TagType; param: string }
 
@@ -54,15 +59,11 @@ function appendFacetsToSearchParams(params: URLSearchParams, facets: Filter): UR
   return next
 }
 
-export default function CategoryFiltersClient() {
-  const { slug } = useParams<{ slug: string }>()
+export default function CategoryFiltersClient({ slug, products, options }: CategoryFiltersClientProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-
-  const products = useMemo(() => byCategory(slug), [slug])
-  const options = useMemo(() => collectCatalogOptions(products), [products])
   const facetOptions = useMemo(() => {
     const sets = new Map<TagType, Set<string>>()
     products.forEach(product => {

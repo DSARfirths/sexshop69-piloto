@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { allProducts, bySlug, formatAttributeLabel, formatAttributeValue, getProductProperties } from '@/lib/products'
+import { formatAttributeLabel, formatAttributeValue, getProductProperties } from '@/lib/products'
+import {
+  getAllProducts,
+  getProductBySlug
+} from '@/lib/products.server'
 import StickyCTA from '@/components/StickyCTA'
 import ProductGallery from '@/components/product/ProductGallery'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -11,12 +15,13 @@ import Sections from '@/components/ui/Sections'
 
 export const runtime = 'nodejs'
 
-export function generateStaticParams() {
-  return allProducts().map(product => ({ slug: product.slug }))
+export async function generateStaticParams() {
+  const products = await getAllProducts()
+  return products.map(product => ({ slug: product.slug }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const p = bySlug(params.slug)
+  const p = await getProductBySlug(params.slug)
   if (!p) return {}
   const title = `${p.name} — SexShop del Perú 69`
   const description = 'Página de producto (piloto ad-safe, mobile-first).'
@@ -50,8 +55,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
-  const product = bySlug(params.slug)
+export default async function ProductPage({ params }: { params: { slug: string } }) {
+  const product = await getProductBySlug(params.slug)
   if (!product) return notFound()
   const imageCount = product.imageFilenames.length
   const imageUrls = Array.from({ length: imageCount }, (_, index) => `/products/${product.slug}/${index + 1}.webp`)
@@ -186,7 +191,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           <Sections product={product} />
         </div>
         <aside>
-          <SpecsTable attributes={product.attributes} specs={product.specs} />
+          <SpecsTable attributes={product.attributes} specs={product.specs ?? undefined} />
         </aside>
       </div>
 

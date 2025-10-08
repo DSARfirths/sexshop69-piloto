@@ -1,7 +1,8 @@
 import { PackageCheck, ShieldCheck, LockKeyhole } from 'lucide-react'
 import Link from 'next/link'
 import Hero from '@/components/Hero'
-import { allProducts, getBestSellers, getNewArrivals, getOffers } from '@/lib/products'
+import { type Product } from '@/lib/products'
+import { getAllProducts, getBestSellers, getNewArrivals, getOffers } from '@/lib/products.server'
 import { CategoryCard } from '@/components/home/CategoryCarousel'
 import BestSellers from '@/components/home/BestSellers'
 import TrustBadgesStrip from '@/components/home/TrustBadgesStrip'
@@ -10,7 +11,7 @@ import FeaturedProducts from '@/components/home/FeaturedProducts'
 import InspirationalBanner from '@/components/home/InspirationalBanner'
 import categoriesData from '@/data/categories.json'
 
-type AvailableProduct = ReturnType<typeof allProducts>[number]
+type AvailableProduct = Product
 
 type CategoryDefinition = {
   slug: string
@@ -45,11 +46,13 @@ const PREMIUM_PRODUCT_SLUGS = [
   'xtreme-x30-britanico-original'
 ] as const
 
-export default function Page() {
-  const products = allProducts()
-  const bestSellers = getBestSellers()
-  const newArrivals = getNewArrivals()
-  const offers = getOffers()
+export default async function Page() {
+  const [products, bestSellers, newArrivals, offers] = await Promise.all([
+    getAllProducts(),
+    getBestSellers(),
+    getNewArrivals(),
+    getOffers()
+  ])
   const newArrivalHighlightBadges: Record<string, string> = Object.fromEntries(
     newArrivals.map(product => [product.slug, 'Nuevo' as const])
   )

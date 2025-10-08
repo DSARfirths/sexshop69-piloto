@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MessageCircle, Search, X } from 'lucide-react'
 
-import { allProducts } from '@/lib/products'
+import type { Product } from '@/lib/products'
 
 const MotionOverlay: any = motion.div
 const MotionSheet: any = motion.div
@@ -29,14 +29,37 @@ const SHEET_VARIANTS = {
 }
 
 export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
-  const products = useMemo(() => allProducts(), [])
   const [mounted, setMounted] = useState(false)
+  const [products, setProducts] = useState<Product[]>([])
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (!mounted || products.length > 0) return
+    let cancelled = false
+
+    const load = async () => {
+      try {
+        const response = await fetch('/api/catalog/products', { cache: 'force-cache' })
+        if (!response.ok) return
+        const data = (await response.json()) as Product[]
+        if (!cancelled) {
+          setProducts(data)
+        }
+      } catch (error) {
+        console.warn('[SearchOverlay] Failed to load catalog', error)
+      }
+    }
+
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [mounted, products.length])
 
   useEffect(() => {
     if (!open) return
@@ -78,7 +101,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
     return products
       .filter((product) => {
         const name = product.name.toLowerCase()
-        const sku = product.sku.toLowerCase()
+        const sku = product.sku ? product.sku.toLowerCase() : ''
         const category = product.category.toLowerCase()
         return name.includes(value) || sku.includes(value) || category.includes(value)
       })
@@ -150,6 +173,8 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                       const displayPrice = (salePrice ?? product.regularPrice).toFixed(2)
                       const regularPrice = product.regularPrice.toFixed(2)
                       const primaryImageSlug = product.imageFilenames?.[0]?.replace(/\..+$/, '') ?? null
+                      const skuValue = product.sku ?? ''
+                      const skuDisplay = skuValue || 'Sin SKU'
 
                       return (
                         <MotionResult
@@ -167,7 +192,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                                 {highlightMatches(product.name, query)}
                               </h3>
                               <p className="mt-1 text-xs uppercase tracking-wide text-neutral-500">
-                                SKU: {highlightMatches(product.sku, query)}
+                                SKU: {highlightMatches(skuDisplay, query)}
                               </p>
                               <p className="mt-1 text-xs text-neutral-500">
                                 Categoría: {highlightMatches(product.category, query)}
@@ -189,7 +214,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                               Ver producto
                             </Link>
                             <a
-                              href={`https://wa.me/51924281623?text=Consulta%20${encodeURIComponent(product.sku)}`}
+                              href={`https://wa.me/51924281623?text=Consulta%20${encodeURIComponent(skuValue || product.slug)}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 font-medium text-neutral-700 transition hover:border-brand-pink/40 hover:text-brand-pink"

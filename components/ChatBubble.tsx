@@ -1,62 +1,115 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { MessageCircle, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import { bySlug, byCategory, type Product } from '@/lib/products'
+
+import type { Product } from '@/lib/products'
 import {
   closeChatAssistant,
   getChatAssistantState,
   subscribeToChatAssistant,
-  toggleChatAssistant,
+  toggleChatAssistant
 } from '@/lib/chat-assistant'
 
-type PageContext = {
-  pageType: 'home' | 'category' | 'product' | 'other'
-  category?: string
-  product?: Pick<Product, 'sku' | 'name' | 'category' | 'slug' | 'regularPrice' | 'salePrice'>
-}
+type ProductSummary = Pick<Product, 'sku' | 'name' | 'category' | 'slug' | 'regularPrice' | 'salePrice'>
 
-function getCtx(pathname: string): PageContext {
-  if (pathname.startsWith('/producto/')) {
-    const slug = pathname.split('/').pop()!
-    const p = bySlug(slug)
-    if (!p) return { pageType: 'product' }
-    const { sku, name, category, slug: productSlug, regularPrice, salePrice } = p
-    return {
-      pageType: 'product',
-      category,
-      product: { sku, name, category, slug: productSlug, regularPrice, salePrice }
-    }
-  }
-  if (pathname.startsWith('/categoria/')) {
-    const category = pathname.split('/').pop()!
-    return { pageType: 'category', category }
-  }
-  return { pageType: pathname === '/' ? 'home' : 'other' }
-}
+type PageContext =
+  | { pageType: 'home' | 'other' }
+  | { pageType: 'product'; product?: ProductSummary | null }
+  | { pageType: 'category'; category: string; topProducts: ProductSummary[] }
 
-function buildSuggestions(ctx: PageContext) {
+type Suggestion = { label: string; href: string }
+
+function buildSuggestions(ctx: PageContext): Suggestion[] {
   if (ctx.pageType === 'product' && ctx.product) {
     return [
-      { label: `Llévate ${ctx.product.name} ahora`, href: `/api/checkout?s=${ctx.product.sku}` },
+      {
+        label: `Llévate ${ctx.product.name} ahora`,
+        href: `/api/checkout?s=${encodeURIComponent(ctx.product.sku ?? ctx.product.slug)}`
+      },
       { label: 'Explorar sensaciones similares', href: `/categoria/${ctx.product.category}` },
-      { label: 'Conversa con una asesora por WhatsApp', href: `https://wa.me/51924281623?text=Consulta%20${ctx.product.sku}` },
+      {
+        label: 'Conversa con una asesora por WhatsApp',
+        href: `https://wa.me/51924281623?text=Consulta%20${encodeURIComponent(
+          ctx.product.sku ?? ctx.product.slug
+        )}`
+      }
     ]
   }
-  if (ctx.pageType === 'category' && ctx.category) {
-    const top = byCategory(ctx.category).slice(0, 3)
-    const topHref = top.length ? `/producto/${top[0].slug}` : `/categoria/${ctx.category}`
+
+  if (ctx.pageType === 'category') {
+    const topHref =
+      ctx.topProducts.length > 0 ? `/producto/${ctx.topProducts[0].slug}` : `/categoria/${ctx.category}`
     return [
       { label: 'Favoritos más deseados de esta categoría', href: topHref },
       { label: 'Ver toda la colección', href: `/categoria/${ctx.category}` },
-      { label: 'Pedir una recomendación discreta', href: 'https://wa.me/51924281623?text=Quiero%20recomendaciones' },
+      {
+        label: 'Pedir una recomendación discreta',
+        href: 'https://wa.me/51924281623?text=Quiero%20recomendaciones'
+      }
     ]
   }
+
   return [
     { label: 'Colección Romance Nocturno', href: '/categoria/vibradores' },
     { label: 'Ritual de bienestar sensorial', href: '/categoria/bienestar' },
-    { label: 'Arma tu kit deluxe', href: '/categoria/kits' },
+    { label: 'Arma tu kit deluxe', href: '/categoria/kits' }
   ]
+}
+
+function buildNotifications(ctx: PageContext): string[] {
+  if (ctx.pageType === 'product' && ctx.product) {
+    return [
+      `${ctx.product.name} está listo para enviarse.`,
+      'Pregúntame por sensaciones similares para ti.',
+      '¿Quieres que te ayude a armar un pack perfecto?'
+    ]
+  }
+
+  if (ctx.pageType === 'category') {
+    const readableCategory = ctx.category.replace(/-/g, ' ')
+    return [
+      `Descubre los favoritos de ${readableCategory}.`,
+      '¿Buscas algo discreto? Te puedo guiar.',
+      'Explora combinaciones irresistibles conmigo.'
+    ]
+  }
+
+  return [
+    'Te muestro lo más deseado del momento.',
+    'Pídeme ideas para sorprender esta noche.',
+    'Estoy lista para sugerirte algo único.'
+  ]
+}
+
+async function fetchProductSummary(slug: string, signal: AbortSignal): Promise<ProductSummary | null> {
+  try {
+    const response = await fetch(`/api/catalog/product?slug=${encodeURIComponent(slug)}`, { signal })
+    if (!response.ok) return null
+    const product = (await response.json()) as ProductSummary
+    return product
+  } catch {
+    return null
+  }
+}
+
+async function fetchCategoryTop(
+  slug: string,
+  signal: AbortSignal,
+  limit = 3
+): Promise<ProductSummary[]> {
+  try {
+    const response = await fetch(
+      `/api/catalog/category?slug=${encodeURIComponent(slug)}&limit=${limit}`,
+      { signal }
+    )
+    if (!response.ok) return []
+    const products = (await response.json()) as ProductSummary[]
+    return products
+  } catch {
+    return []
+  }
 }
 
 export function ChatBubble() {
@@ -64,34 +117,65 @@ export function ChatBubble() {
   const [open, setOpen] = useState(() => getChatAssistantState())
   const [notificationMessage, setNotificationMessage] = useState<string | null>(null)
   const [notificationVisible, setNotificationVisible] = useState(false)
+  const [productSummary, setProductSummary] = useState<ProductSummary | null>(null)
+  const [categoryProducts, setCategoryProducts] = useState<ProductSummary[]>([])
+  const facetController = useRef<AbortController | null>(null)
 
   useEffect(() => {
     return subscribeToChatAssistant(setOpen)
   }, [])
 
-  const ctx = useMemo(() => getCtx(pathname), [pathname])
+  useEffect(() => {
+    if (facetController.current) {
+      facetController.current.abort()
+    }
+    const controller = new AbortController()
+    facetController.current = controller
+
+    const slug = pathname.split('/').pop() ?? ''
+
+    if (pathname.startsWith('/producto/') && slug) {
+      fetchProductSummary(slug, controller.signal).then(data => {
+        if (!controller.signal.aborted) {
+          setProductSummary(data)
+          setCategoryProducts([])
+        }
+      })
+      return () => controller.abort()
+    }
+
+    if (pathname.startsWith('/categoria/') && slug) {
+      fetchCategoryTop(slug, controller.signal).then(data => {
+        if (!controller.signal.aborted) {
+          setCategoryProducts(data)
+          setProductSummary(null)
+        }
+      })
+      return () => controller.abort()
+    }
+
+    setProductSummary(null)
+    setCategoryProducts([])
+    return () => controller.abort()
+  }, [pathname])
+
+  const ctx: PageContext = useMemo(() => {
+    if (pathname.startsWith('/producto/')) {
+      return { pageType: 'product', product: productSummary }
+    }
+    if (pathname.startsWith('/categoria/')) {
+      const category = pathname.split('/').pop() ?? ''
+      return { pageType: 'category', category, topProducts: categoryProducts }
+    }
+    return { pageType: pathname === '/' ? 'home' : 'other' }
+  }, [pathname, productSummary, categoryProducts])
+
   const suggestions = useMemo(() => buildSuggestions(ctx), [ctx])
-  const notifications = useMemo(() => {
-    if (ctx.pageType === 'product' && ctx.product) {
-      return [
-        `¡${ctx.product.name} está listo para enviarse!`,
-        'Pregúntame por sensaciones similares para ti.',
-        '¿Quieres que te ayude a armar un pack perfecto?'
-      ]
-    }
-    if (ctx.pageType === 'category' && ctx.category) {
-      return [
-        `Descubre los favoritos de ${ctx.category.replace(/-/g, ' ')}.`,
-        '¿Buscas algo discreto? Te puedo guiar.',
-        'Explora combinaciones irresistibles conmigo.'
-      ]
-    }
-    return [
-      'Te muestro lo más deseado del momento.',
-      'Pídeme ideas para sorprender esta noche.',
-      'Estoy lista para sugerirte algo único.'
-    ]
-  }, [ctx])
+  const notifications = useMemo(() => buildNotifications(ctx), [ctx])
+
+  useEffect(() => {
+    facetController.current = null
+  }, [productSummary, categoryProducts])
 
   useEffect(() => {
     if (!notifications.length || open) {
@@ -158,24 +242,26 @@ export function ChatBubble() {
               </button>
             </div>
 
-              <ul className="mt-4 space-y-2">
-                {suggestions.map((s, i) => (
-                  <li key={i}>
-                    <a
-                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition hover:border-fuchsia-400/50 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
-                      href={s.href}
-                    >
-                      <span className="text-left text-neutral-100">{s.label}</span>
-                      <span className="text-xs font-semibold uppercase tracking-[0.15em] text-fuchsia-200/80">Ir</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <ul className="mt-4 space-y-2">
+              {suggestions.map((s, i) => (
+                <li key={i}>
+                  <a
+                    className="flex items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3  text-sm transition hover:border-fuchsia-400/50 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70"
+                    href={s.href}
+                  >
+                    <span className="text-left text-neutral-100">{s.label}</span>
+                    <span className="text-xs font-semibold uppercase tracking-[0.15em] text-fuchsia-200/80">
+                      Ir
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
 
-              <p className="mt-4 text-[0.7rem] text-neutral-400">
-                Respuestas confidenciales, siempre con respeto mutuo.
-              </p>
-            </div>
+            <p className="mt-4 text-[0.7rem] text-neutral-400">
+              Respuestas confidenciales, siempre con respeto mutuo.
+            </p>
+          </div>
         )}
 
         <button
@@ -199,4 +285,3 @@ export function ChatBubble() {
     </div>
   )
 }
-

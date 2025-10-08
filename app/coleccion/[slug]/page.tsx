@@ -1,13 +1,18 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+
 import CollectionFiltersClient from './collection-filters-client'
-import { allCollections, findCollection, productsForCollection } from '@/lib/collections'
 import {
   collectCatalogOptions,
   filterCatalogProducts,
   parseCatalogSearchParams,
   type CatalogFilters
 } from '@/lib/catalog-filters'
+import {
+  getCollectionBySlug,
+  getCollections,
+  getProductsForCollection
+} from '@/lib/collections.server'
 
 export const runtime = 'nodejs'
 
@@ -26,11 +31,11 @@ function toURLSearchParams(searchParams: Record<string, string | string[] | unde
 }
 
 export function generateStaticParams() {
-  return allCollections().map(collection => ({ slug: collection.slug }))
+  return getCollections().map(collection => ({ slug: collection.slug }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const collection = findCollection(params.slug)
+  const collection = getCollectionBySlug(params.slug)
   if (!collection) return {}
 
   const title = collection.seo?.title ?? `${collection.name} — SexShop del Perú 69`
@@ -51,19 +56,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function CollectionPage({
+export default async function CollectionPage({
   params,
   searchParams
 }: {
   params: { slug: string }
   searchParams: Record<string, string | string[] | undefined>
 }) {
-  const collection = findCollection(params.slug)
+  const collection = getCollectionBySlug(params.slug)
   if (!collection) return notFound()
 
   const urlSearchParams = toURLSearchParams(searchParams)
   const initialFilters: CatalogFilters = parseCatalogSearchParams(urlSearchParams)
-  const allMatchingProducts = productsForCollection(collection)
+  const allMatchingProducts = await getProductsForCollection(collection)
   const filteredProducts = filterCatalogProducts(allMatchingProducts, initialFilters)
   const options = collectCatalogOptions(allMatchingProducts)
 

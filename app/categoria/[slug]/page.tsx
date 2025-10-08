@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
-import CategoryFiltersClient from './category-filters-client'
-import { allProducts, getCategoryLabel } from '@/lib/products'
 
-const CATEGORY_LABELS: Record<string, string> = {
-  bienestar: 'Bienestar intimo',
+import CategoryFiltersClient from './category-filters-client'
+import { collectCatalogOptions } from '@/lib/catalog-filters'
+import { getCategoryLabel, getProductsByCategory } from '@/lib/products.server'
+
+const FALLBACK_CATEGORY_LABELS: Record<string, string> = {
+  bienestar: 'Bienestar íntimo',
   lenceria: 'Lencería',
   kits: 'Kits de regalo',
   arneses: 'Arneses con arnés',
@@ -13,16 +15,12 @@ const CATEGORY_LABELS: Record<string, string> = {
   anales: 'Juegos anales'
 }
 
-const sensitiveCategories = new Set(
-  allProducts()
-    .filter(product => product.nsfw)
-    .map(product => product.category)
-)
-
-function categoryLabelFor(slug: string) {
-  if (CATEGORY_LABELS[slug]) return CATEGORY_LABELS[slug]
-  const labelFromData = getCategoryLabel(slug)
-  if (labelFromData) return labelFromData
+async function resolveCategoryLabel(slug: string): Promise<string> {
+  if (FALLBACK_CATEGORY_LABELS[slug]) {
+    return FALLBACK_CATEGORY_LABELS[slug]
+  }
+  const labelFromDb = await getCategoryLabel(slug)
+  if (labelFromDb) return labelFromDb
   return slug
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -30,8 +28,12 @@ function categoryLabelFor(slug: string) {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const label = categoryLabelFor(params.slug)
-  const isSensitive = sensitiveCategories.has(params.slug)
+  const [label, products] = await Promise.all([
+    resolveCategoryLabel(params.slug),
+    getProductsByCategory(params.slug)
+  ])
+
+  const isSensitive = products.some(product => product.nsfw)
   const description = isSensitive
     ? `Explora ${label} con filtros seguros para mayores de 18 años en SexShop del Perú 69.`
     : `Compra ${label} con envíos discretos y asesoría confidencial en SexShop del Perú 69.`
@@ -58,11 +60,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const [products, label] = await Promise.all([
+    getProductsByCategory(params.slug),
+    resolveCategoryLabel(params.slug)
+  ])
+
+  const options = collectCatalogOptions(products)
+
   return (
     <div>
-      <h1 className="text-2xl font-semibold capitalize">{categoryLabelFor(params.slug)}</h1>
-      <CategoryFiltersClient />
+      <h1 className="text-2xl font-semibold capitalize">{label}</h1>
+      <CategoryFiltersClient slug={params.slug} products={products} options={options} />
     </div>
   )
 }
