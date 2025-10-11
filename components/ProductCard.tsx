@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, type HTMLMotionProps } from 'framer-motion'
-import { Eye } from 'lucide-react'
+import { Eye, ShoppingCart } from 'lucide-react'
+
 import QuickViewDialog from '@/components/product/QuickViewDialog'
 import { useCategoryFilters } from '@/components/category/filters-context'
 import { type Product } from '@/lib/products'
@@ -18,8 +18,10 @@ const BADGE_LABELS: Record<'nuevo' | 'top' | 'promo', string> = {
 const FALLBACK_IMAGE_SRC =
   'data:image/svg+xml;charset=UTF-8,' +
   encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#f4f4f5"/><stop offset="100%" stop-color="#e4e4e7"/></linearGradient></defs><rect width="320" height="240" fill="url(#g)"/><text x="50%" y="50%" fill="#a1a1aa" font-family="sans-serif" font-size="20" font-weight="600" text-anchor="middle" dominant-baseline="middle">Producto</text></svg>`
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#18181b"/><stop offset="100%" stop-color="#3f3f46"/></linearGradient></defs><rect width="480" height="600" fill="url(#g)"/><text x="50%" y="50%" fill="#d4d4d8" font-family="sans-serif" font-size="24" font-weight="600" text-anchor="middle" dominant-baseline="middle">Producto</text></svg>`
   )
+
+const IMAGE_SLOTS = 3
 
 type ProductCardProps = {
   p: Product
@@ -30,6 +32,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
   const filtersContext = useCategoryFilters()
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false)
   const [imageFailed, setImageFailed] = useState(false)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
   const longPressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const didTriggerQuickView = useRef(false)
 
@@ -50,21 +53,55 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
       ? BADGE_LABELS[p.badge as keyof typeof BADGE_LABELS]
       : p.badge ?? undefined
   const displayBadge = highlightBadge ?? filterBadge ?? resolvedBadge
-  const hasGallery = p.imageCount > 0 && Boolean(p.imageFilenames[0])
-  const primaryImageBasename = p.imageFilenames[0]?.replace(/\..+$/, '') ?? null
-  const mainImageSrc =
-    hasGallery && !imageFailed && primaryImageBasename
-      ? `/products/${p.slug}/${primaryImageBasename}.webp`
-      : FALLBACK_IMAGE_SRC
+
+  const galleryBasenames = useMemo(() => {
+    const filenames = p.imageFilenames.slice(0, IMAGE_SLOTS)
+    const basenames = filenames
+      .map(filename => filename?.replace(/\..+$/, '') ?? null)
+      .filter((value): value is string => Boolean(value))
+
+    if (basenames.length === 0 && p.primaryImageFilename) {
+      const primaryBasename = p.primaryImageFilename.replace(/\..+$/, '')
+      return primaryBasename ? [primaryBasename] : []
+    }
+
+    return Array.from(new Set(basenames))
+  }, [p.imageFilenames, p.primaryImageFilename])
+
+  const normalizedImages =
+    galleryBasenames.length > 0
+      ? galleryBasenames.map(basename => `/products/${p.slug}/${basename}.webp`)
+      : [FALLBACK_IMAGE_SRC]
+
+  const imageCount = normalizedImages.length
+  const safeImageIndex = Math.min(Math.max(activeImageIndex, 0), imageCount - 1)
+  const currentImage = imageFailed ? FALLBACK_IMAGE_SRC : normalizedImages[safeImageIndex]
+  const hasMultipleImages = imageCount > 1
+
   const salePrice = typeof p.salePrice === 'number' ? p.salePrice : null
-  const hasSalePrice = salePrice !== null
-  const displayPrice = (salePrice ?? p.regularPrice).toFixed(2)
-  const regularPrice = p.regularPrice.toFixed(2)
+  const hasSalePrice = salePrice !== null && salePrice < p.regularPrice
+  const currentPrice = hasSalePrice ? salePrice! : p.regularPrice
+  const discountPercentage =
+    hasSalePrice && p.regularPrice > 0
+      ? Math.round(((p.regularPrice - salePrice!) / p.regularPrice) * 100)
+      : null
+
+  const formattedRegularPrice = new Intl.NumberFormat('es-PE', {
+    style: 'currency',
+    currency: 'PEN'
+  }).format(p.regularPrice)
+  const formattedSalePrice = hasSalePrice
+    ? new Intl.NumberFormat('es-PE', {
+        style: 'currency',
+        currency: 'PEN'
+      }).format(currentPrice)
+    : null
+
   const shouldPriorityLoad = Boolean(highlightBadge || p.badge === 'top')
 
   useEffect(() => {
     setImageFailed(false)
-  }, [primaryImageBasename, p.slug])
+  }, [p.slug, galleryBasenames])
 
   useEffect(() => {
     return () => {
@@ -91,7 +128,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
     }, 500)
   }
 
-  const handleTouchEnd: React.TouchEventHandler<HTMLAnchorElement> = (event) => {
+  const handleTouchEnd: React.TouchEventHandler<HTMLAnchorElement> = event => {
     if (longPressTimeout.current) {
       clearTimeout(longPressTimeout.current)
       longPressTimeout.current = null
@@ -111,64 +148,141 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
     didTriggerQuickView.current = false
   }
 
+  const handleImageMouseMove = (event: MouseEvent<HTMLDivElement>) => {
+    if (!hasMultipleImages) return
+    const rect = event.currentTarget.getBoundingClientRect()
+    if (rect.width === 0) return
+    const relativeX = Math.min(Math.max(event.clientX - rect.left, 0), rect.width)
+    const ratio = relativeX / rect.width
+    const index = Math.min(imageCount - 1, Math.floor(ratio * imageCount))
+    if (index !== activeImageIndex) {
+      setActiveImageIndex(index)
+    }
+  }
+
+  const handleImageMouseLeave = () => {
+    if (activeImageIndex !== 0) {
+      setActiveImageIndex(0)
+    }
+  }
+
+  const handleOpenQuickView: React.MouseEventHandler<HTMLButtonElement> = event => {
+    event.preventDefault()
+    event.stopPropagation()
+    cancelLongPress()
+    setIsQuickViewOpen(true)
+  }
+
+  const handleAddToCart: React.MouseEventHandler<HTMLButtonElement> = event => {
+    event.preventDefault()
+    event.stopPropagation()
+    // TODO: Integrar logica real de anadir a la cesta cuando este disponible.
+  }
+
+  const imageLinkProps = {
+    href: `/producto/${p.slug}`,
+    onTouchStart: handleTouchStart,
+    onTouchEnd: handleTouchEnd,
+    onTouchCancel: handleTouchMove,
+    onTouchMove: handleTouchMove
+  }
+
   return (
-    <div className="relative">
-      <Link href={`/producto/${p.slug}`} legacyBehavior passHref>
-        <motion.a
-          {...({
-            href: `/producto/${p.slug}`,
-            className: 'group block overflow-hidden rounded-xl border border-neutral-200 bg-white p-2 text-neutral-900 shadow transition-shadow hover:shadow-lg',
-            whileHover: { y: -4 },
-            whileTap: { scale: 0.98 },
-            transition: { type: 'spring', stiffness: 300, damping: 20, mass: 0.6 },
-            onTouchStart: handleTouchStart,
-            onTouchEnd: handleTouchEnd,
-            onTouchCancel: handleTouchMove,
-            onTouchMove: handleTouchMove
-          } as unknown as HTMLMotionProps<'a'>)}
-        >
-          <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100 p-2">
-            <div className="relative h-full w-full overflow-hidden rounded-lg">
-              {displayBadge && (
-                <div className="absolute left-3 top-3 inline-flex items-center rounded-full bg-fuchsia-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow">
-                  {displayBadge}
-                </div>
-              )}
-              <Image
-                src={mainImageSrc}
-                alt={p.name}
-                fill
-                priority={shouldPriorityLoad}
-                sizes="(min-width: 1024px) 280px, (min-width: 768px) 50vw, 90vw"
-                className="h-full w-full object-cover transition duration-500"
-                onError={() => {
-                  if (!hasGallery) return
-                  setImageFailed(true)
-                }}
-              />
-            </div>
+    <article className="group relative flex h-full flex-col transition-transform duration-300 ease-out hover:-translate-y-1.5 focus-within:-translate-y-1.5">
+      <div className="relative">
+        <Link {...imageLinkProps} className="block">
+          <div
+            className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] bg-neutral-950/90"
+            onMouseMove={handleImageMouseMove}
+            onMouseLeave={handleImageMouseLeave}
+          >
+            {discountPercentage && discountPercentage > 0 && (
+              <div className="absolute left-5 top-5 z-20 inline-flex items-center rounded-full bg-fuchsia-600 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-lg">
+                Ahorra un {discountPercentage}%
+              </div>
+            )}
+            <Image
+              src={currentImage}
+              alt={p.name}
+              fill
+              priority={shouldPriorityLoad}
+              sizes="(min-width: 1536px) 12vw, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 44vw, 92vw"
+              className="h-full w-full object-contain object-center transition duration-500"
+              onError={() => {
+                setImageFailed(true)
+              }}
+            />
+            {hasMultipleImages && (
+              <div className="pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2">
+                {normalizedImages.map((_, index) => (
+                  <span
+                    key={index}
+                    className={`h-1.5 w-5 rounded-full transition ${
+                      index === safeImageIndex ? 'bg-white' : 'bg-white/40 group-hover:bg-white/60'
+                    }`}
+                    aria-hidden
+                  />
+                ))}
+              </div>
+            )}
+            <div className="pointer-events-none absolute inset-0 rounded-[2.25rem] border border-white/10 mix-blend-soft-light" />
           </div>
-          <div className="mt-3 space-y-2">
-            <div className="line-clamp-2 font-medium text-neutral-900">{p.name}</div>
-            <div className="flex items-baseline gap-2">
-              <span className="font-semibold text-fuchsia-600">S/ {displayPrice}</span>
-              {hasSalePrice && (
-                <span className="text-sm font-medium text-neutral-500 line-through">S/ {regularPrice}</span>
-              )}
-            </div>
+        </Link>
+
+        <div className="pointer-events-none absolute inset-0 flex flex-col justify-end opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+          <div className="flex items-center justify-between gap-3 px-6 pb-6">
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              <ShoppingCart className="h-4 w-4" aria-hidden />
+              Anadir a la cesta
+            </button>
+            <button
+              type="button"
+              onClick={handleOpenQuickView}
+              aria-label="Vista rapida"
+              className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              <Eye className="h-5 w-5" aria-hidden />
+            </button>
           </div>
-        </motion.a>
-      </Link>
-      <button
-        type="button"
-        onClick={() => setIsQuickViewOpen(true)}
-        aria-label="Vista rápida"
-        className="absolute right-3 top-3 z-10 rounded-full bg-fuchsia-500/10 p-1 text-fuchsia-600 transition hover:bg-fuchsia-500/20"
+        </div>
+      </div>
+
+      <Link
+        href={`/producto/${p.slug}`}
+        className="mt-6 block rounded-[2rem] bg-white/95 p-6 text-neutral-900 backdrop-blur transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fuchsia-200"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchMove}
+        onTouchMove={handleTouchMove}
       >
-        <Eye className="h-5 w-5" />
-      </button>
+        {displayBadge && (
+          <span className="inline-flex items-center rounded-full bg-neutral-900/5 px-4 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-neutral-500">
+            {displayBadge}
+          </span>
+        )}
+        {p.brand && (
+          <p className="mt-4 text-xs font-medium uppercase tracking-[0.28em] text-neutral-400">{p.brand}</p>
+        )}
+        <h3 className="mt-3 font-heading text-xl font-semibold leading-tight text-neutral-900 sm:text-2xl">
+          <span className="relative inline-block after:absolute after:left-0 after:bottom-0 after:h-[0.12em] after:w-0 after:bg-gradient-to-r from-fuchsia-500 to-violet-500 after:transition-all after:duration-300 group-hover:after:w-full group-focus-within:after:w-full">
+            {p.name}
+          </span>
+        </h3>
+        <div className="mt-4 flex flex-wrap items-baseline gap-3">
+          <span className={`text-lg font-semibold ${hasSalePrice ? 'text-fuchsia-600' : 'text-neutral-900'} sm:text-xl`}>
+            {hasSalePrice && formattedSalePrice ? formattedSalePrice : formattedRegularPrice}
+          </span>
+          {hasSalePrice && (
+            <span className="text-sm font-medium text-neutral-400 line-through">{formattedRegularPrice}</span>
+          )}
+        </div>
+      </Link>
 
       <QuickViewDialog product={p} open={isQuickViewOpen} onOpenChange={setIsQuickViewOpen} />
-    </div>
+    </article>
   )
 }

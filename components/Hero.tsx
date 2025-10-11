@@ -102,7 +102,7 @@ export default function Hero() {
     <section
       aria-roledescription="carrusel"
       aria-label="Experiencias destacadas"
-      className="relative isolate flex min-h-[80vh] flex-col overflow-hidden rounded-[2.5rem] border border-white/10 bg-neutral-950 text-white shadow-[0_40px_120px_-40px_rgba(126,34,206,0.45)]"
+      className="relative isolate flex min-h-[85vh] flex-col overflow-hidden bg-neutral-950 text-white"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}

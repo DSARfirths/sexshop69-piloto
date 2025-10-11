@@ -8,7 +8,7 @@ export default function AboutSection({ headingId }: AboutSectionProps) {
   return (
     <section
       aria-labelledby={headingId}
-      className="relative isolate overflow-hidden rounded-[2.5rem] bg-neutral-950 px-6 py-16 text-white sm:px-10 lg:px-16 xl:px-20"
+      className="relative isolate overflow-hidden bg-neutral-950 px-6 py-16 text-white sm:px-10 lg:px-16 xl:px-20"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(236,72,153,0.55),_transparent_55%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(30,17,45,0.92)_0%,rgba(17,24,39,0.88)_45%,rgba(76,29,149,0.65)_100%)] mix-blend-soft-light" />
