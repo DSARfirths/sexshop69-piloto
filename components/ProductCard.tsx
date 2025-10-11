@@ -18,7 +18,7 @@ const BADGE_LABELS: Record<'nuevo' | 'top' | 'promo', string> = {
 const FALLBACK_IMAGE_SRC =
   'data:image/svg+xml;charset=UTF-8,' +
   encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#18181b"/><stop offset="100%" stop-color="#3f3f46"/></linearGradient></defs><rect width="480" height="600" fill="url(#g)"/><text x="50%" y="50%" fill="#d4d4d8" font-family="sans-serif" font-size="24" font-weight="600" text-anchor="middle" dominant-baseline="middle">Producto</text></svg>`
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#f4f4f5"/><stop offset="100%" stop-color="#e4e4e7"/></linearGradient></defs><rect width="480" height="600" fill="url(#g)"/><text x="50%" y="50%" fill="#a1a1aa" font-family="sans-serif" font-size="24" font-weight="600" text-anchor="middle" dominant-baseline="middle">Producto</text></svg>`
   )
 
 const IMAGE_SLOTS = 3
@@ -188,16 +188,17 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
   }
 
   return (
-    <article className="group relative flex h-full flex-col transition-transform duration-300 ease-out hover:-translate-y-1.5 focus-within:-translate-y-1.5">
+    <article className="group relative flex h-full flex-col transition-transform duration-300 ease-brand hover:-translate-y-1.5 focus-within:-translate-y-1.5">
       <div className="relative">
         <Link {...imageLinkProps} className="block">
           <div
-            className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] bg-neutral-950/90"
+            className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] border border-neutral-200 bg-white"
+            onMouseEnter={handleImageMouseMove}
             onMouseMove={handleImageMouseMove}
             onMouseLeave={handleImageMouseLeave}
           >
             {discountPercentage && discountPercentage > 0 && (
-              <div className="absolute left-5 top-5 z-20 inline-flex items-center rounded-full bg-fuchsia-600 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-lg">
+              <div className="absolute left-5 top-5 z-20 inline-flex items-center rounded-full bg-brand-pink px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-brand-soft">
                 Ahorra un {discountPercentage}%
               </div>
             )}
@@ -207,7 +208,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
               fill
               priority={shouldPriorityLoad}
               sizes="(min-width: 1536px) 12vw, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 44vw, 92vw"
-              className="h-full w-full object-contain object-center transition duration-500"
+              className="h-full w-full object-contain object-center transition duration-200 ease-linear"
               onError={() => {
                 setImageFailed(true)
               }}
@@ -218,14 +219,13 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
                   <span
                     key={index}
                     className={`h-1.5 w-5 rounded-full transition ${
-                      index === safeImageIndex ? 'bg-white' : 'bg-white/40 group-hover:bg-white/60'
+                      index === safeImageIndex ? 'bg-brand-pink' : 'bg-neutral-300 group-hover:bg-neutral-400'
                     }`}
                     aria-hidden
                   />
                 ))}
               </div>
             )}
-            <div className="pointer-events-none absolute inset-0 rounded-[2.25rem] border border-white/10 mix-blend-soft-light" />
           </div>
         </Link>
 
@@ -234,7 +234,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-neutral-900 shadow-lg transition hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-200"
             >
               <ShoppingCart className="h-4 w-4" aria-hidden />
               Anadir a la cesta
@@ -243,7 +243,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
               type="button"
               onClick={handleOpenQuickView}
               aria-label="Vista rapida"
-              className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-lg transition hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-200"
             >
               <Eye className="h-5 w-5" aria-hidden />
             </button>
@@ -253,32 +253,37 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
 
       <Link
         href={`/producto/${p.slug}`}
-        className="mt-6 block rounded-[2rem] bg-white/95 p-6 text-neutral-900 backdrop-blur transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fuchsia-200"
+        className="mt-6 block rounded-[2rem] border border-neutral-200 bg-white p-6 text-neutral-900 transition hover:border-neutral-300 hover:shadow-brand-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-pink/50"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchMove}
         onTouchMove={handleTouchMove}
       >
         {displayBadge && (
-          <span className="inline-flex items-center rounded-full bg-neutral-900/5 px-4 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-neutral-500">
+          <span className="inline-flex items-center rounded-full bg-neutral-100 px-4 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-neutral-500">
             {displayBadge}
           </span>
         )}
         {p.brand && (
           <p className="mt-4 text-xs font-medium uppercase tracking-[0.28em] text-neutral-400">{p.brand}</p>
         )}
-        <h3 className="mt-3 font-heading text-xl font-semibold leading-tight text-neutral-900 sm:text-2xl">
-          <span className="relative inline-block after:absolute after:left-0 after:bottom-0 after:h-[0.12em] after:w-0 after:bg-gradient-to-r from-fuchsia-500 to-violet-500 after:transition-all after:duration-300 group-hover:after:w-full group-focus-within:after:w-full">
+        <h3 className="mt-3 font-heading text-xl font-semibold leading-snug text-neutral-900 sm:text-[1.45rem]">
+          <span className="relative inline box-decoration-clone bg-[linear-gradient(90deg,#ff2193,#ff65b9)] bg-[length:0%_1px] bg-[position:0_100%] bg-no-repeat transition-[background-size] duration-300 ease-brand group-hover:bg-[length:100%_1px] group-focus-within:bg-[length:100%_1px]">
             {p.name}
           </span>
         </h3>
-        <div className="mt-4 flex flex-wrap items-baseline gap-3">
-          <span className={`text-lg font-semibold ${hasSalePrice ? 'text-fuchsia-600' : 'text-neutral-900'} sm:text-xl`}>
-            {hasSalePrice && formattedSalePrice ? formattedSalePrice : formattedRegularPrice}
+        <div className="mt-5 space-y-2">
+          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-neutral-400">
+            {hasSalePrice ? 'Precio oferta' : 'Precio regular'}
           </span>
-          {hasSalePrice && (
-            <span className="text-sm font-medium text-neutral-400 line-through">{formattedRegularPrice}</span>
-          )}
+          <div className="flex flex-wrap items-baseline gap-3">
+            <span className={`text-xl font-semibold ${hasSalePrice ? 'text-brand-pink' : 'text-neutral-900'}`}>
+              {hasSalePrice && formattedSalePrice ? formattedSalePrice : formattedRegularPrice}
+            </span>
+            {hasSalePrice && (
+              <span className="text-sm font-medium text-neutral-400 line-through">{formattedRegularPrice}</span>
+            )}
+          </div>
         </div>
       </Link>
 
