@@ -22,7 +22,6 @@ type AssetImageProps = {
   className?: string
   priority?: boolean
   sizes?: string
-  shouldBlur?: boolean
 }
 
 function buildImageSrc(productSlug: string, filename?: string | null) {
@@ -32,9 +31,8 @@ function buildImageSrc(productSlug: string, filename?: string | null) {
   return `/products/${productSlug}/${basename}.webp`
 }
 
-function AssetImage({ productSlug, filename, alt, className, priority, sizes, shouldBlur }: AssetImageProps) {
+function AssetImage({ productSlug, filename, alt, className, priority, sizes }: AssetImageProps) {
   const [failed, setFailed] = useState(false)
-  const finalClassName = `${className ?? ''}${shouldBlur && filename ? ' blur-sm' : ''}`.trim()
 
   useEffect(() => {
     setFailed(false)
@@ -49,7 +47,7 @@ function AssetImage({ productSlug, filename, alt, className, priority, sizes, sh
       fill
       priority={priority}
       sizes={sizes}
-      className={finalClassName}
+      className={className}
       onError={() => {
         if (!filename) return
         setFailed(true)
@@ -142,7 +140,6 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                         className={`object-cover ${
                           galleryImages.length > 0 ? 'md:hover:scale-[1.02] md:transition-transform md:duration-500' : ''
                         }`}
-                        shouldBlur={Boolean(product.nsfw)}
                       />
                     </div>
                     {galleryImages.length > 1 && (
@@ -159,7 +156,6 @@ export default function QuickViewDialog({ product, open, onOpenChange }: QuickVi
                               sizes="96px"
                               priority={open && index < 2}
                               className="object-cover"
-                              shouldBlur={Boolean(product.nsfw)}
                             />
                           </div>
                         ))}

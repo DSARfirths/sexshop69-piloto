@@ -24,16 +24,24 @@ export default async function Page() {
   const fallbackProducts = needed > 0 ? fallbackPool.slice(0, needed) : []
   const featuredProducts = [...curatedProducts, ...fallbackProducts]
 
+  const fullBleedClass = 'relative left-1/2 right-1/2 w-screen -translate-x-1/2'
+
   return (
     <>
-      <Hero />
-      <div className="mt-10 space-y-14 sm:mt-16 sm:space-y-16 lg:mt-24 lg:space-y-20">
-        <ProductShowcase
-          products={featuredProducts}
-          headingId="destacados-del-mes"
-          title="Destacados del mes"
-          description="Doce placeres que elegimos a mano para inspirarte: juguetes premium, rituales sensoriales y esenciales para explorar en pareja o en solitario."
-        />
+      <div className={fullBleedClass}>
+        <Hero />
+      </div>
+      <div className={`${fullBleedClass} bg-gradient-to-b from-white via-white to-neutral-50`}>
+        <div className="mx-auto w-full max-w-[1400px] px-6 py-16 sm:px-10 sm:py-20 lg:px-12 lg:py-24">
+          <ProductShowcase
+            products={featuredProducts}
+            headingId="destacados-del-mes"
+            title="Destacados del mes"
+            description="Doce placeres que elegimos a mano para inspirarte: juguetes premium, rituales sensoriales y esenciales para explorar en pareja o en solitario."
+          />
+        </div>
+      </div>
+      <div className={fullBleedClass}>
         <AboutSection headingId="sobre-sexshop69" />
       </div>
     </>
