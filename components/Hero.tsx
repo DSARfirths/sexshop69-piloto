@@ -72,6 +72,7 @@ export default function Hero() {
   const preparedSlides = useMemo(() => slides, [])
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const hasMultipleSlides = preparedSlides.length > 1
 
   useEffect(() => {
     if (isPaused || preparedSlides.length <= 1) return
@@ -135,9 +136,11 @@ export default function Hero() {
       <div className="relative z-10 flex flex-1 flex-col justify-between px-6 py-14 sm:px-10 lg:px-16">
         <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
           <span>{activeSlide.tag}</span>
-          <span>
-            {activeIndex + 1}/{preparedSlides.length}
-          </span>
+          {hasMultipleSlides && (
+            <span>
+              {activeIndex + 1}/{preparedSlides.length}
+            </span>
+          )}
         </div>
 
         <div className="mt-10 grid flex-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.6fr)]">
@@ -201,41 +204,43 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="mt-12 flex items-center justify-between gap-4 text-xs text-white/60">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handlePrevious}
-              aria-label="Ver historia anterior"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Ver siguiente historia"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              ›
-            </button>
+        {hasMultipleSlides && (
+          <div className="mt-12 flex items-center justify-between gap-4 text-xs text-white/60">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePrevious}
+                aria-label="Ver historia anterior"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Ver siguiente historia"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                ›
+              </button>
+            </div>
+            <div className="flex flex-1 justify-end gap-2">
+              {preparedSlides.map((slide, index) => {
+                const isActive = index === activeIndex
+                return (
+                  <button
+                    key={slide.id}
+                    type="button"
+                    onClick={() => goTo(index)}
+                    aria-label={`Ir a la experiencia ${slide.title}`}
+                    aria-current={isActive}
+                    className={`h-2 rounded-full transition-all ${isActive ? 'w-12 bg-white' : 'w-6 bg-white/40 hover:bg-white/70'}`}
+                  />
+                )
+              })}
+            </div>
           </div>
-          <div className="flex flex-1 justify-end gap-2">
-            {preparedSlides.map((slide, index) => {
-              const isActive = index === activeIndex
-              return (
-                <button
-                  key={slide.id}
-                  type="button"
-                  onClick={() => goTo(index)}
-                  aria-label={`Ir a la experiencia ${slide.title}`}
-                  aria-current={isActive}
-                  className={`h-2 rounded-full transition-all ${isActive ? 'w-12 bg-white' : 'w-6 bg-white/40 hover:bg-white/70'}`}
-                />
-              )
-            })}
-          </div>
-        </div>
+        )}
       </div>
     </section>
   )
