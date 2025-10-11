@@ -188,17 +188,17 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
   }
 
   return (
-    <article className="group relative flex h-full flex-col transition-transform duration-300 ease-brand hover:-translate-y-1.5 focus-within:-translate-y-1.5">
+    <article className="group relative flex h-full flex-col gap-4 transition-transform duration-300 ease-brand hover:-translate-y-1 focus-within:-translate-y-1">
       <div className="relative">
         <Link {...imageLinkProps} className="block">
           <div
-            className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] border border-neutral-200 bg-white"
-            onMouseEnter={handleImageMouseMove}
+            className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] bg-white"
             onMouseMove={handleImageMouseMove}
             onMouseLeave={handleImageMouseLeave}
+            onMouseEnter={handleImageMouseMove}
           >
             {discountPercentage && discountPercentage > 0 && (
-              <div className="absolute left-5 top-5 z-20 inline-flex items-center rounded-full bg-brand-pink px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-brand-soft">
+              <div className="absolute left-5 top-5 z-10 inline-flex items-center rounded-full bg-brand-pink px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white">
                 Ahorra un {discountPercentage}%
               </div>
             )}
@@ -208,7 +208,7 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
               fill
               priority={shouldPriorityLoad}
               sizes="(min-width: 1536px) 12vw, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 44vw, 92vw"
-              className="h-full w-full object-contain object-center transition duration-200 ease-linear"
+              className="h-full w-full object-contain object-center transition-transform duration-200 ease-linear group-hover:scale-[1.03]"
               onError={() => {
                 setImageFailed(true)
               }}
@@ -228,32 +228,29 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
             )}
           </div>
         </Link>
-
-        <div className="pointer-events-none absolute inset-0 flex flex-col justify-end opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
-          <div className="flex items-center justify-between gap-3 px-6 pb-6">
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-neutral-900 shadow-lg transition hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-200"
-            >
-              <ShoppingCart className="h-4 w-4" aria-hidden />
-              Anadir a la cesta
-            </button>
-            <button
-              type="button"
-              onClick={handleOpenQuickView}
-              aria-label="Vista rapida"
-              className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-lg transition hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-200"
-            >
-              <Eye className="h-5 w-5" aria-hidden />
-            </button>
-          </div>
+        <button
+          type="button"
+          onClick={handleOpenQuickView}
+          aria-label="Vista rapida"
+          className="absolute right-5 top-5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-neutral-900 opacity-0 transition duration-200 ease-brand hover:bg-white focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink/50 group-hover:opacity-100 group-focus-within:opacity-100"
+        >
+          <Eye className="h-5 w-5" aria-hidden />
+        </button>
+        <div className="pointer-events-none absolute inset-x-5 bottom-6 flex justify-center opacity-0 transition duration-200 ease-brand group-hover:opacity-100 group-focus-within:opacity-100">
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink/40"
+          >
+            <ShoppingCart className="h-4 w-4" aria-hidden />
+            Anadir a la cesta
+          </button>
         </div>
       </div>
 
       <Link
         href={`/producto/${p.slug}`}
-        className="mt-6 block rounded-[2rem] border border-neutral-200 bg-white p-6 text-neutral-900 transition hover:border-neutral-300 hover:shadow-brand-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-pink/50"
+        className="block rounded-[1.75rem] bg-white p-5 text-neutral-900 transition hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-pink/50"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchMove}
@@ -265,14 +262,14 @@ export default function ProductCard({ p, highlightBadge }: ProductCardProps) {
           </span>
         )}
         {p.brand && (
-          <p className="mt-4 text-xs font-medium uppercase tracking-[0.28em] text-neutral-400">{p.brand}</p>
+          <p className="mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-neutral-400">{p.brand}</p>
         )}
-        <h3 className="mt-3 font-heading text-xl font-semibold leading-snug text-neutral-900 sm:text-[1.45rem]">
+        <h3 className="mt-2 font-brand text-[1.1rem] font-semibold leading-snug text-neutral-900 sm:text-[1.25rem]">
           <span className="relative inline box-decoration-clone bg-[linear-gradient(90deg,#ff2193,#ff65b9)] bg-[length:0%_1px] bg-[position:0_100%] bg-no-repeat transition-[background-size] duration-300 ease-brand group-hover:bg-[length:100%_1px] group-focus-within:bg-[length:100%_1px]">
             {p.name}
           </span>
         </h3>
-        <div className="mt-5 space-y-2">
+        <div className="mt-4 space-y-2">
           <span className="text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-neutral-400">
             {hasSalePrice ? 'Precio oferta' : 'Precio regular'}
           </span>

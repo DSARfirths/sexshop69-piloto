@@ -7,7 +7,7 @@ export const LANDING_FEATURED_SLUGS = [
   'vibrador-varita-masajeador-rosado-viben',
   'a-huevos-masturbadores-juego-de-6-piezas',
   'anillo-de-toro-vibrador-stay-hard-10-funciones-azul',
-  'lubricante-anal-moist-lube',
+  'vibrador-anal-sex-usb-bullet',
   'a-consolador-king-cock-plus-7pene-de-triple-densidad-con-bolas',
   'cheeky-charms-kit-de-tapon-anal-de-metal-plateado',
   'juguete-masturbador-barack'
